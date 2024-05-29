@@ -63,7 +63,7 @@ const App: React.FC = () => {
   // We use this hook to skip the login page and demonstrate the application more quickly.
   const { loading } = useAutoLoginForDemo();
 
-  const API_URL = 'https://outfit4rent.online';
+  const API_URL = 'https://api.outfit4rent.online';
   const dataProvider = jsonServerDataProvider(API_URL);
 
   const { t, i18n } = useTranslation();
