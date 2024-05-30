@@ -3,7 +3,6 @@ import {
   FilterDropdown,
   getDefaultSortOrder,
   NumberField,
-  useSelect,
   useTable,
 } from '@refinedev/antd';
 import type { HttpError } from '@refinedev/core';
@@ -18,18 +17,20 @@ import {
   Button,
   Input,
   InputNumber,
-  Select,
   Table,
   theme,
   Typography,
 } from 'antd';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import type { ICategory, IProduct } from '../../../interfaces';
+import type { IProduct } from '../../../interfaces';
 import { PaginationTotal } from '../../paginationTotal';
-import { ProductStatus } from '../status';
 
 export const ProductListTable = () => {
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const { token } = theme.useToken();
   const t = useTranslate();
   const go = useGo();
@@ -63,19 +64,39 @@ export const ProductListTable = () => {
     },
   });
 
-  const { selectProps: categorySelectProps, queryResult } =
-    useSelect<ICategory>({
-      resource: 'categories',
-      optionLabel: 'title',
-      optionValue: 'id',
-      defaultValue: getDefaultFilter('category.id', filters, 'in'),
-    });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://api.outfit4rent.online/products');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const result: IProduct[] = await response.json();
+        setProducts(result);
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Failed to fetch products.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const categories = queryResult?.data?.data || [];
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>;
+  }
 
   return (
     <Table
       {...tableProps}
+      dataSource={products}
       rowKey="id"
       scroll={{ x: true }}
       pagination={{
@@ -228,70 +249,68 @@ export const ProductListTable = () => {
           );
         }}
       />
-      <Table.Column<IProduct>
-        title={t('products.fields.category')}
-        dataIndex={['category', 'title']}
-        key="category.id"
-        width={128}
-        defaultFilteredValue={getDefaultFilter('category.id', filters, 'in')}
-        filterDropdown={(props) => {
-          return (
-            <FilterDropdown
-              {...props}
-              selectedKeys={props.selectedKeys.map(Number)}
-            >
-              <Select
-                {...categorySelectProps}
-                style={{ width: '200px' }}
-                allowClear
-                mode="multiple"
-                placeholder={t('products.filter.category.placeholder')}
-              />
-            </FilterDropdown>
-          );
-        }}
-        render={(_, record) => {
-          const categoryMatch = categories.find(
-            (categoryItem) => categoryItem?.id === record.category?.id,
-          );
-
+      <Table.Column
+        title={t('products.fields.size')}
+        dataIndex="size"
+        key="size"
+        render={(size: string) => {
           return (
             <Typography.Text
               style={{
                 whiteSpace: 'nowrap',
               }}
             >
-              {categoryMatch?.title || '-'}
+              {size}
             </Typography.Text>
           );
         }}
       />
       <Table.Column
-        title={t('products.fields.isActive.label')}
-        dataIndex="isActive"
-        key="isActive"
-        sorter
-        defaultSortOrder={getDefaultSortOrder('isActive', sorters)}
-        defaultFilteredValue={getDefaultFilter('isActive', filters, 'in')}
-        filterDropdown={(props) => (
-          <FilterDropdown {...props}>
-            <Select
-              style={{ width: '200px' }}
-              allowClear
-              mode="multiple"
-              placeholder={t('products.filter.isActive.placeholder')}
+        title={t('products.fields.category')}
+        dataIndex="category"
+        key="category"
+        render={(category: string) => {
+          return (
+            <Typography.Text
+              style={{
+                whiteSpace: 'nowrap',
+              }}
             >
-              <Select.Option value="true">
-                {t('products.fields.isActive.true')}
-              </Select.Option>
-              <Select.Option value="false">
-                {t('products.fields.isActive.false')}
-              </Select.Option>
-            </Select>
-          </FilterDropdown>
-        )}
-        render={(isActive: boolean) => {
-          return <ProductStatus value={isActive} />;
+              {category}
+            </Typography.Text>
+          );
+        }}
+      />
+      <Table.Column
+        title={t('products.fields.brand')}
+        dataIndex="brand"
+        key="brand"
+        render={(brand: string) => {
+          return (
+            <Typography.Text
+              style={{
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {brand}
+            </Typography.Text>
+          );
+        }}
+      />
+      <Table.Column
+        title={t('products.fields.type')}
+        dataIndex="type"
+        key="type"
+        render={(type: string) => {
+          return (
+            <Typography.Text
+              style={{
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {type}
+            </Typography.Text>
+          );
         }}
       />
       <Table.Column
