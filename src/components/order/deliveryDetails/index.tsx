@@ -80,7 +80,7 @@ export const OrderDeliveryDetails = ({ order }: Props) => {
       {
         icon: <UserOutlined />,
         title: t('orders.fields.customer'),
-        description: `${order.user.firstName} ${order.user.lastName}`,
+        description: `${order.user.name} ${order.user.name}`,
       },
       {
         icon: <HistoryOutlined />,

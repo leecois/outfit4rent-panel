@@ -21,7 +21,7 @@ import {
 } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
-import type { ICategory, IProduct } from '../../../interfaces';
+import type { ICategory, IProductDetail } from '../../../interfaces';
 import { Drawer } from '../../drawer';
 import { ProductStatus } from '../status';
 
@@ -40,8 +40,8 @@ export const ProductDrawerShow = (props: Props) => {
   const { token } = theme.useToken();
   const breakpoint = Grid.useBreakpoint();
 
-  const { queryResult } = useShow<IProduct, HttpError>({
-    resource: 'products',
+  const { queryResult } = useShow<IProductDetail, HttpError>({
+    resource: 'product',
     id: props?.id, // when undefined, id will be read from the URL.
   });
   const product = queryResult.data?.data;
@@ -96,8 +96,8 @@ export const ProductDrawerShow = (props: Props) => {
             margin: '16px auto',
             borderRadius: '8px',
           }}
-          src={product?.images?.[0].url}
-          alt={product?.images?.[0].name}
+          src={product?.images?.[0].link}
+          alt={product?.images?.[0].link}
         />
       </Flex>
       <Flex
@@ -147,7 +147,7 @@ export const ProductDrawerShow = (props: Props) => {
                   {t('products.fields.category')}
                 </Typography.Text>
               ),
-              value: <Typography.Text>{category?.title}</Typography.Text>,
+              value: <Typography.Text>{category?.name}</Typography.Text>,
             },
             {
               label: (
@@ -155,7 +155,11 @@ export const ProductDrawerShow = (props: Props) => {
                   {t('products.fields.isActive.label')}
                 </Typography.Text>
               ),
-              value: <ProductStatus value={!!product?.isActive} />,
+              value: (
+                <ProductStatus
+                  value={String(product?.status) === '1' ? 'true' : 'false'}
+                />
+              ),
             },
           ]}
           renderItem={(item) => {

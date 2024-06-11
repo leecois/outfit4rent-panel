@@ -69,7 +69,7 @@ export const OrderList = () => {
         orderNumber: item.orderNumber,
         status: item.status.text,
         store: item.store.title,
-        user: item.user.firstName,
+        user: item.user.name,
       };
     },
   });

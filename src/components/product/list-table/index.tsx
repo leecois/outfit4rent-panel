@@ -3,6 +3,7 @@ import {
   FilterDropdown,
   getDefaultSortOrder,
   NumberField,
+  useSelect,
   useTable,
 } from '@refinedev/antd';
 import type { HttpError } from '@refinedev/core';
@@ -17,27 +18,25 @@ import {
   Button,
   Input,
   InputNumber,
+  Select,
   Table,
   theme,
   Typography,
 } from 'antd';
-import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import type { IProduct } from '../../../interfaces';
+import type { ICategory, IProductList } from '../../../interfaces';
 import { PaginationTotal } from '../../paginationTotal';
+import { ProductStatus } from '../status';
 
 export const ProductListTable = () => {
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const { token } = theme.useToken();
   const t = useTranslate();
   const go = useGo();
   const { pathname } = useLocation();
   const { showUrl } = useNavigation();
 
-  const { tableProps, sorters, filters } = useTable<IProduct, HttpError>({
+  const { tableProps, sorters, filters } = useTable<IProductList, HttpError>({
     filters: {
       initial: [
         {
@@ -51,12 +50,12 @@ export const ProductListTable = () => {
           value: '',
         },
         {
-          field: 'category.id',
+          field: 'category',
           operator: 'in',
           value: [],
         },
         {
-          field: 'isActive',
+          field: 'status',
           operator: 'in',
           value: [],
         },
@@ -64,39 +63,16 @@ export const ProductListTable = () => {
     },
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://api.outfit4rent.online/products');
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const result: IProduct[] = await response.json();
-        setProducts(result);
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Failed to fetch products.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
+  const { selectProps: categorySelectProps } = useSelect<ICategory>({
+    resource: 'categories',
+    optionLabel: 'name',
+    optionValue: 'name',
+    defaultValue: getDefaultFilter('category', filters, 'in'),
+  });
 
   return (
     <Table
       {...tableProps}
-      dataSource={products}
       rowKey="id"
       scroll={{ x: true }}
       pagination={{
@@ -147,15 +123,15 @@ export const ProductListTable = () => {
         )}
       />
       <Table.Column
-        title={t('products.fields.images.label')}
-        dataIndex="images"
-        key="images"
-        render={(images: IProduct['images']) => {
+        title={t('products.fields.imgUrl.label')}
+        dataIndex="imgUrl"
+        key="imgUrl"
+        render={(imgUrl: string) => {
           return (
             <Avatar
               shape="square"
-              src={images?.[0]?.thumbnailUrl || images?.[0]?.url}
-              alt={images?.[0].name}
+              src={imgUrl || 'default-image-url.jpg'}
+              alt={`Product image`}
             />
           );
         }}
@@ -249,26 +225,28 @@ export const ProductListTable = () => {
           );
         }}
       />
-      <Table.Column
-        title={t('products.fields.size')}
-        dataIndex="size"
-        key="size"
-        render={(size: string) => {
-          return (
-            <Typography.Text
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {size}
-            </Typography.Text>
-          );
-        }}
-      />
-      <Table.Column
+      <Table.Column<IProductList>
         title={t('products.fields.category')}
         dataIndex="category"
         key="category"
+        width={128}
+        defaultFilteredValue={getDefaultFilter('category', filters, 'in')}
+        filterDropdown={(props) => {
+          return (
+            <FilterDropdown
+              {...props}
+              selectedKeys={props.selectedKeys.map(String)}
+            >
+              <Select
+                {...categorySelectProps}
+                style={{ width: '200px' }}
+                allowClear
+                mode="multiple"
+                placeholder={t('products.filter.category.placeholder')}
+              />
+            </FilterDropdown>
+          );
+        }}
         render={(category: string) => {
           return (
             <Typography.Text
@@ -282,35 +260,31 @@ export const ProductListTable = () => {
         }}
       />
       <Table.Column
-        title={t('products.fields.brand')}
-        dataIndex="brand"
-        key="brand"
-        render={(brand: string) => {
-          return (
-            <Typography.Text
-              style={{
-                whiteSpace: 'nowrap',
-              }}
+        title={t('products.fields.status.label')}
+        dataIndex="status"
+        key="status"
+        sorter
+        defaultSortOrder={getDefaultSortOrder('status', sorters)}
+        defaultFilteredValue={getDefaultFilter('status', filters, 'in')}
+        filterDropdown={(props) => (
+          <FilterDropdown {...props}>
+            <Select
+              style={{ width: '200px' }}
+              allowClear
+              mode="multiple"
+              placeholder={t('products.filter.status.placeholder')}
             >
-              {brand}
-            </Typography.Text>
-          );
-        }}
-      />
-      <Table.Column
-        title={t('products.fields.type')}
-        dataIndex="type"
-        key="type"
-        render={(type: string) => {
-          return (
-            <Typography.Text
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {type}
-            </Typography.Text>
-          );
+              <Select.Option value="1">
+                {t('products.fields.status.active')}
+              </Select.Option>
+              <Select.Option value="0">
+                {t('products.fields.status.inactive')}
+              </Select.Option>
+            </Select>
+          </FilterDropdown>
+        )}
+        render={(status: string) => {
+          return <ProductStatus value={status === '1' ? 'true' : 'false'} />;
         }}
       />
       <Table.Column
@@ -318,7 +292,7 @@ export const ProductListTable = () => {
         key="actions"
         fixed="right"
         align="center"
-        render={(_, record: IProduct) => {
+        render={(_, record: IProductList) => {
           return (
             <Button
               icon={<EyeOutlined />}

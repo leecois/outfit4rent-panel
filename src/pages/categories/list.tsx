@@ -32,14 +32,14 @@ export const CategoryList = () => {
         }}
       >
         <Table.Column
-          key="title"
-          dataIndex="title"
+          key="name"
+          dataIndex="name"
           width={224}
           title={t('categories.fields.title')}
         />
         <Table.Column<ICategory>
-          key="id"
-          dataIndex="id"
+          key="name"
+          dataIndex="name"
           width={576}
           title={t('categories.fields.products')}
           render={(_, record) => {
@@ -47,11 +47,11 @@ export const CategoryList = () => {
           }}
         />
         <Table.Column<ICategory>
-          key="isActive"
-          dataIndex="isActive"
+          key="status"
+          dataIndex="status"
           title={t('categories.fields.isActive.label')}
           render={(_, record) => {
-            return <CategoryStatus value={record.isActive} />;
+            return <CategoryStatus value={record.status} />;
           }}
         />
       </Table>

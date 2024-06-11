@@ -1,6 +1,5 @@
 import { EyeOutlined, SearchOutlined } from '@ant-design/icons';
 import {
-  DateField,
   ExportButton,
   FilterDropdown,
   getDefaultSortOrder,
@@ -46,7 +45,7 @@ export const CustomerList = ({ children }: PropsWithChildren) => {
     filters: {
       initial: [
         {
-          field: 'fullName',
+          field: 'name',
           operator: 'contains',
           value: '',
         },
@@ -68,15 +67,14 @@ export const CustomerList = ({ children }: PropsWithChildren) => {
     filters,
     pageSize: 50,
     maxItemCount: 50,
-    mapData: (item) => {
-      return {
-        id: item.id,
-        fullName: item.fullName,
-        gsm: item.gsm,
-        isActive: item.isActive,
-        createdAt: item.createdAt,
-      };
-    },
+    mapData: (item) => ({
+      id: item.id,
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      address: item.address,
+      status: item.status,
+    }),
   });
 
   return (
@@ -102,11 +100,7 @@ export const CustomerList = ({ children }: PropsWithChildren) => {
           dataIndex="id"
           title="ID #"
           render={(value) => (
-            <Typography.Text
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-            >
+            <Typography.Text style={{ whiteSpace: 'nowrap' }}>
               #{value}
             </Typography.Text>
           )}
@@ -117,33 +111,29 @@ export const CustomerList = ({ children }: PropsWithChildren) => {
               }}
             />
           )}
-          defaultFilteredValue={getDefaultFilter('orderNumber', filters, 'eq')}
+          defaultFilteredValue={getDefaultFilter('id', filters, 'eq')}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
               <InputNumber
                 addonBefore="#"
                 style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
+                placeholder={t('users.filter.id.placeholder')}
               />
             </FilterDropdown>
           )}
         />
         <Table.Column
           align="center"
-          key="avatar"
-          dataIndex={['avatar']}
-          title={t('users.fields.avatar.label')}
-          render={(value) => <Avatar src={value[0].url} />}
+          key="picture"
+          dataIndex="picture"
+          title={t('users.fields.picture')}
+          render={(value) => <Avatar src={value} />}
         />
         <Table.Column
-          key="fullName"
-          dataIndex="fullName"
+          key="name"
+          dataIndex="name"
           title={t('users.fields.name')}
-          defaultFilteredValue={getDefaultFilter(
-            'fullName',
-            filters,
-            'contains',
-          )}
+          defaultFilteredValue={getDefaultFilter('name', filters, 'contains')}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
               <Input
@@ -154,46 +144,69 @@ export const CustomerList = ({ children }: PropsWithChildren) => {
           )}
         />
         <Table.Column
-          key="gsm"
-          dataIndex="gsm"
-          title={t('users.fields.gsm')}
-          defaultFilteredValue={getDefaultFilter('gsm', filters, 'eq')}
+          key="email"
+          dataIndex="email"
+          title={t('users.fields.email')}
+          defaultFilteredValue={getDefaultFilter('email', filters, 'contains')}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
               <Input
                 style={{ width: '100%' }}
-                placeholder={t('users.filter.gsm.placeholder')}
+                placeholder={t('users.filter.email.placeholder')}
               />
             </FilterDropdown>
           )}
         />
         <Table.Column
-          key="createdAt"
-          dataIndex="createdAt"
-          title={t('users.fields.createdAt')}
-          render={(value) => <DateField value={value} format="LLL" />}
-          sorter
+          key="phone"
+          dataIndex="phone"
+          title={t('users.fields.phone')}
+          defaultFilteredValue={getDefaultFilter('phone', filters, 'eq')}
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input
+                style={{ width: '100%' }}
+                placeholder={t('users.filter.phone.placeholder')}
+              />
+            </FilterDropdown>
+          )}
         />
         <Table.Column
-          key="isActive"
-          dataIndex="isActive"
-          title={t('users.fields.isActive.label')}
-          render={(value) => {
-            return <UserStatus value={value} />;
-          }}
+          key="address"
+          dataIndex="address"
+          title={t('users.fields.address')}
+          defaultFilteredValue={getDefaultFilter(
+            'address',
+            filters,
+            'contains',
+          )}
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input
+                style={{ width: '100%' }}
+                placeholder={t('users.filter.address.placeholder')}
+              />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column
+          key="status"
+          dataIndex="status"
+          title={t('users.fields.status.title')}
+          render={(value) => <UserStatus value={value} />}
           sorter
-          defaultSortOrder={getDefaultSortOrder('isActive', sorters)}
+          defaultSortOrder={getDefaultSortOrder('status', sorters)}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
               <Select
                 style={{ width: '100%' }}
-                placeholder={t('users.filter.isActive.placeholder')}
+                placeholder={t('users.filter.status.placeholder')}
               >
-                <Select.Option value="true">
-                  {t('users.fields.isActive.true')}
+                <Select.Option value={1}>
+                  {t('users.fields.status.active')}
                 </Select.Option>
-                <Select.Option value="false">
-                  {t('users.fields.isActive.false')}
+                <Select.Option value={0}>
+                  {t('users.fields.status.inactive')}
                 </Select.Option>
               </Select>
             </FilterDropdown>
@@ -207,7 +220,7 @@ export const CustomerList = ({ children }: PropsWithChildren) => {
               icon={<EyeOutlined />}
               onClick={() => {
                 return go({
-                  to: `${showUrl('users', record.id)}`,
+                  to: `${showUrl('customers', record.id)}`,
                   query: {
                     to: pathname,
                   },

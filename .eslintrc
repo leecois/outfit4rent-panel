@@ -55,7 +55,9 @@
         "simple-import-sort/exports": "error", // Export configuration for `eslint-plugin-simple-import-sort`
         "import/order": "off", // Avoid conflict rule between `eslint-plugin-import` and `eslint-plugin-simple-import-sort`
         "import/no-cycle": "off", // Disable import cycle rule
+        "@typescript-eslint/naming-convention": "off",
         "@typescript-eslint/no-unused-vars": "off",
+        "no-underscore-dangle": "off",
         "unused-imports/no-unused-imports": "error",
         "unused-imports/no-unused-vars": [
           "error",

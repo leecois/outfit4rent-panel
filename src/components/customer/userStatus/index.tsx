@@ -1,40 +1,41 @@
 import { CheckCircleOutlined, PauseCircleOutlined } from '@ant-design/icons';
 import { useTranslate } from '@refinedev/core';
 import { Tag, theme, Typography } from 'antd';
+import React from 'react';
 
-import { useConfigProvider } from '../../../context';
 import type { IUser } from '../../../interfaces';
 
 type Props = {
-  value: IUser['isActive'];
+  value: IUser['status'];
 };
 
 export const UserStatus = ({ value }: Props) => {
   const t = useTranslate();
   const { token } = theme.useToken();
-  const { mode } = useConfigProvider();
-  const isDark = mode === 'dark';
 
-  let textColor;
-  if (value) {
-    textColor = isDark ? token.green7 : '#3C8618';
-  } else {
-    textColor = token.colorTextTertiary;
-  }
+  const statusText =
+    value === 1
+      ? t('users.fields.status.active')
+      : t('users.fields.status.inactive');
+  const statusIcon =
+    value === 1 ? <CheckCircleOutlined /> : <PauseCircleOutlined />;
+  const statusColor = value === 1 ? 'green' : 'default';
+  const textColor = value === 1 ? token.colorSuccess : token.colorTextTertiary;
+
   return (
     <Tag
-      color={value ? 'green' : 'default'}
+      color={statusColor}
       style={{
         color: textColor,
       }}
-      icon={value ? <CheckCircleOutlined /> : <PauseCircleOutlined />}
+      icon={statusIcon}
     >
       <Typography.Text
         style={{
           color: textColor,
         }}
       >
-        {t(`users.fields.isActive.${value}`)}
+        {statusText}
       </Typography.Text>
     </Tag>
   );

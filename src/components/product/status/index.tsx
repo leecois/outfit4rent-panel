@@ -3,10 +3,10 @@ import { useTranslate } from '@refinedev/core';
 import { Tag, theme, Typography } from 'antd';
 
 import { useConfigProvider } from '../../../context';
-import type { IProduct } from '../../../interfaces';
+import type { IProductList } from '../../../interfaces';
 
 type Props = {
-  value: IProduct['isActive'];
+  value: IProductList['status'];
 };
 
 export const ProductStatus = ({ value }: Props) => {

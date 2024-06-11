@@ -37,23 +37,23 @@ export const useStoreForm = (props: Props) => {
   useEffect(() => {
     if (store?.address?.coordinate) {
       setLatLng({
-        lat: store.address.coordinate?.[0],
-        lng: store.address.coordinate?.[1],
+        lat: store.address?.coordinate?.[0],
+        lng: store.address?.coordinate?.[1],
       });
     }
   }, [store?.address.coordinate?.[0], store?.address.coordinate?.[1]]);
 
   // we are using these debounced values to get lang and lat from the address text
   // to minimize the number of requests, we are using debounced values
-  const [debouncedAdressValue, setDebouncedAdressValue] = useDebounceValue(
+  const [debouncedAddressValue, setDebouncedAddressValue] = useDebounceValue(
     form.formProps.form?.getFieldValue(['address', 'text']),
     500,
   );
 
   // get lat and lng with address
   useEffect(() => {
-    if (debouncedAdressValue) {
-      getLatLngWithAddress(debouncedAdressValue).then((data) => {
+    if (debouncedAddressValue) {
+      getLatLngWithAddress(debouncedAddressValue).then((data) => {
         // set form field with lat and lng values
         if (data) {
           const { lat, lng } = convertLatLng({
@@ -73,7 +73,7 @@ export const useStoreForm = (props: Props) => {
         }
       });
     }
-  }, [debouncedAdressValue, form.formProps.form?.setFieldValue]);
+  }, [debouncedAddressValue, form.formProps.form?.setFieldValue]);
 
   const handleMapOnDragEnd = async ({
     lat,
@@ -104,7 +104,7 @@ export const useStoreForm = (props: Props) => {
     latLng,
     isFormDisabled,
     setIsFormDisabled: handleSetIsFormDisabled,
-    handleAddressChange: (address: string) => setDebouncedAdressValue(address),
+    handleAddressChange: (address: string) => setDebouncedAddressValue(address),
     handleMapOnDragEnd,
   };
 };

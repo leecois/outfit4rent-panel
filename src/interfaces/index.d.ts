@@ -28,15 +28,12 @@ export interface IOrderStatus {
 
 export interface IUser {
   id: number;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  gender: string;
-  gsm: string;
-  createdAt: string;
-  isActive: boolean;
-  avatar: Array<IFile>;
-  addresses: Array<IAddress>;
+  name: string;
+  email: string;
+  picture: string;
+  phone: string;
+  address: string;
+  status: number;
 }
 
 export interface IIdentity {
@@ -112,25 +109,56 @@ export interface IOrder {
   amount: number;
 }
 
-export interface IProduct {
+// src/interfaces/index.ts
+
+export interface IBrand {
   id: number;
   name: string;
-  isActive: boolean;
-  description: string;
-  images: Array<IFile & { thumbnailUrl?: string }>;
-  createdAt: string;
+}
+
+export interface IImage {
+  id: number;
+  link: string;
+}
+
+export interface IProductDetail {
+  id: number;
+  name: string;
   price: number;
-  category: {
-    id: number;
-    title: string;
-  };
-  stock: number;
+  size: string;
+  deposit: number;
+  description: string;
+  status: number;
+  isUsed: string;
+  category: ICategory;
+  brand: IBrand;
+  quantity: number;
+  availableQuantity: number;
+  type: string;
+  images: IImage[];
+}
+
+export interface IProductList {
+  id: number;
+  name: string;
+  price: number;
+  size: string;
+  deposit: number;
+  description: string;
+  status: string;
+  category: string;
+  brand: string;
+  type: string;
+  imgUrl: string;
 }
 
 export interface ICategory {
   id: number;
-  title: string;
-  isActive: boolean;
+  name: string;
+  description: string;
+  status: number;
+  imageUrl: string;
+  isFeatured: boolean;
 }
 
 export interface IOrderFilterVariables {

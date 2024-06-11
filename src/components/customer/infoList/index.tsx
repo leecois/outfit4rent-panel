@@ -1,14 +1,10 @@
 import {
-  CalendarOutlined,
-  CheckCircleOutlined,
   EnvironmentOutlined,
   PhoneOutlined,
-  RightCircleOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { useTranslate } from '@refinedev/core';
-import { Card, List, Space, theme, Typography } from 'antd';
-import dayjs from 'dayjs';
+import { Card, List, Typography } from 'antd';
 import React from 'react';
 
 import type { IUser } from '../../../interfaces';
@@ -19,7 +15,6 @@ type Props = {
 };
 
 export const CustomerInfoList = ({ customer }: Props) => {
-  const { token } = theme.useToken();
   const t = useTranslate();
 
   return (
@@ -35,62 +30,19 @@ export const CustomerInfoList = ({ customer }: Props) => {
         itemLayout="horizontal"
         dataSource={[
           {
-            title: t('users.fields.gsm'),
+            title: t('customers.fields.phone'),
             icon: <PhoneOutlined />,
-            value: <Typography.Text>{customer?.gsm}</Typography.Text>,
+            value: <Typography.Text>{customer?.phone}</Typography.Text>,
           },
           {
-            title: t('users.fields.addresses'),
+            title: t('users.fields.address'),
             icon: <EnvironmentOutlined />,
-            value: (
-              <Space direction="vertical">
-                {customer?.addresses.map((address, index) => {
-                  const isFirst = index === 0;
-
-                  return (
-                    <Space key={index}>
-                      {isFirst ? (
-                        <CheckCircleOutlined
-                          style={{
-                            color: token.colorSuccess,
-                          }}
-                        />
-                      ) : (
-                        <RightCircleOutlined
-                          style={{
-                            color: token.colorTextTertiary,
-                          }}
-                        />
-                      )}
-                      <Typography.Text
-                        key={index}
-                        style={{
-                          color: isFirst
-                            ? token.colorText
-                            : token.colorTextTertiary,
-                        }}
-                      >
-                        {address.text}
-                      </Typography.Text>
-                    </Space>
-                  );
-                })}
-              </Space>
-            ),
+            value: <Typography.Text>{customer?.address}</Typography.Text>,
           },
           {
-            title: t('users.fields.isActive.label'),
+            title: t('users.fields.status.label'),
             icon: <UserOutlined />,
-            value: <UserStatus value={!!customer?.isActive} />,
-          },
-          {
-            title: t('users.fields.createdAt'),
-            icon: <CalendarOutlined />,
-            value: (
-              <Typography.Text>
-                {dayjs(customer?.createdAt).format('MMMM, YYYY HH:mm A')}
-              </Typography.Text>
-            ),
+            value: <UserStatus value={customer?.status ?? 0} />,
           },
         ]}
         renderItem={(item) => {

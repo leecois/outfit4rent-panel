@@ -24,7 +24,6 @@ import routerProvider, {
   NavigateToResource,
   UnsavedChangesNotifier,
 } from '@refinedev/react-router-v6';
-import jsonServerDataProvider from '@refinedev/simple-rest';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
@@ -47,6 +46,7 @@ import {
   ProductShow,
 } from './pages/products';
 import { StoreCreate, StoreEdit, StoreList } from './pages/stores';
+import { dataProvider } from './rest-data-provider';
 
 interface TitleHandlerOptions {
   resource?: IResourceItem;
@@ -64,7 +64,7 @@ const App: React.FC = () => {
   const { loading } = useAutoLoginForDemo();
 
   const API_URL = 'https://api.outfit4rent.online';
-  const dataProvider = jsonServerDataProvider(API_URL);
+  const data = dataProvider(API_URL);
 
   const { t, i18n } = useTranslation();
 
@@ -85,7 +85,7 @@ const App: React.FC = () => {
           <DevtoolsProvider>
             <Refine
               routerProvider={routerProvider}
-              dataProvider={dataProvider}
+              dataProvider={data}
               authProvider={authProvider}
               i18nProvider={i18nProvider}
               options={{
@@ -112,7 +112,7 @@ const App: React.FC = () => {
                   },
                 },
                 {
-                  name: 'users',
+                  name: 'customers',
                   list: '/customers',
                   show: '/customers/:id',
                   meta: {

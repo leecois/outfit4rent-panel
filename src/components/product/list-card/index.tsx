@@ -15,7 +15,7 @@ import {
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import type { ICategory, IProduct } from '../../../interfaces';
+import type { ICategory, IProductList } from '../../../interfaces';
 import { PaginationTotal } from '../../paginationTotal';
 import { ProductStatus } from '../status';
 import { useStyles } from './styled';
@@ -32,7 +32,7 @@ export const ProductListCard = () => {
     listProps: productListProps,
     filters,
     setFilters,
-  } = useSimpleList<IProduct, HttpError>({
+  } = useSimpleList<IProductList, HttpError>({
     pagination: {
       current: 1,
       pageSize: 12,
@@ -40,7 +40,7 @@ export const ProductListCard = () => {
     filters: {
       initial: [
         {
-          field: 'category.id',
+          field: 'category',
           operator: 'in',
           value: [],
         },
@@ -62,34 +62,34 @@ export const ProductListCard = () => {
   const categoryFilters = useMemo(() => {
     const foundFilter = filters.find((filterItem) => {
       if ('field' in filterItem) {
-        return filterItem.field === 'category.id';
+        return filterItem.field === 'category';
       }
 
       return false;
     });
 
-    const filterValues = foundFilter?.value?.map(Number);
+    const filterValues = foundFilter?.value?.map(String);
 
     return {
       operator: foundFilter?.operator || 'in',
-      value: (filterValues || []) as Array<number>,
+      value: (filterValues || []) as Array<string>,
     };
   }, [filters]).value;
 
   const hasCategoryFilter = categoryFilters?.length > 0;
 
-  const handleOnTagClick = (categoryId: number) => {
+  const handleOnTagClick = (categoryName: string) => {
     const newFilters = categoryFilters;
-    const hasCurrentFilter = newFilters.includes(categoryId);
+    const hasCurrentFilter = newFilters.includes(categoryName);
     if (hasCurrentFilter) {
-      newFilters.splice(newFilters.indexOf(categoryId), 1);
+      newFilters.splice(newFilters.indexOf(categoryName), 1);
     } else {
-      newFilters.push(categoryId);
+      newFilters.push(categoryName);
     }
 
     setFilters([
       {
-        field: 'category.id',
+        field: 'category',
         operator: 'in',
         value: newFilters,
       },
@@ -114,7 +114,7 @@ export const ProductListCard = () => {
           onClick={() => {
             setFilters([
               {
-                field: 'category.id',
+                field: 'category',
                 operator: 'in',
                 value: [],
               },
@@ -128,17 +128,17 @@ export const ProductListCard = () => {
             <Tag
               key={category.id}
               color={
-                categoryFilters?.includes(category.id) ? 'orange' : undefined
+                categoryFilters?.includes(category.name) ? 'orange' : undefined
               }
               style={{
                 padding: '4px 10px 4px 10px',
                 cursor: 'pointer',
               }}
               onClick={() => {
-                handleOnTagClick(category.id);
+                handleOnTagClick(category.name);
               }}
             >
-              {category.title}
+              {category.name}
             </Tag>
           ))}
 
@@ -211,8 +211,8 @@ export const ProductListCard = () => {
                     View
                   </Tag>
                   <img
-                    src={item.images[0].url}
-                    alt={item.images[0].name}
+                    src={item.imgUrl || 'default-image-url.jpg'}
+                    alt={`Product image ${item.id}`}
                     style={{
                       aspectRatio: 288 / 160,
                       objectFit: 'cover',
@@ -229,13 +229,12 @@ export const ProductListCard = () => {
                   }}
                 >
                   <Typography.Text key="category.title">
-                    {
-                      categories.find(
-                        (category) => category.id === item.category.id,
-                      )?.title
-                    }
+                    {item.category}
                   </Typography.Text>
-                  <ProductStatus key="status" value={item.isActive} />
+                  <ProductStatus
+                    key="status"
+                    value={item.status === '1' ? 'true' : 'false'}
+                  />
                 </Flex>,
               ]}
             >

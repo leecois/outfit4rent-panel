@@ -22,7 +22,7 @@ import {
 } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
-import type { ICategory, IProduct } from '../../../interfaces';
+import type { ICategory, IProductDetail } from '../../../interfaces';
 import { Drawer } from '../../drawer';
 import { useStyles } from './styled';
 
@@ -43,7 +43,7 @@ export const ProductDrawerForm = (props: Props) => {
   const { styles, theme } = useStyles();
 
   const { drawerProps, formProps, close, saveButtonProps, formLoading } =
-    useDrawerForm<IProduct>({
+    useDrawerForm<IProductDetail>({
       resource: 'products',
       id: props?.id, // when undefined, id will be read from the URL.
       action: props.action,

@@ -3,7 +3,7 @@ import { useList } from '@refinedev/core';
 import { Avatar, Flex, Popover } from 'antd';
 import { useState } from 'react';
 
-import type { ICategory, IProduct } from '../../../interfaces';
+import type { ICategory, IProductDetail } from '../../../interfaces';
 import { ProductDrawerForm } from '../../product/drawer-form';
 import { ProductDrawerShow } from '../../product/drawer-show';
 
@@ -15,7 +15,7 @@ export const TableCategoryProductColumn = ({ category }: Props) => {
   const [productId, setProductId] = useState<number | null>(null);
   const [drawerAction, setDrawerAction] = useState<'show' | 'edit'>('show');
 
-  const { data, isLoading } = useList<IProduct, HttpError>({
+  const { data, isLoading } = useList<IProductDetail, HttpError>({
     resource: 'products',
     queryOptions: {
       enabled: !!category.id,
@@ -61,8 +61,8 @@ export const TableCategoryProductColumn = ({ category }: Props) => {
             <Popover key={product.id} title={product?.name}>
               <Avatar
                 shape="square"
-                src={image?.thumbnailUrl || image?.url}
-                alt={image?.name}
+                src={image?.link || image?.link}
+                alt={image?.link}
                 style={{
                   cursor: 'pointer',
                   aspectRatio: 32 / 32,

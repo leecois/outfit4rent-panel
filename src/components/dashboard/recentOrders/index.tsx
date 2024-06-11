@@ -79,7 +79,7 @@ export const RecentOrders: React.FC = () => {
                   fontSize: 14,
                 }}
               >
-                {record?.user?.firstName} {record?.user?.lastName}
+                {record?.user?.name} {record?.user?.name}
               </Typography.Text>
               <Typography.Text
                 ellipsis
@@ -88,7 +88,7 @@ export const RecentOrders: React.FC = () => {
                 }}
                 type="secondary"
               >
-                {record?.user?.addresses?.[0]?.text}
+                {record?.user?.address?.[0]}
               </Typography.Text>
             </Space>
           );

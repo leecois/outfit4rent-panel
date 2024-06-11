@@ -3,7 +3,7 @@ import { CreateButton, List } from '@refinedev/antd';
 import { useGo, useNavigation, useTranslate } from '@refinedev/core';
 import { Segmented } from 'antd';
 import type { PropsWithChildren } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { ProductListCard, ProductListTable } from '../../components';
@@ -16,16 +16,26 @@ export const ProductList = ({ children }: PropsWithChildren) => {
   const { pathname } = useLocation();
   const { createUrl } = useNavigation();
 
-  const [view, setView] = useState<View>(
-    (localStorage.getItem('product-view') as View) || 'table',
-  );
+  const [view, setView] = useState<View>('table');
 
-  const handleViewChange = (value: View) => {
-    // remove query params (pagination, filters, etc.) when changing view
-    replace('');
+  // Ensure localStorage is accessed only on the client side
+  useEffect(() => {
+    const savedView = localStorage.getItem('product-view') as View;
+    if (savedView) {
+      setView(savedView);
+    }
+  }, []);
 
-    setView(value);
-    localStorage.setItem('product-view', value);
+  const handleViewChange = (value: string | View) => {
+    if (value === 'table' || value === 'card') {
+      // remove query params (pagination, filters, etc.) when changing view
+      replace('');
+
+      setView(value);
+      localStorage.setItem('product-view', value);
+    } else {
+      console.error('Unexpected view value:', value);
+    }
   };
 
   const t = useTranslate();

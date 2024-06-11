@@ -21,7 +21,7 @@ export const CustomerShow = () => {
     <Drawer
       open
       onClose={() => {
-        list('users');
+        list('customers');
       }}
       width={breakpoint.sm ? '736px' : '100%'}
     >

@@ -9,7 +9,7 @@ type Props = {
 export const CustomerInfoSummary = ({ customer }: Props) => {
   return (
     <Flex align="center" gap={32}>
-      <Avatar size={96} src={customer?.avatar?.[0]?.url} />
+      <Avatar size={96} src={customer?.picture} />
       <Flex vertical>
         <Typography.Text type="secondary">#{customer?.id}</Typography.Text>
         <Typography.Title
@@ -18,7 +18,7 @@ export const CustomerInfoSummary = ({ customer }: Props) => {
             margin: 0,
           }}
         >
-          {customer?.fullName}
+          {customer?.name}
         </Typography.Title>
       </Flex>
     </Flex>
