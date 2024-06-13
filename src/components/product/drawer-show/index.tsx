@@ -12,6 +12,7 @@ import {
 import {
   Avatar,
   Button,
+  Col,
   Divider,
   Flex,
   Grid,
@@ -21,8 +22,9 @@ import {
 } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
-import type { ICategory, IProductDetail } from '../../../interfaces';
+import type { IBrand, ICategory, IProductDetail } from '../../../interfaces';
 import { Drawer } from '../../drawer';
+import { ProductReviewTable } from '../review-table';
 import { ProductStatus } from '../status';
 
 type Props = {
@@ -41,7 +43,7 @@ export const ProductDrawerShow = (props: Props) => {
   const breakpoint = Grid.useBreakpoint();
 
   const { queryResult } = useShow<IProductDetail, HttpError>({
-    resource: 'product',
+    resource: 'products',
     id: props?.id, // when undefined, id will be read from the URL.
   });
   const product = queryResult.data?.data;
@@ -53,7 +55,15 @@ export const ProductDrawerShow = (props: Props) => {
       enabled: !!product?.category?.id,
     },
   });
+  const { data: brandData } = useOne<IBrand, HttpError>({
+    resource: 'brands',
+    id: product?.brand?.id,
+    queryOptions: {
+      enabled: !!product?.brand?.id,
+    },
+  });
   const category = categoryData?.data;
+  const brand = brandData?.data;
 
   const handleDrawerClose = () => {
     if (props?.onClose) {
@@ -81,7 +91,7 @@ export const ProductDrawerShow = (props: Props) => {
   return (
     <Drawer
       open={true}
-      width={breakpoint.sm ? '378px' : '100%'}
+      width={breakpoint.sm ? '736px' : '100%'}
       zIndex={1001}
       onClose={handleDrawerClose}
     >
@@ -96,8 +106,8 @@ export const ProductDrawerShow = (props: Props) => {
             margin: '16px auto',
             borderRadius: '8px',
           }}
-          src={product?.images?.[0].link}
-          alt={product?.images?.[0].link}
+          src={product?.images?.[0]?.link}
+          alt={product?.images?.[0]?.link}
         />
       </Flex>
       <Flex
@@ -148,6 +158,14 @@ export const ProductDrawerShow = (props: Props) => {
                 </Typography.Text>
               ),
               value: <Typography.Text>{category?.name}</Typography.Text>,
+            },
+            {
+              label: (
+                <Typography.Text type="secondary">
+                  {t('products.fields.brand')}
+                </Typography.Text>
+              ),
+              value: <Typography.Text>{brand?.name}</Typography.Text>,
             },
             {
               label: (
@@ -214,6 +232,14 @@ export const ProductDrawerShow = (props: Props) => {
           {t('actions.edit')}
         </Button>
       </Flex>
+      <Col
+        span={24}
+        style={{
+          marginTop: '5px',
+        }}
+      >
+        <ProductReviewTable product={product} />
+      </Col>
     </Drawer>
   );
 };

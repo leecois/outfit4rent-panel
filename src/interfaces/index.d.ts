@@ -94,6 +94,15 @@ export interface ICourier {
   status: ICourierStatus;
   vehicle: IVehicle;
 }
+export interface IPartner {
+  id: number;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  areaId: number;
+  status: number;
+}
 
 export interface IOrder {
   id: number;
@@ -179,12 +188,12 @@ export interface IUserFilterVariables {
 
 export interface IReview {
   id: number;
-  order: IOrder;
-  user: IUser;
-  star: number;
-  createDate: string;
-  status: 'pending' | 'approved' | 'rejected';
-  comment: Array<string>;
+  content: string;
+  title: string;
+  numberStars: number;
+  customerId: number;
+  productId: number;
+  reviewImages: string[];
 }
 
 export type IVehicle = {

@@ -59,8 +59,8 @@
       }
     },
     "error": {
-      "info": "You may have forgotten to add the {{action}} component to {{resource}} resource.",
       "404": "Sorry, the page you visited does not exist.",
+      "info": "You may have forgotten to add the {{action}} component to {{resource}} resource.",
       "resource404": "Are you sure you have created the {{resource}} resource.",
       "backHome": "Back Home"
     }
@@ -137,8 +137,8 @@
       "products": "Products",
       "isActive": {
         "label": "Status",
-        "true": "Visible",
-        "false": "Invisible"
+        "0": "Invisible",
+        "1": "Visible"
       }
     }
   },
@@ -406,7 +406,16 @@
         "description": "Upload Image",
         "validation": "must be 1080x1080 px"
       },
-      "createdAt": "CreatedAt"
+      "createdAt": "CreatedAt",
+      "status": {
+        "active": "Active",
+        "label": "Label",
+        "inactive": "Inactive"
+      },
+      "brand": "Brand",
+      "imgUrl": {
+        "label": "Images"
+      }
     },
     "filter": {
       "title": "Filters",
@@ -438,6 +447,9 @@
         "placeholder": "Select Status",
         "true": "Available",
         "false": "Unavailable"
+      },
+      "status": {
+        "placeholder": "Placeholder"
       }
     },
     "actions": {
@@ -552,6 +564,15 @@
         "label": "Status",
         "true": "Active",
         "false": "Idle"
+      },
+      "picture": "Avatar",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "status": {
+        "title": "Status",
+        "active": "Active",
+        "inactive": "Inactive"
       }
     },
     "filter": {

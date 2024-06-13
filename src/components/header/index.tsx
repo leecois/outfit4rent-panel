@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { useConfigProvider } from '../../context';
-import type { ICourier, IIdentity, IOrder, IStore } from '../../interfaces';
+import type { IIdentity, IOrder, IProductList, IStore } from '../../interfaces';
 import { IconMoon, IconSun } from '../icons';
 import { useStyles } from './styled';
 
@@ -138,8 +138,8 @@ export const Header: React.FC = () => {
     },
   });
 
-  const { refetch: refetchCouriers } = useList<ICourier>({
-    resource: 'couriers',
+  const { refetch: refetchCouriers } = useList<IProductList>({
+    resource: 'products',
     config: {
       filters: [{ field: 'q', operator: 'contains', value }],
     },
@@ -148,9 +148,9 @@ export const Header: React.FC = () => {
       onSuccess: (data) => {
         const courierOptionGroup = data.data.map((item) =>
           renderItem(
-            `${item.name} ${item.surname}`,
-            item.avatar[0].url,
-            `/couriers/${item.id}/edit`,
+            `${item.name} ${item.category}`,
+            item.imgUrl[0],
+            `/products/${item.id}`,
           ),
         );
         if (courierOptionGroup.length > 0) {
@@ -169,8 +169,8 @@ export const Header: React.FC = () => {
   useEffect(() => {
     setOptions([]);
     refetchOrders();
-    refetchCouriers();
     refetchStores();
+    refetchCouriers();
   }, [value]);
 
   const menuItems: MenuProps['items'] = [...(i18n.languages || [])]

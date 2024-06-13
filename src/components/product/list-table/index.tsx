@@ -25,9 +25,15 @@ import {
 } from 'antd';
 import { useLocation } from 'react-router-dom';
 
-import type { ICategory, IProductList } from '../../../interfaces';
+import type {
+  IBrand,
+  ICategory,
+  IProductDetail,
+  IProductList,
+} from '../../../interfaces';
 import { PaginationTotal } from '../../paginationTotal';
 import { ProductStatus } from '../status';
+import { ProductTableColumnRating } from '../tableColumnRating';
 
 export const ProductListTable = () => {
   const { token } = theme.useToken();
@@ -50,7 +56,12 @@ export const ProductListTable = () => {
           value: '',
         },
         {
-          field: 'category',
+          field: 'category.id',
+          operator: 'in',
+          value: [],
+        },
+        {
+          field: 'brand.id',
           operator: 'in',
           value: [],
         },
@@ -63,12 +74,25 @@ export const ProductListTable = () => {
     },
   });
 
-  const { selectProps: categorySelectProps } = useSelect<ICategory>({
-    resource: 'categories',
-    optionLabel: 'name',
-    optionValue: 'name',
-    defaultValue: getDefaultFilter('category', filters, 'in'),
-  });
+  const { selectProps: categorySelectProps, queryResult } =
+    useSelect<ICategory>({
+      resource: 'categories',
+      optionLabel: 'name',
+      optionValue: 'id',
+      defaultValue: getDefaultFilter('category.id', filters, 'in'),
+    });
+
+  const categories = queryResult?.data?.data || [];
+
+  const { selectProps: brandSelectProps, queryResult: brandQueryResult } =
+    useSelect<IBrand>({
+      resource: 'brands',
+      optionLabel: 'name',
+      optionValue: 'id',
+      defaultValue: getDefaultFilter('brand.id', filters, 'in'),
+    });
+
+  const brands = brandQueryResult?.data?.data || [];
 
   return (
     <Table
@@ -225,17 +249,17 @@ export const ProductListTable = () => {
           );
         }}
       />
-      <Table.Column<IProductList>
+      <Table.Column<IProductDetail>
         title={t('products.fields.category')}
-        dataIndex="category"
-        key="category"
+        dataIndex={['category', 'name']}
+        key="category.id"
         width={128}
-        defaultFilteredValue={getDefaultFilter('category', filters, 'in')}
+        defaultFilteredValue={getDefaultFilter('category.id', filters, 'in')}
         filterDropdown={(props) => {
           return (
             <FilterDropdown
               {...props}
-              selectedKeys={props.selectedKeys.map(String)}
+              selectedKeys={props.selectedKeys.map(Number)}
             >
               <Select
                 {...categorySelectProps}
@@ -247,16 +271,66 @@ export const ProductListTable = () => {
             </FilterDropdown>
           );
         }}
-        render={(category: string) => {
+        render={(_, record) => {
+          const categoryMatch = categories.find(
+            (categoryItem) => categoryItem?.name === record.category?.name,
+          );
+
           return (
             <Typography.Text
               style={{
                 whiteSpace: 'nowrap',
               }}
             >
-              {category}
+              {categoryMatch?.name || '-'}
             </Typography.Text>
           );
+        }}
+      />
+      <Table.Column<IProductDetail>
+        title={t('products.fields.brand')}
+        dataIndex={['brands', 'name']}
+        key="brand.id"
+        width={128}
+        defaultFilteredValue={getDefaultFilter('brand.id', filters, 'in')}
+        filterDropdown={(props) => {
+          return (
+            <FilterDropdown
+              {...props}
+              selectedKeys={props.selectedKeys.map(Number)}
+            >
+              <Select
+                {...brandSelectProps}
+                style={{ width: '200px' }}
+                allowClear
+                mode="multiple"
+                placeholder={t('products.filter.category.placeholder')}
+              />
+            </FilterDropdown>
+          );
+        }}
+        render={(_, record) => {
+          const brandMatch = brands.find(
+            (brandItem) => brandItem?.id === record.brand?.id,
+          );
+
+          return (
+            <Typography.Text
+              style={{
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {brandMatch?.name || '-'}
+            </Typography.Text>
+          );
+        }}
+      />
+      <Table.Column<IProductList>
+        dataIndex="id"
+        key="ratings"
+        title={t('couriers.fields.rating.label')}
+        render={(_, record) => {
+          return <ProductTableColumnRating product={record} />;
         }}
       />
       <Table.Column

@@ -59,13 +59,12 @@
       }
     },
     "error": {
-      "info": "Bạn có thể đã quên thêm thành phần {{action}} vào tài nguyên {{resource}}.",
       "404": "Xin lỗi, trang bạn đã truy cập không tồn tại.",
+      "info": "Bạn có thể đã quên thêm thành phần {{action}} vào tài nguyên {{resource}}.",
       "resource404": "Bạn có chắc chắn đã tạo tài nguyên {{resource}} không.",
       "backHome": "Quay về Trang chủ"
     }
   },
-
   "actions": {
     "list": "Liệt kê",
     "create": "Tạo",
@@ -249,7 +248,6 @@
       "edit": "Chỉnh sửa người giao hàng"
     }
   },
-
   "dashboard": {
     "title": "Bảng điều khiển",
     "overview": {
@@ -385,7 +383,6 @@
       "mainTotal": "TỔNG CỘNG"
     }
   },
-
   "products": {
     "products": "Sản phẩm",
     "titles": {
@@ -409,7 +406,15 @@
         "description": "Tải lên một bức ảnh.",
         "validation": "Độ phân giải ảnh: 1080x1080px."
       },
-      "createdAt": "Tạo vào"
+      "createdAt": "Tạo vào",
+      "status": {
+        "active": "Hoạt động",
+        "label": "Nhãn",
+        "inactive": "Không hoạt động"
+      },
+      "imgUrl": {
+        "label": "Ảnh"
+      }
     },
     "filter": {
       "title": "Bộ lọc",
@@ -556,7 +561,11 @@
         "label": "Trạng thái",
         "true": "Hoạt động",
         "false": "Không hoạt động"
-      }
+      },
+      "picture": "Ảnh",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "address": "Địa chỉ"
     },
     "filter": {
       "title": "Bộ lọc",

@@ -22,7 +22,7 @@ import {
 } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
-import type { ICategory, IProductDetail } from '../../../interfaces';
+import type { IBrand, ICategory, IProductDetail } from '../../../interfaces';
 import { Drawer } from '../../drawer';
 import { useStyles } from './styled';
 
@@ -55,6 +55,9 @@ export const ProductDrawerForm = (props: Props) => {
 
   const { selectProps: categorySelectProps } = useSelect<ICategory>({
     resource: 'categories',
+  });
+  const { selectProps: brandSelectProps } = useSelect<IBrand>({
+    resource: 'brands',
   });
 
   const onDrawerCLose = () => {
@@ -92,7 +95,7 @@ export const ProductDrawerForm = (props: Props) => {
       {...drawerProps}
       open={true}
       title={title}
-      width={breakpoint.sm ? '378px' : '100%'}
+      width={breakpoint.sm ? '736px' : '100%'}
       zIndex={1001}
       onClose={onDrawerCLose}
     >
@@ -114,10 +117,11 @@ export const ProductDrawerForm = (props: Props) => {
             <Upload.Dragger
               name="file"
               action={`${apiUrl}/media/upload`}
-              maxCount={1}
+              maxCount={3}
+              multiple
               accept=".png,.jpg,.jpeg"
               className={styles.uploadDragger}
-              showUploadList={false}
+              showUploadList={true}
             >
               <Flex
                 vertical
@@ -206,6 +210,18 @@ export const ProductDrawerForm = (props: Props) => {
               ]}
             >
               <Select {...categorySelectProps} />
+            </Form.Item>
+            <Form.Item
+              label={t('products.fields.brand')}
+              name={['brand', 'id']}
+              className={styles.formItem}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Select {...brandSelectProps} />
             </Form.Item>
             <Form.Item
               label={t('products.fields.isActive.label')}

@@ -40,7 +40,7 @@ export const ProductListCard = () => {
     filters: {
       initial: [
         {
-          field: 'category',
+          field: 'category.id',
           operator: 'in',
           value: [],
         },
@@ -62,34 +62,34 @@ export const ProductListCard = () => {
   const categoryFilters = useMemo(() => {
     const foundFilter = filters.find((filterItem) => {
       if ('field' in filterItem) {
-        return filterItem.field === 'category';
+        return filterItem.field === 'category.id';
       }
 
       return false;
     });
 
-    const filterValues = foundFilter?.value?.map(String);
+    const filterValues = foundFilter?.value?.map(Number);
 
     return {
       operator: foundFilter?.operator || 'in',
-      value: (filterValues || []) as Array<string>,
+      value: (filterValues || []) as Array<number>,
     };
   }, [filters]).value;
 
   const hasCategoryFilter = categoryFilters?.length > 0;
 
-  const handleOnTagClick = (categoryName: string) => {
+  const handleOnTagClick = (categoryId: number) => {
     const newFilters = categoryFilters;
-    const hasCurrentFilter = newFilters.includes(categoryName);
+    const hasCurrentFilter = newFilters.includes(categoryId);
     if (hasCurrentFilter) {
-      newFilters.splice(newFilters.indexOf(categoryName), 1);
+      newFilters.splice(newFilters.indexOf(categoryId), 1);
     } else {
-      newFilters.push(categoryName);
+      newFilters.push(categoryId);
     }
 
     setFilters([
       {
-        field: 'category',
+        field: 'category.id',
         operator: 'in',
         value: newFilters,
       },
@@ -114,7 +114,7 @@ export const ProductListCard = () => {
           onClick={() => {
             setFilters([
               {
-                field: 'category',
+                field: 'category.id',
                 operator: 'in',
                 value: [],
               },
@@ -128,14 +128,14 @@ export const ProductListCard = () => {
             <Tag
               key={category.id}
               color={
-                categoryFilters?.includes(category.name) ? 'orange' : undefined
+                categoryFilters?.includes(category.id) ? 'orange' : undefined
               }
               style={{
                 padding: '4px 10px 4px 10px',
                 cursor: 'pointer',
               }}
               onClick={() => {
-                handleOnTagClick(category.name);
+                handleOnTagClick(category.id);
               }}
             >
               {category.name}

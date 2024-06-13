@@ -1,32 +1,42 @@
 import { useList } from '@refinedev/core';
 import { Rate } from 'antd';
 
-import type { ICourier, IReview } from '../../../interfaces';
+import type { IProductList, IReview } from '../../../interfaces';
 
 type Props = {
-  courier?: ICourier;
+  product?: IProductList;
 };
 
-export const CourierTableColumnRating = (props: Props) => {
+export const ProductTableColumnRating = (props: Props) => {
   const { data, isLoading } = useList<IReview>({
     resource: 'reviews',
     filters: [
       {
-        field: 'order.courier.id',
+        field: 'order.product.id',
         operator: 'eq',
-        value: props.courier?.id,
+        value: props.product?.id,
       },
     ],
     pagination: {
       mode: 'off',
     },
     queryOptions: {
-      enabled: !!props.courier?.id,
+      enabled: !!props.product?.id,
     },
   });
 
   if (isLoading)
-    return <Rate key="skeleton" disabled allowHalf defaultValue={0} />;
+    return (
+      <Rate
+        key="skeleton"
+        style={{
+          minWidth: '132px',
+        }}
+        disabled
+        allowHalf
+        defaultValue={0}
+      />
+    );
 
   const review = data?.data || [];
   const totalStarCount = review?.reduce(
