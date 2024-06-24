@@ -10,8 +10,8 @@ import {
   useTranslate,
 } from '@refinedev/core';
 import {
-  Avatar,
   Button,
+  Carousel,
   Col,
   Divider,
   Flex,
@@ -22,7 +22,7 @@ import {
 } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
-import type { IBrand, ICategory, IProductDetail } from '../../../interfaces';
+import type { IBrand, ICategory, IProductList } from '../../../interfaces';
 import { Drawer } from '../../drawer';
 import { ProductReviewTable } from '../review-table';
 import { ProductStatus } from '../status';
@@ -42,7 +42,7 @@ export const ProductDrawerShow = (props: Props) => {
   const { token } = theme.useToken();
   const breakpoint = Grid.useBreakpoint();
 
-  const { queryResult } = useShow<IProductDetail, HttpError>({
+  const { queryResult } = useShow<IProductList, HttpError>({
     resource: 'products',
     id: props?.id, // when undefined, id will be read from the URL.
   });
@@ -50,16 +50,16 @@ export const ProductDrawerShow = (props: Props) => {
 
   const { data: categoryData } = useOne<ICategory, HttpError>({
     resource: 'categories',
-    id: product?.category?.id,
+    id: product?.idCategory,
     queryOptions: {
-      enabled: !!product?.category?.id,
+      enabled: !!product?.idCategory,
     },
   });
   const { data: brandData } = useOne<IBrand, HttpError>({
     resource: 'brands',
-    id: product?.brand?.id,
+    id: product?.idBrand,
     queryOptions: {
-      enabled: !!product?.brand?.id,
+      enabled: !!product?.idBrand,
     },
   });
   const category = categoryData?.data;
@@ -95,21 +95,23 @@ export const ProductDrawerShow = (props: Props) => {
       zIndex={1001}
       onClose={handleDrawerClose}
     >
-      <Flex vertical align="center" justify="center">
-        <Avatar
-          shape="square"
-          style={{
-            aspectRatio: 1,
-            objectFit: 'contain',
-            width: '240px',
-            height: '240px',
-            margin: '16px auto',
-            borderRadius: '8px',
-          }}
-          src={product?.images?.[0]?.link}
-          alt={product?.images?.[0]?.link}
-        />
-      </Flex>
+      <Carousel arrows infinite={false}>
+        {product?.images?.map((image) => (
+          <div key={image.id}>
+            <img
+              src={image.url}
+              alt={`Product image ${image.id}`}
+              style={{
+                aspectRatio: 1,
+                objectFit: 'contain',
+                width: '100%',
+                height: '240px',
+              }}
+            />
+          </div>
+        ))}
+      </Carousel>
+
       <Flex
         vertical
         style={{
@@ -173,11 +175,7 @@ export const ProductDrawerShow = (props: Props) => {
                   {t('products.fields.isActive.label')}
                 </Typography.Text>
               ),
-              value: (
-                <ProductStatus
-                  value={String(product?.status) === '1' ? 'true' : 'false'}
-                />
-              ),
+              value: <ProductStatus value={product?.status ?? 0} />,
             },
           ]}
           renderItem={(item) => {

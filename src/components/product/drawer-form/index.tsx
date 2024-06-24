@@ -8,7 +8,6 @@ import {
 import type { BaseKey } from '@refinedev/core';
 import { useApiUrl, useGetToPath, useGo, useTranslate } from '@refinedev/core';
 import {
-  Avatar,
   Button,
   Flex,
   Form,
@@ -22,7 +21,7 @@ import {
 } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
-import type { IBrand, ICategory, IProductDetail } from '../../../interfaces';
+import type { IBrand, ICategory, IProductList } from '../../../interfaces';
 import { Drawer } from '../../drawer';
 import { useStyles } from './styled';
 
@@ -32,7 +31,11 @@ type Props = {
   onClose?: () => void;
   onMutationSuccess?: () => void;
 };
-
+interface UploadResponse {
+  message: string;
+  statusCode: string;
+  data: string;
+}
 export const ProductDrawerForm = (props: Props) => {
   const getToPath = useGetToPath();
   const [searchParameters] = useSearchParams();
@@ -40,10 +43,10 @@ export const ProductDrawerForm = (props: Props) => {
   const t = useTranslate();
   const apiUrl = useApiUrl();
   const breakpoint = Grid.useBreakpoint();
-  const { styles, theme } = useStyles();
+  const { styles } = useStyles();
 
   const { drawerProps, formProps, close, saveButtonProps, formLoading } =
-    useDrawerForm<IProductDetail>({
+    useDrawerForm<IProductList>({
       resource: 'products',
       id: props?.id, // when undefined, id will be read from the URL.
       action: props.action,
@@ -85,10 +88,20 @@ export const ProductDrawerForm = (props: Props) => {
     });
   };
 
-  const images = Form.useWatch('images', formProps.form);
-  const image = images?.[0] || null;
-  const previewImageURL = image?.url || image?.response?.url;
   const title = props.action === 'edit' ? null : t('products.actions.add');
+
+  const handleUploadChange = (info: any) => {
+    const { fileList } = info;
+    const updatedFileList = fileList.map((file: any) => {
+      if (file.response) {
+        return {
+          url: (file.response as UploadResponse).data,
+        };
+      }
+      return file;
+    });
+    formProps.form?.setFieldsValue({ images: updatedFileList });
+  };
 
   return (
     <Drawer
@@ -111,55 +124,22 @@ export const ProductDrawerForm = (props: Props) => {
             rules={[
               {
                 required: true,
+                message: 'Please upload at least one image.',
               },
             ]}
           >
             <Upload.Dragger
               name="file"
-              action={`${apiUrl}/media/upload`}
-              maxCount={3}
+              action={`${apiUrl}/products/uploaded-file`}
               multiple
               accept=".png,.jpg,.jpeg"
-              className={styles.uploadDragger}
               showUploadList={true}
+              onChange={handleUploadChange}
+              listType="picture-card"
             >
-              <Flex
-                vertical
-                align="center"
-                justify="center"
-                style={{
-                  position: 'relative',
-                  height: '100%',
-                }}
-              >
-                <Avatar
-                  shape="square"
-                  style={{
-                    aspectRatio: 1,
-                    objectFit: 'contain',
-                    width: previewImageURL ? '100%' : '48px',
-                    height: previewImageURL ? '100%' : '48px',
-                    marginTop: previewImageURL ? undefined : 'auto',
-                    transform: previewImageURL ? undefined : 'translateY(50%)',
-                  }}
-                  src={previewImageURL || '/images/product-default-img.png'}
-                  alt="Product Image"
-                />
-                <Button
-                  icon={<UploadOutlined />}
-                  style={{
-                    marginTop: 'auto',
-                    marginBottom: '16px',
-                    backgroundColor: theme.colorBgContainer,
-                    ...(!!previewImageURL && {
-                      position: 'absolute',
-                      bottom: 0,
-                    }),
-                  }}
-                >
-                  {t('products.fields.images.description')}
-                </Button>
-              </Flex>
+              <Button icon={<UploadOutlined />}>
+                {t('products.fields.images.description')}
+              </Button>
             </Upload.Dragger>
           </Form.Item>
           <Flex vertical>
@@ -188,6 +168,42 @@ export const ProductDrawerForm = (props: Props) => {
               <Input.TextArea rows={6} />
             </Form.Item>
             <Form.Item
+              label={t('products.fields.description')}
+              name="size"
+              className={styles.formItem}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input.TextArea rows={6} />
+            </Form.Item>
+            <Form.Item
+              label={t('products.fields.description')}
+              name="type"
+              className={styles.formItem}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input.TextArea rows={6} />
+            </Form.Item>
+            <Form.Item
+              label={t('products.fields.description')}
+              name="quantity"
+              className={styles.formItem}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <InputNumber prefix={''} style={{ width: '150px' }} />
+            </Form.Item>
+            <Form.Item
               label={t('products.fields.price')}
               name="price"
               className={styles.formItem}
@@ -200,8 +216,20 @@ export const ProductDrawerForm = (props: Props) => {
               <InputNumber prefix={'$'} style={{ width: '150px' }} />
             </Form.Item>
             <Form.Item
+              label={t('products.fields.deposit')}
+              name="deposit"
+              className={styles.formItem}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <InputNumber prefix={'$'} style={{ width: '150px' }} />
+            </Form.Item>
+            <Form.Item
               label={t('products.fields.category')}
-              name={['category', 'id']}
+              name="idCategory"
               className={styles.formItem}
               rules={[
                 {
@@ -213,7 +241,7 @@ export const ProductDrawerForm = (props: Props) => {
             </Form.Item>
             <Form.Item
               label={t('products.fields.brand')}
-              name={['brand', 'id']}
+              name="idBrand"
               className={styles.formItem}
               rules={[
                 {
@@ -225,7 +253,7 @@ export const ProductDrawerForm = (props: Props) => {
             </Form.Item>
             <Form.Item
               label={t('products.fields.isActive.label')}
-              name="isActive"
+              name="status"
               className={styles.formItem}
               initialValue={true}
             >
@@ -235,11 +263,11 @@ export const ProductDrawerForm = (props: Props) => {
                 options={[
                   {
                     label: t('products.fields.isActive.true'),
-                    value: true,
+                    value: 1,
                   },
                   {
                     label: t('products.fields.isActive.false'),
-                    value: false,
+                    value: 0,
                   },
                 ]}
               />

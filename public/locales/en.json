@@ -136,9 +136,9 @@
       "title": "Title",
       "products": "Products",
       "isActive": {
-        "label": "Status",
         "0": "Invisible",
-        "1": "Visible"
+        "1": "Visible",
+        "label": "Status"
       }
     }
   },
@@ -415,7 +415,9 @@
       "brand": "Brand",
       "imgUrl": {
         "label": "Images"
-      }
+      },
+      "image": "Image",
+      "deposit": "Deposit"
     },
     "filter": {
       "title": "Filters",

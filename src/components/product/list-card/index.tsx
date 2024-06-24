@@ -57,6 +57,7 @@ export const ProductListCard = () => {
       mode: 'off',
     },
   });
+
   const categories = categoryData?.data || [];
 
   const categoryFilters = useMemo(() => {
@@ -179,17 +180,6 @@ export const ProductListCard = () => {
               hoverable
               bordered={false}
               className={styles.card}
-              styles={{
-                body: {
-                  padding: 16,
-                },
-                cover: {
-                  position: 'relative',
-                },
-                actions: {
-                  marginTop: 'auto',
-                },
-              }}
               cover={
                 <>
                   <Tag
@@ -211,7 +201,7 @@ export const ProductListCard = () => {
                     View
                   </Tag>
                   <img
-                    src={item.imgUrl || 'default-image-url.jpg'}
+                    src={item.images[0]?.url || 'default-image-url.jpg'}
                     alt={`Product image ${item.id}`}
                     style={{
                       aspectRatio: 288 / 160,
@@ -229,12 +219,11 @@ export const ProductListCard = () => {
                   }}
                 >
                   <Typography.Text key="category.title">
-                    {item.category}
+                    {categories.find(
+                      (category) => category.id === item.idCategory,
+                    )?.name || '-'}
                   </Typography.Text>
-                  <ProductStatus
-                    key="status"
-                    value={item.status === '1' ? 'true' : 'false'}
-                  />
+                  <ProductStatus key="status" value={item.status} />
                 </Flex>,
               ]}
             >
@@ -250,7 +239,6 @@ export const ProductListCard = () => {
                     >
                       {item.name}
                     </Typography.Title>
-
                     <NumberField
                       value={item.price}
                       style={{

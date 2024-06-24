@@ -127,24 +127,8 @@ export interface IBrand {
 
 export interface IImage {
   id: number;
-  link: string;
-}
-
-export interface IProductDetail {
-  id: number;
-  name: string;
-  price: number;
-  size: string;
-  deposit: number;
-  description: string;
-  status: number;
-  isUsed: string;
-  category: ICategory;
-  brand: IBrand;
-  quantity: number;
-  availableQuantity: number;
-  type: string;
-  images: IImage[];
+  url: string;
+  idProduct: number;
 }
 
 export interface IProductList {
@@ -152,13 +136,17 @@ export interface IProductList {
   name: string;
   price: number;
   size: string;
-  deposit: number;
   description: string;
-  status: string;
-  category: string;
-  brand: string;
+  status: number;
+  isUsed: string;
+  deposit: number;
+  idCategory: number;
+  quantity: number;
+  availableQuantity: number;
+  idBrand: number;
   type: string;
-  imgUrl: string;
+  isFeatured: boolean;
+  images: IImage[];
 }
 
 export interface ICategory {

@@ -2,10 +2,10 @@ import { useTable } from '@refinedev/antd';
 import { useNavigation, useTranslate } from '@refinedev/core';
 import { Rate, Table, Tag } from 'antd';
 
-import type { IProductDetail, IReview } from '../../../interfaces';
+import type { IProductList, IReview } from '../../../interfaces';
 
 type Props = {
-  product?: IProductDetail;
+  product?: IProductList;
 };
 
 export const ProductReviewTable = (props: Props) => {

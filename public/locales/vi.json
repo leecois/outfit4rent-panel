@@ -414,7 +414,8 @@
       },
       "imgUrl": {
         "label": "Ảnh"
-      }
+      },
+      "deposit": "Tiền cọc"
     },
     "filter": {
       "title": "Bộ lọc",

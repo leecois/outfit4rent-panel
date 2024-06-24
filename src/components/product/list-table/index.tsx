@@ -25,12 +25,7 @@ import {
 } from 'antd';
 import { useLocation } from 'react-router-dom';
 
-import type {
-  IBrand,
-  ICategory,
-  IProductDetail,
-  IProductList,
-} from '../../../interfaces';
+import type { IBrand, ICategory, IProductList } from '../../../interfaces';
 import { PaginationTotal } from '../../paginationTotal';
 import { ProductStatus } from '../status';
 import { ProductTableColumnRating } from '../tableColumnRating';
@@ -56,12 +51,12 @@ export const ProductListTable = () => {
           value: '',
         },
         {
-          field: 'category.id',
+          field: 'idCategory',
           operator: 'in',
           value: [],
         },
         {
-          field: 'brand.id',
+          field: 'idBrand',
           operator: 'in',
           value: [],
         },
@@ -108,11 +103,7 @@ export const ProductListTable = () => {
     >
       <Table.Column
         title={
-          <Typography.Text
-            style={{
-              whiteSpace: 'nowrap',
-            }}
-          >
+          <Typography.Text style={{ whiteSpace: 'nowrap' }}>
             ID #
           </Typography.Text>
         }
@@ -120,19 +111,13 @@ export const ProductListTable = () => {
         key="id"
         width={80}
         render={(value) => (
-          <Typography.Text
-            style={{
-              whiteSpace: 'nowrap',
-            }}
-          >
+          <Typography.Text style={{ whiteSpace: 'nowrap' }}>
             #{value}
           </Typography.Text>
         )}
         filterIcon={(filtered) => (
           <SearchOutlined
-            style={{
-              color: filtered ? token.colorPrimary : undefined,
-            }}
+            style={{ color: filtered ? token.colorPrimary : undefined }}
           />
         )}
         defaultFilteredValue={getDefaultFilter('id', filters, 'eq')}
@@ -147,14 +132,14 @@ export const ProductListTable = () => {
         )}
       />
       <Table.Column
-        title={t('products.fields.imgUrl.label')}
-        dataIndex="imgUrl"
-        key="imgUrl"
-        render={(imgUrl: string) => {
+        title={t('products.fields.image')}
+        dataIndex="images"
+        key="images"
+        render={(images: IProductList['images']) => {
           return (
             <Avatar
               shape="square"
-              src={imgUrl || 'default-image-url.jpg'}
+              src={images[0]?.url || 'default-image-url.jpg'}
               alt={`Product image`}
             />
           );
@@ -166,9 +151,7 @@ export const ProductListTable = () => {
         key="name"
         filterIcon={(filtered) => (
           <SearchOutlined
-            style={{
-              color: filtered ? token.colorPrimary : undefined,
-            }}
+            style={{ color: filtered ? token.colorPrimary : undefined }}
           />
         )}
         defaultFilteredValue={getDefaultFilter('name', filters, 'contains')}
@@ -177,17 +160,11 @@ export const ProductListTable = () => {
             <Input placeholder={t('products.filter.name.placeholder')} />
           </FilterDropdown>
         )}
-        render={(value: string) => {
-          return (
-            <Typography.Text
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {value}
-            </Typography.Text>
-          );
-        }}
+        render={(value: string) => (
+          <Typography.Text style={{ whiteSpace: 'nowrap' }}>
+            {value}
+          </Typography.Text>
+        )}
       />
       <Table.Column
         title={t('products.fields.description')}
@@ -196,9 +173,7 @@ export const ProductListTable = () => {
         width={432}
         filterIcon={(filtered) => (
           <SearchOutlined
-            style={{
-              color: filtered ? token.colorPrimary : undefined,
-            }}
+            style={{ color: filtered ? token.colorPrimary : undefined }}
           />
         )}
         defaultFilteredValue={getDefaultFilter(
@@ -211,19 +186,14 @@ export const ProductListTable = () => {
             <Input placeholder={t('products.filter.description.placeholder')} />
           </FilterDropdown>
         )}
-        render={(description: string) => {
-          return (
-            <Typography.Paragraph
-              ellipsis={{ rows: 1, tooltip: true }}
-              style={{
-                maxWidth: '400px',
-                marginBottom: 0,
-              }}
-            >
-              {description}
-            </Typography.Paragraph>
-          );
-        }}
+        render={(description: string) => (
+          <Typography.Paragraph
+            ellipsis={{ rows: 1, tooltip: true }}
+            style={{ maxWidth: '400px', marginBottom: 0 }}
+          >
+            {description}
+          </Typography.Paragraph>
+        )}
       />
       <Table.Column
         title={t('products.fields.price')}
@@ -232,94 +202,75 @@ export const ProductListTable = () => {
         align="right"
         sorter
         defaultSortOrder={getDefaultSortOrder('price', sorters)}
-        render={(price: number) => {
-          return (
-            <NumberField
-              value={price}
-              style={{
-                width: '80px',
-                fontVariantNumeric: 'tabular-nums',
-                whiteSpace: 'nowrap',
-              }}
-              options={{
-                style: 'currency',
-                currency: 'USD',
-              }}
-            />
-          );
-        }}
+        render={(price: number) => (
+          <NumberField
+            value={typeof price === 'number' ? price : 0}
+            style={{
+              width: '80px',
+              fontVariantNumeric: 'tabular-nums',
+              whiteSpace: 'nowrap',
+            }}
+            options={{ style: 'currency', currency: 'USD' }}
+          />
+        )}
       />
-      <Table.Column<IProductDetail>
+      <Table.Column<IProductList>
         title={t('products.fields.category')}
-        dataIndex={['category', 'name']}
+        dataIndex="idCategory"
         key="category.id"
         width={128}
-        defaultFilteredValue={getDefaultFilter('category.id', filters, 'in')}
-        filterDropdown={(props) => {
-          return (
-            <FilterDropdown
-              {...props}
-              selectedKeys={props.selectedKeys.map(Number)}
-            >
-              <Select
-                {...categorySelectProps}
-                style={{ width: '200px' }}
-                allowClear
-                mode="multiple"
-                placeholder={t('products.filter.category.placeholder')}
-              />
-            </FilterDropdown>
-          );
-        }}
+        defaultFilteredValue={getDefaultFilter('idCategory', filters, 'in')}
+        filterDropdown={(props) => (
+          <FilterDropdown
+            {...props}
+            selectedKeys={props.selectedKeys.map(Number)}
+          >
+            <Select
+              {...categorySelectProps}
+              style={{ width: '200px' }}
+              allowClear
+              mode="multiple"
+              placeholder={t('products.filter.category.placeholder')}
+            />
+          </FilterDropdown>
+        )}
         render={(_, record) => {
           const categoryMatch = categories.find(
-            (categoryItem) => categoryItem?.name === record.category?.name,
+            (categoryItem) => categoryItem.id === record.idCategory,
           );
-
           return (
-            <Typography.Text
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-            >
+            <Typography.Text style={{ whiteSpace: 'nowrap' }}>
               {categoryMatch?.name || '-'}
             </Typography.Text>
           );
         }}
       />
-      <Table.Column<IProductDetail>
+      <Table.Column<IProductList>
         title={t('products.fields.brand')}
-        dataIndex={['brands', 'name']}
+        dataIndex="idBrand"
         key="brand.id"
         width={128}
         defaultFilteredValue={getDefaultFilter('brand.id', filters, 'in')}
-        filterDropdown={(props) => {
-          return (
-            <FilterDropdown
-              {...props}
-              selectedKeys={props.selectedKeys.map(Number)}
-            >
-              <Select
-                {...brandSelectProps}
-                style={{ width: '200px' }}
-                allowClear
-                mode="multiple"
-                placeholder={t('products.filter.category.placeholder')}
-              />
-            </FilterDropdown>
-          );
-        }}
+        filterDropdown={(props) => (
+          <FilterDropdown
+            {...props}
+            selectedKeys={props.selectedKeys.map(Number)}
+          >
+            <Select
+              {...brandSelectProps}
+              style={{ width: '200px' }}
+              allowClear
+              mode="multiple"
+              placeholder={t('products.filter.brand.placeholder')}
+            />
+          </FilterDropdown>
+        )}
         render={(_, record) => {
           const brandMatch = brands.find(
-            (brandItem) => brandItem?.id === record.brand?.id,
+            (brandItem) => brandItem.id === record.idBrand,
           );
-
           return (
-            <Typography.Text
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-            >
+            <Typography.Text style={{ whiteSpace: 'nowrap' }}>
               {brandMatch?.name || '-'}
             </Typography.Text>
           );
@@ -328,13 +279,11 @@ export const ProductListTable = () => {
       <Table.Column<IProductList>
         dataIndex="id"
         key="ratings"
-        title={t('couriers.fields.rating.label')}
-        render={(_, record) => {
-          return <ProductTableColumnRating product={record} />;
-        }}
+        title={t('products.fields.rating')}
+        render={(_, record) => <ProductTableColumnRating product={record} />}
       />
       <Table.Column
-        title={t('products.fields.status.label')}
+        title={t('products.fields.status')}
         dataIndex="status"
         key="status"
         sorter
@@ -357,34 +306,26 @@ export const ProductListTable = () => {
             </Select>
           </FilterDropdown>
         )}
-        render={(status: string) => {
-          return <ProductStatus value={status === '1' ? 'true' : 'false'} />;
-        }}
+        render={(status: number) => <ProductStatus value={status} />}
       />
       <Table.Column
         title={t('table.actions')}
         key="actions"
         fixed="right"
         align="center"
-        render={(_, record: IProductList) => {
-          return (
-            <Button
-              icon={<EyeOutlined />}
-              onClick={() => {
-                return go({
-                  to: `${showUrl('products', record.id)}`,
-                  query: {
-                    to: pathname,
-                  },
-                  options: {
-                    keepQuery: true,
-                  },
-                  type: 'replace',
-                });
-              }}
-            />
-          );
-        }}
+        render={(_, record: IProductList) => (
+          <Button
+            icon={<EyeOutlined />}
+            onClick={() => {
+              return go({
+                to: `${showUrl('products', record.id)}`,
+                query: { to: pathname },
+                options: { keepQuery: true },
+                type: 'replace',
+              });
+            }}
+          />
+        )}
       />
     </Table>
   );

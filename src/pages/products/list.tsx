@@ -34,6 +34,7 @@ export const ProductList = ({ children }: PropsWithChildren) => {
       setView(value);
       localStorage.setItem('product-view', value);
     } else {
+      // eslint-disable-next-line no-console
       console.error('Unexpected view value:', value);
     }
   };

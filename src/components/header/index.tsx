@@ -148,8 +148,8 @@ export const Header: React.FC = () => {
       onSuccess: (data) => {
         const courierOptionGroup = data.data.map((item) =>
           renderItem(
-            `${item.name} ${item.category}`,
-            item.imgUrl[0],
+            `${item.name} ${item.idCategory}`,
+            item.images[0].url,
             `/products/${item.id}`,
           ),
         );
