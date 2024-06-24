@@ -50,8 +50,8 @@ export const AllStoresMap = () => {
           mapId: 'all-stores-map',
           disableDefaultUI: true,
           center: {
-            lat: 40.730_61,
-            lng: -73.935_242,
+            lat: 10.8447022,
+            lng: 106.7618557,
           },
           zoom: 10,
         }}

@@ -53,8 +53,8 @@ export const StoreMap = (props: Props) => {
         mapProps={{
           mapId: 'store-map',
           center: {
-            lat: lat || 39.668_545_8,
-            lng: lng || -75.676_026_4,
+            lat: lat || 10.8447022,
+            lng: lng || 106.7618557,
           },
         }}
       >

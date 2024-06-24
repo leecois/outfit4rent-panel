@@ -34,7 +34,13 @@ import { BikeWhiteIcon } from './components/icons';
 import { ConfigProvider } from './context';
 import { useAutoLoginForDemo } from './hooks';
 import { AuthPage } from './pages/auth';
-import { CategoryList } from './pages/categories';
+import { BrandCreate, BrandEdit, BrandList, BrandShow } from './pages/brands';
+import {
+  CategoryCreate,
+  CategoryEdit,
+  CategoryList,
+  CategoryShow,
+} from './pages/categories';
 import { CourierCreate, CourierEdit, CourierList } from './pages/couriers';
 import { CustomerList, CustomerShow } from './pages/customers';
 import { DashboardPage } from './pages/dashboard';
@@ -133,6 +139,9 @@ const App: React.FC = () => {
                 {
                   name: 'categories',
                   list: '/categories',
+                  create: '/categories/new',
+                  edit: '/categories/:id/edit',
+                  show: '/categories/:id',
                   meta: {
                     icon: <TagsOutlined />,
                   },
@@ -155,6 +164,13 @@ const App: React.FC = () => {
                   meta: {
                     icon: <BikeWhiteIcon />,
                   },
+                },
+                {
+                  name: 'brands',
+                  list: '/brands',
+                  create: '/brands/new',
+                  edit: '/brands/:id/edit',
+                  show: '/brands/:id',
                 },
               ]}
             >
@@ -216,7 +232,31 @@ const App: React.FC = () => {
                     <Route path=":id/edit" element={<StoreEdit />} />
                   </Route>
 
-                  <Route path="/categories" element={<CategoryList />} />
+                  <Route
+                    path="/categories"
+                    element={
+                      <CategoryList>
+                        <Outlet />
+                      </CategoryList>
+                    }
+                  >
+                    <Route path="new" element={<CategoryCreate />} />
+                    <Route path=":id" element={<CategoryShow />} />
+                    <Route path=":id/edit" element={<CategoryEdit />} />
+                  </Route>
+
+                  <Route
+                    path="/brands"
+                    element={
+                      <BrandList>
+                        <Outlet />
+                      </BrandList>
+                    }
+                  >
+                    <Route path="new" element={<BrandCreate />} />
+                    <Route path=":id" element={<BrandShow />} />
+                    <Route path=":id/edit" element={<BrandEdit />} />
+                  </Route>
 
                   <Route path="/couriers">
                     <Route

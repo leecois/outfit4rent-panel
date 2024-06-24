@@ -1,30 +1,19 @@
 import { EditOutlined } from '@ant-design/icons';
-import { DeleteButton, NumberField } from '@refinedev/antd';
+import { DeleteButton } from '@refinedev/antd';
 import type { BaseKey, HttpError } from '@refinedev/core';
 import {
   useGetToPath,
   useGo,
   useNavigation,
-  useOne,
   useShow,
   useTranslate,
 } from '@refinedev/core';
-import {
-  Button,
-  Carousel,
-  Col,
-  Divider,
-  Grid,
-  List,
-  theme,
-  Typography,
-} from 'antd';
+import { Button, Divider, Grid, List, theme, Typography } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
-import type { IBrand, ICategory, IProductList } from '../../../interfaces';
+import type { ICategory } from '../../../interfaces';
 import { Drawer } from '../../drawer';
-import { ProductReviewTable } from '../review-table';
-import { ProductStatus } from '../status';
+import { CategoryStatus } from '../status';
 
 type Props = {
   id?: BaseKey;
@@ -32,7 +21,7 @@ type Props = {
   onEdit?: () => void;
 };
 
-export const ProductDrawerShow = (props: Props) => {
+export const CategoryDrawerShow = (props: Props) => {
   const getToPath = useGetToPath();
   const [searchParameters] = useSearchParams();
   const go = useGo();
@@ -41,28 +30,11 @@ export const ProductDrawerShow = (props: Props) => {
   const { token } = theme.useToken();
   const breakpoint = Grid.useBreakpoint();
 
-  const { queryResult } = useShow<IProductList, HttpError>({
-    resource: 'products',
+  const { queryResult } = useShow<ICategory, HttpError>({
+    resource: 'categories',
     id: props?.id, // when undefined, id will be read from the URL.
   });
-  const product = queryResult.data?.data;
-
-  const { data: categoryData } = useOne<ICategory, HttpError>({
-    resource: 'categories',
-    id: product?.idCategory,
-    queryOptions: {
-      enabled: !!product?.idCategory,
-    },
-  });
-  const { data: brandData } = useOne<IBrand, HttpError>({
-    resource: 'brands',
-    id: product?.idBrand,
-    queryOptions: {
-      enabled: !!product?.idBrand,
-    },
-  });
-  const category = categoryData?.data;
-  const brand = brandData?.data;
+  const category = queryResult.data?.data;
 
   const handleDrawerClose = () => {
     if (props?.onClose) {
@@ -94,22 +66,19 @@ export const ProductDrawerShow = (props: Props) => {
       zIndex={1001}
       onClose={handleDrawerClose}
     >
-      <Carousel draggable swipeToSlide infinite={false} arrows autoplay dots>
-        {product?.images?.map((image) => (
-          <div key={image.id}>
-            <img
-              src={image.url}
-              alt={`Product image ${image.id}`}
-              style={{
-                aspectRatio: 1,
-                objectFit: 'contain',
-                width: '100%',
-                height: '240px',
-              }}
-            />
-          </div>
-        ))}
-      </Carousel>
+      {category?.images && category.images.length > 0 && (
+        <div style={{ textAlign: 'center', padding: '16px' }}>
+          <img
+            src={category.images[0].url}
+            alt={category.name}
+            style={{
+              maxWidth: '100%',
+              maxHeight: '240px',
+              objectFit: 'contain',
+            }}
+          />
+        </div>
+      )}
 
       <div
         style={{
@@ -121,9 +90,9 @@ export const ProductDrawerShow = (props: Props) => {
             padding: '16px',
           }}
         >
-          <Typography.Title level={5}>{product?.name}</Typography.Title>
+          <Typography.Title level={5}>{category?.name}</Typography.Title>
           <Typography.Text type="secondary">
-            {product?.description}
+            {category?.description}
           </Typography.Text>
         </div>
         <Divider
@@ -137,42 +106,22 @@ export const ProductDrawerShow = (props: Props) => {
             {
               label: (
                 <Typography.Text type="secondary">
-                  {t('products.fields.price')}
+                  {t('categories.fields.status')}
+                </Typography.Text>
+              ),
+              value: <CategoryStatus value={category?.status ?? 0} />,
+            },
+            {
+              label: (
+                <Typography.Text type="secondary">
+                  {t('categories.fields.isFeatured')}
                 </Typography.Text>
               ),
               value: (
-                <NumberField
-                  value={product?.price || 0}
-                  options={{
-                    style: 'currency',
-                    currency: 'USD',
-                  }}
-                />
-              ),
-            },
-            {
-              label: (
-                <Typography.Text type="secondary">
-                  {t('products.fields.category')}
+                <Typography.Text>
+                  {category?.isFeatured ? t('common.yes') : t('common.no')}
                 </Typography.Text>
               ),
-              value: <Typography.Text>{category?.name}</Typography.Text>,
-            },
-            {
-              label: (
-                <Typography.Text type="secondary">
-                  {t('products.fields.brand')}
-                </Typography.Text>
-              ),
-              value: <Typography.Text>{brand?.name}</Typography.Text>,
-            },
-            {
-              label: (
-                <Typography.Text type="secondary">
-                  {t('products.fields.isActive.label')}
-                </Typography.Text>
-              ),
-              value: <ProductStatus value={product?.status ?? 0} />,
             },
           ]}
           renderItem={(item) => (
@@ -198,11 +147,9 @@ export const ProductDrawerShow = (props: Props) => {
       >
         <DeleteButton
           type="text"
-          recordItemId={product?.id}
-          resource="products"
-          onSuccess={() => {
-            handleDrawerClose();
-          }}
+          recordItemId={category?.id}
+          resource="categories"
+          onSuccess={handleDrawerClose}
         />
         <Button
           icon={<EditOutlined />}
@@ -211,9 +158,9 @@ export const ProductDrawerShow = (props: Props) => {
               props.onEdit();
             } else {
               go({
-                to: `${editUrl('products', product?.id || '')}`,
+                to: `${editUrl('categories', category?.id || '')}`,
                 query: {
-                  to: '/products',
+                  to: '/categories',
                 },
                 options: {
                   keepQuery: true,
@@ -226,14 +173,6 @@ export const ProductDrawerShow = (props: Props) => {
           {t('actions.edit')}
         </Button>
       </div>
-      <Col
-        span={24}
-        style={{
-          marginTop: '5px',
-        }}
-      >
-        <ProductReviewTable product={product} />
-      </Col>
     </Drawer>
   );
 };

@@ -30,8 +30,8 @@ export const useStoreForm = (props: Props) => {
   const store = form.queryResult?.data?.data;
 
   const [latLng, setLatLng] = useState<Partial<LatLng>>({
-    lat: props.action === 'create' ? 39.668_53 : undefined,
-    lng: props.action === 'create' ? -75.676_02 : undefined,
+    lat: props.action === 'create' ? 10.8447022 : undefined,
+    lng: props.action === 'create' ? 106.7618557 : undefined,
   });
 
   useEffect(() => {

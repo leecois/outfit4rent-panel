@@ -6,16 +6,12 @@ import { Button, Table, Tag } from 'antd';
 import type { PropsWithChildren } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import {
-  CategoryStatus,
-  PaginationTotal,
-  TableCategoryProductColumn,
-} from '../../components';
-import type { ICategory } from '../../interfaces';
+import { PaginationTotal } from '../../components';
+import { BrandStatus, TableBrandProductColumn } from '../../components/brands';
+import type { IBrand } from '../../interfaces';
 
-export const CategoryList = ({ children }: PropsWithChildren) => {
-  const { tableProps } = useTable<ICategory, HttpError>();
-
+export const BrandList = ({ children }: PropsWithChildren) => {
+  const { tableProps } = useTable<IBrand, HttpError>();
   const t = useTranslate();
   const go = useGo();
   const { pathname } = useLocation();
@@ -33,20 +29,21 @@ export const CategoryList = ({ children }: PropsWithChildren) => {
           ...tableProps.pagination,
           hideOnSinglePage: true,
           showTotal: (total) => (
-            <PaginationTotal total={total} entityName="categories" />
+            <PaginationTotal total={total} entityName="brands" />
           ),
         }}
       >
-        <Table.Column<ICategory>
+        <Table.Column<IBrand>
           key="images"
           dataIndex="images"
+          width={100}
           title={t('categories.fields.image')}
           render={(images) =>
             images &&
             images.length > 0 && (
               <img
                 src={images[0].url}
-                alt="Category Image"
+                alt="Brand Image"
                 style={{ width: 50, height: 50 }}
               />
             )
@@ -58,16 +55,25 @@ export const CategoryList = ({ children }: PropsWithChildren) => {
           width={224}
           title={t('categories.fields.title')}
         />
-        <Table.Column<ICategory>
-          key="id"
-          dataIndex="id"
+        <Table.Column<IBrand>
+          key="name"
+          dataIndex="name"
           width={576}
           title={t('categories.fields.products')}
           render={(_, record) => {
-            return <TableCategoryProductColumn category={record} />;
+            return <TableBrandProductColumn brand={record} />;
           }}
         />
-        <Table.Column<ICategory>
+
+        <Table.Column<IBrand>
+          key="status"
+          dataIndex="status"
+          title={t('categories.fields.isActive.label')}
+          render={(_, record) => {
+            return <BrandStatus value={record.status} />;
+          }}
+        />
+        <Table.Column<IBrand>
           key="isFeatured"
           dataIndex="isFeatured"
           title={t('categories.fields.isFeatured')}
@@ -77,25 +83,17 @@ export const CategoryList = ({ children }: PropsWithChildren) => {
             </Tag>
           )}
         />
-        <Table.Column<ICategory>
-          key="status"
-          dataIndex="status"
-          title={t('categories.fields.isActive.label')}
-          render={(_, record) => {
-            return <CategoryStatus value={record.status} />;
-          }}
-        />
         <Table.Column
           title={t('table.actions')}
           key="actions"
           fixed="right"
           align="center"
-          render={(_, record: ICategory) => (
+          render={(_, record: IBrand) => (
             <Button
               icon={<EyeOutlined />}
               onClick={() => {
                 return go({
-                  to: `${showUrl('categories', record.id)}`,
+                  to: `${showUrl('brands', record.id)}`,
                   query: { to: pathname },
                   options: { keepQuery: true },
                   type: 'replace',

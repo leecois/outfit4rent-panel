@@ -118,11 +118,18 @@ export interface IOrder {
   amount: number;
 }
 
-// src/interfaces/index.ts
-
 export interface IBrand {
   id: number;
   name: string;
+  images: [
+    {
+      id: number;
+      url: string;
+    },
+  ];
+  description: string;
+  status: number;
+  isFeatured: boolean;
 }
 
 export interface IImage {
@@ -154,7 +161,12 @@ export interface ICategory {
   name: string;
   description: string;
   status: number;
-  imageUrl: string;
+  images: [
+    {
+      id: number;
+      url: string;
+    },
+  ];
   isFeatured: boolean;
 }
 

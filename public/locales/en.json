@@ -139,7 +139,8 @@
         "0": "Invisible",
         "1": "Visible",
         "label": "Status"
-      }
+      },
+      "image": "Image"
     }
   },
   "couriers": {
@@ -417,7 +418,8 @@
         "label": "Images"
       },
       "image": "Image",
-      "deposit": "Deposit"
+      "deposit": "Deposit",
+      "isFeatured": "Featured"
     },
     "filter": {
       "title": "Filters",

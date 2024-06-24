@@ -9,7 +9,6 @@ import type { BaseKey } from '@refinedev/core';
 import { useApiUrl, useGetToPath, useGo, useTranslate } from '@refinedev/core';
 import {
   Button,
-  Flex,
   Form,
   Grid,
   Input,
@@ -31,11 +30,13 @@ type Props = {
   onClose?: () => void;
   onMutationSuccess?: () => void;
 };
+
 interface UploadResponse {
   message: string;
   statusCode: string;
   data: string;
 }
+
 export const ProductDrawerForm = (props: Props) => {
   const getToPath = useGetToPath();
   const [searchParameters] = useSearchParams();
@@ -58,12 +59,17 @@ export const ProductDrawerForm = (props: Props) => {
 
   const { selectProps: categorySelectProps } = useSelect<ICategory>({
     resource: 'categories',
-  });
-  const { selectProps: brandSelectProps } = useSelect<IBrand>({
-    resource: 'brands',
+    optionLabel: 'name',
+    optionValue: 'id',
   });
 
-  const onDrawerCLose = () => {
+  const { selectProps: brandSelectProps } = useSelect<IBrand>({
+    resource: 'brands',
+    optionLabel: 'name',
+    optionValue: 'id',
+  });
+
+  const onDrawerClose = () => {
     close();
 
     if (props?.onClose) {
@@ -110,7 +116,7 @@ export const ProductDrawerForm = (props: Props) => {
       title={title}
       width={breakpoint.sm ? '736px' : '100%'}
       zIndex={1001}
-      onClose={onDrawerCLose}
+      onClose={onDrawerClose}
     >
       <Spin spinning={formLoading}>
         <Form {...formProps} layout="vertical">
@@ -142,154 +148,183 @@ export const ProductDrawerForm = (props: Props) => {
               </Button>
             </Upload.Dragger>
           </Form.Item>
-          <Flex vertical>
-            <Form.Item
-              label={t('products.fields.name')}
-              name="name"
-              className={styles.formItem}
-              rules={[
+          <Form.Item
+            label={t('products.fields.name')}
+            name="name"
+            className={styles.formItem}
+            rules={[
+              {
+                required: true,
+                message: 'Please enter the product name.',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label={t('products.fields.description')}
+            name="description"
+            className={styles.formItem}
+            rules={[
+              {
+                required: true,
+                message: 'Please enter the product description.',
+              },
+            ]}
+          >
+            <Input.TextArea rows={6} />
+          </Form.Item>
+          <Form.Item
+            label={t('products.fields.size')}
+            name="size"
+            className={styles.formItem}
+            rules={[
+              {
+                required: true,
+                message: 'Please enter the product size.',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label={t('products.fields.type')}
+            name="type"
+            className={styles.formItem}
+            rules={[
+              {
+                required: true,
+                message: 'Please enter the product type.',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label={t('products.fields.quantity')}
+            name="quantity"
+            className={styles.formItem}
+            rules={[
+              {
+                required: true,
+                message: 'Please enter the product quantity.',
+              },
+            ]}
+          >
+            <InputNumber prefix={''} style={{ width: '150px' }} />
+          </Form.Item>
+          <Form.Item
+            label={t('products.fields.price')}
+            name="price"
+            className={styles.formItem}
+            rules={[
+              {
+                required: true,
+                message: 'Please enter the product price.',
+              },
+            ]}
+          >
+            <InputNumber prefix={'$'} style={{ width: '150px' }} />
+          </Form.Item>
+          <Form.Item
+            label={t('products.fields.deposit')}
+            name="deposit"
+            className={styles.formItem}
+            rules={[
+              {
+                required: true,
+                message: 'Please enter the product deposit.',
+              },
+            ]}
+          >
+            <InputNumber prefix={'$'} style={{ width: '150px' }} />
+          </Form.Item>
+          <Form.Item
+            label={t('products.fields.category')}
+            name="idCategory"
+            className={styles.formItem}
+            rules={[
+              {
+                required: true,
+                message: 'Please select a category.',
+              },
+            ]}
+          >
+            <Select {...categorySelectProps} />
+          </Form.Item>
+          <Form.Item
+            label={t('products.fields.brand')}
+            name="idBrand"
+            className={styles.formItem}
+            rules={[
+              {
+                required: true,
+                message: 'Please select a brand.',
+              },
+            ]}
+          >
+            <Select {...brandSelectProps} />
+          </Form.Item>
+          <Form.Item
+            label={t('products.fields.isActive.label')}
+            name="status"
+            className={styles.formItem}
+            initialValue={1}
+          >
+            <Segmented
+              block
+              size="large"
+              options={[
                 {
-                  required: true,
+                  label: t('products.fields.isActive.true'),
+                  value: 1,
+                },
+                {
+                  label: t('products.fields.isActive.false'),
+                  value: 0,
                 },
               ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label={t('products.fields.description')}
-              name="description"
-              className={styles.formItem}
-              rules={[
+            />
+          </Form.Item>
+          <Form.Item
+            label={t('products.fields.isFeatured')}
+            name="isFeatured"
+            className={styles.formItem}
+            initialValue={1}
+          >
+            <Segmented
+              block
+              size="large"
+              options={[
                 {
-                  required: true,
+                  label: t('products.fields.isActive.true'),
+                  value: true,
+                },
+                {
+                  label: t('products.fields.isActive.false'),
+                  value: false,
                 },
               ]}
+            />
+          </Form.Item>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '16px',
+              padding: '16px 0',
+            }}
+          >
+            <Button onClick={onDrawerClose}>Cancel</Button>
+            <SaveButton
+              {...saveButtonProps}
+              htmlType="submit"
+              type="primary"
+              icon={null}
             >
-              <Input.TextArea rows={6} />
-            </Form.Item>
-            <Form.Item
-              label={t('products.fields.description')}
-              name="size"
-              className={styles.formItem}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input.TextArea rows={6} />
-            </Form.Item>
-            <Form.Item
-              label={t('products.fields.description')}
-              name="type"
-              className={styles.formItem}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input.TextArea rows={6} />
-            </Form.Item>
-            <Form.Item
-              label={t('products.fields.description')}
-              name="quantity"
-              className={styles.formItem}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <InputNumber prefix={''} style={{ width: '150px' }} />
-            </Form.Item>
-            <Form.Item
-              label={t('products.fields.price')}
-              name="price"
-              className={styles.formItem}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <InputNumber prefix={'$'} style={{ width: '150px' }} />
-            </Form.Item>
-            <Form.Item
-              label={t('products.fields.deposit')}
-              name="deposit"
-              className={styles.formItem}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <InputNumber prefix={'$'} style={{ width: '150px' }} />
-            </Form.Item>
-            <Form.Item
-              label={t('products.fields.category')}
-              name="idCategory"
-              className={styles.formItem}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Select {...categorySelectProps} />
-            </Form.Item>
-            <Form.Item
-              label={t('products.fields.brand')}
-              name="idBrand"
-              className={styles.formItem}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Select {...brandSelectProps} />
-            </Form.Item>
-            <Form.Item
-              label={t('products.fields.isActive.label')}
-              name="status"
-              className={styles.formItem}
-              initialValue={true}
-            >
-              <Segmented
-                block
-                size="large"
-                options={[
-                  {
-                    label: t('products.fields.isActive.true'),
-                    value: 1,
-                  },
-                  {
-                    label: t('products.fields.isActive.false'),
-                    value: 0,
-                  },
-                ]}
-              />
-            </Form.Item>
-            <Flex
-              align="center"
-              justify="space-between"
-              style={{
-                padding: '16px 16px 0px 16px',
-              }}
-            >
-              <Button onClick={onDrawerCLose}>Cancel</Button>
-              <SaveButton
-                {...saveButtonProps}
-                htmlType="submit"
-                type="primary"
-                icon={null}
-              >
-                Save
-              </SaveButton>
-            </Flex>
-          </Flex>
+              Save
+            </SaveButton>
+          </div>
         </Form>
       </Spin>
     </Drawer>
