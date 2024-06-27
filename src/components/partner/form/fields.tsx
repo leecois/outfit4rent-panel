@@ -23,20 +23,20 @@ import {
 import { useEffect, useRef } from 'react';
 import InputMask from 'react-input-mask';
 
-import type { IStore } from '../../../interfaces';
+import type { IPartner } from '../../../interfaces';
 import { FormItemEditable, FormItemHorizontal } from '../../form';
-import { StoreStatus } from '../status';
+import { PartnerStatus } from '../status';
 
 type Props = {
-  formProps: UseFormReturnType<IStore>['formProps'];
-  saveButtonProps: UseFormReturnType<IStore>['saveButtonProps'];
+  formProps: UseFormReturnType<IPartner>['formProps'];
+  saveButtonProps: UseFormReturnType<IPartner>['saveButtonProps'];
   action: UseFormProps['action'];
   isFormDisabled: boolean;
   setIsFormDisabled: (value: boolean) => void;
   handleAddressChange: (address: string) => void;
 };
 
-export const StoreFormFields = ({
+export const PartnerFormFields = ({
   formProps,
   saveButtonProps,
   action,
@@ -55,19 +55,20 @@ export const StoreFormFields = ({
     }
   }, [isFormDisabled]);
 
-  const statusField = Form.useWatch('isActive', formProps.form);
+  const statusField = Form.useWatch('status', formProps.form);
 
   return (
     <Form {...formProps} layout="horizontal" disabled={isFormDisabled}>
       <FormItemEditable
         formItemProps={{
-          name: 'title',
+          name: 'name',
           style: {
             marginBottom: '32px',
           },
           rules: [
             {
               required: true,
+              message: 'Please input the name!',
             },
           ],
         }}
@@ -75,34 +76,32 @@ export const StoreFormFields = ({
         <Input
           ref={titleInputRef}
           size="large"
-          placeholder={t('stores.fields.title')}
+          placeholder={t('partners.fields.name')}
         />
       </FormItemEditable>
       <Card
-        styles={{
-          body: {
-            padding: 0,
-          },
+        bodyStyle={{
+          padding: 0,
         }}
       >
         <FormItemHorizontal
-          name="isActive"
-          initialValue={true}
+          name="status"
+          initialValue={0}
           icon={<RightCircleOutlined />}
-          label={t('stores.fields.isActive.label')}
+          label={t('partners.fields.status.label')}
         >
           {isFormDisabled ? (
-            <StoreStatus value={statusField} />
+            <PartnerStatus value={statusField} />
           ) : (
             <Segmented
               options={[
                 {
-                  label: t('stores.fields.isActive.true'),
-                  value: true,
+                  label: t('partners.fields.status.inactive'),
+                  value: 0,
                 },
                 {
-                  label: t('stores.fields.isActive.false'),
-                  value: false,
+                  label: t('partners.fields.status.active'),
+                  value: 1,
                 },
               ]}
             />
@@ -115,12 +114,13 @@ export const StoreFormFields = ({
         />
         <FormItemHorizontal
           icon={<MailOutlined />}
-          label={t('stores.fields.email')}
+          label={t('partners.fields.email')}
           name="email"
           rules={[
             {
               required: true,
               type: 'email',
+              message: 'Please input a valid email!',
             },
           ]}
         >
@@ -132,15 +132,16 @@ export const StoreFormFields = ({
           }}
         />
         <FormItemHorizontal
-          name={['address', 'text']}
+          name="address"
           icon={<EnvironmentOutlined />}
-          label={t('stores.fields.address')}
+          label={t('partners.fields.address')}
           flexProps={{
             align: 'flex-start',
           }}
           rules={[
             {
               required: true,
+              message: 'Please input the address!',
             },
           ]}
         >
@@ -157,12 +158,13 @@ export const StoreFormFields = ({
           }}
         />
         <FormItemHorizontal
-          name="gsm"
+          name="phone"
           icon={<PhoneOutlined />}
-          label={t('stores.fields.gsm')}
+          label={t('partners.fields.phone')}
           rules={[
             {
               required: true,
+              message: 'Please input a valid phone number!',
             },
           ]}
         >
@@ -203,7 +205,7 @@ export const StoreFormFields = ({
               <DeleteButton
                 type="text"
                 onSuccess={() => {
-                  list('stores');
+                  list('partners');
                 }}
                 style={{
                   marginLeft: '-16px',
@@ -255,7 +257,7 @@ export const StoreFormFields = ({
         }}
       >
         <Form.Item
-          name={['address', 'coordinate', 0]}
+          name={['coordinate', 'x']}
           style={{
             display: 'none',
           }}
@@ -276,7 +278,7 @@ export const StoreFormFields = ({
           style={{
             display: 'none',
           }}
-          name={['address', 'coordinate', 1]}
+          name={['coordinate', 'y']}
           rules={[
             {
               required: true,

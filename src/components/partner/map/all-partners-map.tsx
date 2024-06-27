@@ -9,28 +9,28 @@ import { useList, useNavigation, useTranslate } from '@refinedev/core';
 import { Card, Flex, List, Tag, Typography } from 'antd';
 import { useRef, useState } from 'react';
 
-import type { IStore } from '../../../interfaces';
+import type { IPartner } from '../../../interfaces';
 import { BasicMarker } from '../../icons';
 import { AdvancedMarker, Map } from '../../map';
 
-export const AllStoresMap = () => {
+export const AllPartnersMap = () => {
   const t = useTranslate();
   const parentRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
-  const [selectedStore, setSelectedStore] = useState<IStore | null>(null);
+  const [selectedPartner, setSelectedPartner] = useState<IPartner | null>(null);
 
   const { edit } = useNavigation();
 
-  const { data: storeData } = useList<IStore>({
-    resource: 'stores',
+  const { data: partnerData } = useList<IPartner>({
+    resource: 'partners',
     pagination: {
       mode: 'off',
     },
   });
-  const stores = storeData?.data || [];
+  const partners = partnerData?.data || [];
 
-  const handleMarkerClick = (e: any, store: IStore) => {
-    setSelectedStore(store);
+  const handleMarkerClick = (e: any, partner: IPartner) => {
+    setSelectedPartner(partner);
   };
 
   return (
@@ -47,7 +47,7 @@ export const AllStoresMap = () => {
       <Map
         mapProps={{
           setMap,
-          mapId: 'all-stores-map',
+          mapId: 'all-partners-map',
           disableDefaultUI: true,
           center: {
             lat: 10.8447022,
@@ -56,49 +56,47 @@ export const AllStoresMap = () => {
           zoom: 10,
         }}
       >
-        {stores?.map((store) => {
-          const lat = Number(store.address?.coordinate?.[0]);
-          const lng = Number(store.address?.coordinate?.[1]);
+        {partners?.map((partner) => {
+          const lat = parseFloat(partner.coordinate.x);
+          const lng = parseFloat(partner.coordinate.y);
 
           if (!lat || !lng) return null;
 
           return (
             <AdvancedMarker
-              key={store.id}
+              key={partner.id}
               map={map}
-              zIndex={selectedStore?.id === store.id ? 1 : 0}
+              zIndex={selectedPartner?.id === partner.id ? 1 : 0}
               position={{
                 lat,
                 lng,
               }}
               onClick={(e: any) => {
-                handleMarkerClick(e, store);
+                handleMarkerClick(e, partner);
               }}
             >
-              {(selectedStore?.id !== store.id || !selectedStore) && (
-                <img src="/images/marker-store.svg" alt={store.title} />
+              {(selectedPartner?.id !== partner.id || !selectedPartner) && (
+                <img src="/images/marker-store.svg" alt={partner.name} />
               )}
-              {selectedStore?.id === store.id && (
+              {selectedPartner?.id === partner.id && (
                 <Card
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedStore(null);
+                    setSelectedPartner(null);
                   }}
                   style={{
                     position: 'relative',
                     marginBottom: '16px',
                   }}
-                  styles={{
-                    body: {
-                      padding: '16px',
-                    },
+                  bodyStyle={{
+                    padding: '16px',
                   }}
                 >
                   <Flex align="center" justify="space-between" gap={32}>
                     <Typography.Title
                       level={5}
                       onClick={() => {
-                        edit('stores', selectedStore.id);
+                        edit('partners', selectedPartner.id);
                       }}
                       style={{
                         cursor: 'pointer',
@@ -106,16 +104,16 @@ export const AllStoresMap = () => {
                         marginBottom: '0px',
                       }}
                     >
-                      {selectedStore.title}
+                      {selectedPartner.name}
                     </Typography.Title>
                     <Tag
-                      color={selectedStore.isActive ? 'green' : 'default'}
+                      color={selectedPartner.status ? 'green' : 'default'}
                       style={{
-                        color: selectedStore.isActive ? 'green' : '#00000073',
+                        color: selectedPartner.status ? 'green' : '#00000073',
                         marginInlineEnd: 0,
                       }}
                       icon={
-                        selectedStore.isActive ? (
+                        selectedPartner.status ? (
                           <CheckCircleOutlined />
                         ) : (
                           <StopOutlined />
@@ -124,12 +122,14 @@ export const AllStoresMap = () => {
                     >
                       <Typography.Text
                         style={{
-                          color: selectedStore.isActive
+                          color: selectedPartner.status
                             ? '#3C8618'
                             : '00000073',
                         }}
                       >
-                        {t(`stores.fields.isActive.${selectedStore.isActive}`)}
+                        {t(
+                          `partners.fields.status.${selectedPartner.status ? 'active' : 'inactive'}`,
+                        )}
                       </Typography.Text>
                     </Tag>
                   </Flex>
@@ -137,15 +137,15 @@ export const AllStoresMap = () => {
                     dataSource={[
                       {
                         title: <EnvironmentOutlined />,
-                        value: selectedStore.address.text,
+                        value: partner.area.address,
                       },
                       {
                         title: <UserOutlined />,
-                        value: selectedStore.email,
+                        value: partner.email,
                       },
                       {
                         title: <PhoneOutlined />,
-                        value: selectedStore.gsm,
+                        value: partner.phone,
                       },
                     ]}
                     renderItem={(item) => (

@@ -8,7 +8,16 @@ import {
   useShow,
   useTranslate,
 } from '@refinedev/core';
-import { Button, Divider, Grid, List, theme, Typography } from 'antd';
+import {
+  Avatar,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  List,
+  theme,
+  Typography,
+} from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
 import type { IBrand } from '../../../interfaces';
@@ -62,25 +71,28 @@ export const BrandDrawerShow = (props: Props) => {
   return (
     <Drawer
       open={true}
-      width={breakpoint.sm ? '736px' : '100%'}
+      width={breakpoint.sm ? '378px' : '100%'}
       zIndex={1001}
       onClose={handleDrawerClose}
     >
-      {brand?.images && brand.images.length > 0 && (
-        <div style={{ textAlign: 'center', padding: '16px' }}>
-          <img
-            src={brand.images[0].url}
-            alt={brand.name}
-            style={{
-              maxWidth: '100%',
-              maxHeight: '240px',
-              objectFit: 'contain',
-            }}
-          />
-        </div>
-      )}
+      <Flex vertical align="center" justify="center">
+        <Avatar
+          shape="square"
+          style={{
+            aspectRatio: 1,
+            objectFit: 'contain',
+            width: '240px',
+            height: '240px',
+            margin: '16px auto',
+            borderRadius: '8px',
+          }}
+          src={brand?.url}
+          alt={brand?.url}
+        />
+      </Flex>
 
-      <div
+      <Flex
+        vertical
         style={{
           backgroundColor: token.colorBgContainer,
         }}
@@ -106,7 +118,7 @@ export const BrandDrawerShow = (props: Props) => {
             {
               label: (
                 <Typography.Text type="secondary">
-                  {t('brands.fields.status')}
+                  {t('brands.fields.status.label')}
                 </Typography.Text>
               ),
               value: <BrandStatus value={brand?.status ?? 0} />,
@@ -114,12 +126,14 @@ export const BrandDrawerShow = (props: Props) => {
             {
               label: (
                 <Typography.Text type="secondary">
-                  {t('brands.fields.isFeatured')}
+                  {t('brands.fields.isFeatured.label')}
                 </Typography.Text>
               ),
               value: (
                 <Typography.Text>
-                  {brand?.isFeatured ? t('common.yes') : t('common.no')}
+                  {brand?.isFeatured
+                    ? t('brands.fields.isFeatured.true')
+                    : t('brands.fields.isFeatured.false')}
                 </Typography.Text>
               ),
             },
@@ -136,7 +150,7 @@ export const BrandDrawerShow = (props: Props) => {
             </List.Item>
           )}
         />
-      </div>
+      </Flex>
       <div
         style={{
           display: 'flex',

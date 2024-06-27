@@ -1,9 +1,9 @@
 import type { UseFormProps } from '@refinedev/antd';
 import { useForm } from '@refinedev/antd';
 import { useEffect, useState } from 'react';
-import { useDebounceValue } from 'usehooks-ts';
+import { useDebounce } from 'usehooks-ts';
 
-import type { IStore } from '../../../interfaces';
+import type { IPartner } from '../../../interfaces';
 import type { LatLng } from '../../../utils';
 import {
   convertLatLng,
@@ -15,19 +15,19 @@ type Props = {
   action: UseFormProps['action'];
 };
 
-export const useStoreForm = (props: Props) => {
+export const usePartnerForm = (props: Props) => {
   const [isFormDisabled, setIsFormDisabled] = useState(
     () => props.action === 'edit',
   );
 
-  const form = useForm<IStore>({
+  const form = useForm<IPartner>({
     action: props.action,
     redirect: false,
     onMutationSuccess: () => {
       setIsFormDisabled(true);
     },
   });
-  const store = form.queryResult?.data?.data;
+  const partner = form.queryResult?.data?.data;
 
   const [latLng, setLatLng] = useState<Partial<LatLng>>({
     lat: props.action === 'create' ? 10.8447022 : undefined,
@@ -35,36 +35,32 @@ export const useStoreForm = (props: Props) => {
   });
 
   useEffect(() => {
-    if (store?.address?.coordinate) {
+    if (partner?.coordinate) {
       setLatLng({
-        lat: store.address?.coordinate?.[0],
-        lng: store.address?.coordinate?.[1],
+        lat: parseFloat(partner.coordinate.x),
+        lng: parseFloat(partner.coordinate.y),
       });
     }
-  }, [store?.address.coordinate?.[0], store?.address.coordinate?.[1]]);
+  }, [partner?.coordinate]);
 
-  // we are using these debounced values to get lang and lat from the address text
-  // to minimize the number of requests, we are using debounced values
-  const [debouncedAddressValue, setDebouncedAddressValue] = useDebounceValue(
-    form.formProps.form?.getFieldValue(['address', 'text']),
+  const debouncedAddressValue = useDebounce(
+    form.formProps.form?.getFieldValue('address'),
     500,
   );
 
-  // get lat and lng with address
   useEffect(() => {
     if (debouncedAddressValue) {
       getLatLngWithAddress(debouncedAddressValue).then((data) => {
-        // set form field with lat and lng values
         if (data) {
           const { lat, lng } = convertLatLng({
             lat: data.lat,
             lng: data.lng,
           });
 
-          form.formProps.form?.setFieldValue(
-            ['address', 'coordinate'],
-            [lat, lng],
-          );
+          form.formProps.form?.setFieldValue('coordinate', {
+            x: lat.toString(),
+            y: lng.toString(),
+          });
 
           setLatLng({
             lat,
@@ -73,7 +69,7 @@ export const useStoreForm = (props: Props) => {
         }
       });
     }
-  }, [debouncedAddressValue, form.formProps.form?.setFieldValue]);
+  }, [debouncedAddressValue, form.formProps.form]);
 
   const handleMapOnDragEnd = async ({
     lat,
@@ -82,11 +78,14 @@ export const useStoreForm = (props: Props) => {
     lat: number;
     lng: number;
   }) => {
-    // get address with lat lng and set form field
     const data = await getAddressWithLatLng({ lat, lng });
     if (data) {
-      // set form field with address value
-      form.formProps.form?.setFieldValue(['address', 'text'], data.address);
+      form.formProps.form?.setFieldValue('address', data.address);
+      form.formProps.form?.setFieldValue('coordinate', {
+        x: lat.toString(),
+        y: lng.toString(),
+      });
+      setLatLng({ lat, lng });
     }
   };
 
@@ -99,12 +98,13 @@ export const useStoreForm = (props: Props) => {
 
   return {
     ...form,
-    store,
+    partner,
     formLoading: isLoading,
     latLng,
     isFormDisabled,
     setIsFormDisabled: handleSetIsFormDisabled,
-    handleAddressChange: (address: string) => setDebouncedAddressValue(address),
+    handleAddressChange: (address: string) =>
+      form.formProps.form?.setFieldValue('address', address),
     handleMapOnDragEnd,
   };
 };

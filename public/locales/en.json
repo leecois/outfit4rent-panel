@@ -135,12 +135,19 @@
       "id": "ID",
       "title": "Title",
       "products": "Products",
-      "isActive": {
+      "image": "Image",
+      "isFeatured": {
+        "0": "No",
+        "1": "Yes",
+        "label": "Featured"
+      },
+      "status": {
         "0": "Invisible",
         "1": "Visible",
         "label": "Status"
       },
-      "image": "Image"
+      "name": "Category name",
+      "description": "Description"
     }
   },
   "couriers": {
@@ -395,10 +402,14 @@
       "id": "ID",
       "name": "Name",
       "description": "Description",
-      "isActive": {
+      "status": {
+        "0": "Unavailable",
+        "1": "Available",
         "label": "Status",
         "true": "Available",
-        "false": "Unavailable"
+        "false": "Unavailable",
+        "active": "Active",
+        "inactive": "Inactive"
       },
       "price": "Price",
       "category": "Category",
@@ -408,18 +419,14 @@
         "validation": "must be 1080x1080 px"
       },
       "createdAt": "CreatedAt",
-      "status": {
-        "active": "Active",
-        "label": "Label",
-        "inactive": "Inactive"
-      },
       "brand": "Brand",
       "imgUrl": {
         "label": "Images"
       },
       "image": "Image",
       "deposit": "Deposit",
-      "isFeatured": "Featured"
+      "isFeatured": "Featured",
+      "rating": "Rating"
     },
     "filter": {
       "title": "Filters",
@@ -446,14 +453,11 @@
       "createdAt": {
         "label": "Created At"
       },
-      "isActive": {
+      "status": {
         "label": "Status",
         "placeholder": "Select Status",
         "true": "Available",
         "false": "Unavailable"
-      },
-      "status": {
-        "placeholder": "Placeholder"
       }
     },
     "actions": {
@@ -538,7 +542,8 @@
     "tagFilterDescription": "Use tags to filter your search",
     "all": "All",
     "productSearch": "Product Search",
-    "addNewStore": "Add New Store"
+    "addNewStore": "Add New Store",
+    "addNewPartner": "Add new partner"
   },
   "users": {
     "users": "Customers",
@@ -617,6 +622,59 @@
     "addresses": {
       "addresses": "Addresses",
       "address": "Address"
+    }
+  },
+  "brands": {
+    "brands": "Brand",
+    "fields": {
+      "name": "Brand name",
+      "description": "Description",
+      "isFeatured": {
+        "label": "Featured",
+        "true": "Yes",
+        "false": "No"
+      },
+      "status": {
+        "label": "Status",
+        "0": "Inactive",
+        "1": "Active",
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    }
+  },
+  "partners": {
+    "partners": "Partners",
+    "fields": {
+      "phone": "Phone",
+      "address": "Address",
+      "email": "Email",
+      "status": {
+        "0": "Inactive",
+        "1": "Active",
+        "label": "Status",
+        "inactive": "Inactive",
+        "active": "Active",
+        "inActive": "Inactive",
+        "name": "Name"
+      },
+      "name": "Name",
+      "area": "Area"
+    },
+    "addNewPartner": "Add new Partner",
+    "filter": {
+      "id": {
+        "placeholder": "ID"
+      },
+      "name": {
+        "placeholder": "Name"
+      },
+      "email": {
+        "placeholder": "Email"
+      },
+      "status": {
+        "placeholder": "Status"
+      }
     }
   }
 }

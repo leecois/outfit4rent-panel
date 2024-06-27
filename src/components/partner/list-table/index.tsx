@@ -8,19 +8,18 @@ import {
 import { getDefaultFilter, useTranslate } from '@refinedev/core';
 import { Input, InputNumber, Select, Table, theme, Typography } from 'antd';
 
-import type { IStore } from '../../../interfaces';
-import { PaginationTotal } from '../..';
-import { StoreStatus } from '..';
+import type { IPartner } from '../../../interfaces';
+import { PaginationTotal, PartnerStatus } from '../..';
 
-export const StoreListTable = () => {
+export const PartnerListTable = () => {
   const { token } = theme.useToken();
   const t = useTranslate();
 
-  const { tableProps, sorters, filters } = useTable<IStore>({
+  const { tableProps, sorters, filters } = useTable<IPartner>({
     filters: {
       initial: [
         {
-          field: 'title',
+          field: 'name',
           operator: 'contains',
           value: '',
         },
@@ -43,7 +42,7 @@ export const StoreListTable = () => {
       pagination={{
         ...tableProps.pagination,
         showTotal: (total) => (
-          <PaginationTotal total={total} entityName="stores" />
+          <PaginationTotal total={total} entityName="partners" />
         ),
       }}
     >
@@ -81,14 +80,14 @@ export const StoreListTable = () => {
             <InputNumber
               addonBefore="#"
               style={{ width: '100%' }}
-              placeholder={t('stores.filter.id.placeholder')}
+              placeholder={t('partners.filter.id.placeholder')}
             />
           </FilterDropdown>
         )}
       />
       <Table.Column
-        dataIndex="title"
-        title={t('stores.fields.title')}
+        dataIndex="name"
+        title={t('partners.fields.name')}
         filterIcon={(filtered) => (
           <SearchOutlined
             style={{
@@ -96,16 +95,16 @@ export const StoreListTable = () => {
             }}
           />
         )}
-        defaultFilteredValue={getDefaultFilter('title', filters, 'contains')}
+        defaultFilteredValue={getDefaultFilter('name', filters, 'contains')}
         filterDropdown={(props) => (
           <FilterDropdown {...props}>
-            <Input placeholder={t('stores.filter.title.placeholder')} />
+            <Input placeholder={t('partners.filter.name.placeholder')} />
           </FilterDropdown>
         )}
       />
       <Table.Column
         dataIndex="email"
-        title={t('stores.fields.email')}
+        title={t('partners.fields.email')}
         filterIcon={(filtered) => (
           <SearchOutlined
             style={{
@@ -116,13 +115,13 @@ export const StoreListTable = () => {
         defaultFilteredValue={getDefaultFilter('email', filters, 'contains')}
         filterDropdown={(props) => (
           <FilterDropdown {...props}>
-            <Input placeholder={t('stores.filter.email.placeholder')} />
+            <Input placeholder={t('partners.filter.email.placeholder')} />
           </FilterDropdown>
         )}
       />
       <Table.Column
-        dataIndex="gsm"
-        title={t('stores.fields.gsm')}
+        dataIndex="phone"
+        title={t('partners.fields.phone')}
         render={(value) => (
           <Typography.Text
             style={{
@@ -133,36 +132,41 @@ export const StoreListTable = () => {
           </Typography.Text>
         )}
       />
+      <Table.Column dataIndex="address" title={t('partners.fields.address')} />
       <Table.Column
-        dataIndex={['address', 'text']}
-        title={t('stores.fields.address')}
+        title={t('partners.fields.area')}
+        dataIndex={['area', 'address']}
+        render={(_, record: IPartner) =>
+          `${record.area.address}, ${record.area.district}, ${record.area.city}`
+        }
       />
+
       <Table.Column
-        dataIndex="isActive"
-        title={t('stores.fields.isActive.label')}
+        dataIndex="status"
+        title={t('partners.fields.status.label')}
         sorter
-        defaultSortOrder={getDefaultSortOrder('isActive', sorters)}
-        defaultFilteredValue={getDefaultFilter('isActive', filters, 'in')}
+        defaultSortOrder={getDefaultSortOrder('status', sorters)}
+        defaultFilteredValue={getDefaultFilter('status', filters, 'in')}
         filterDropdown={(props) => (
           <FilterDropdown {...props}>
             <Select
               style={{ width: '200px' }}
               allowClear
               mode="multiple"
-              placeholder={t('stores.filter.isActive.placeholder')}
+              placeholder={t('partners.filter.status.placeholder')}
             >
-              <Select.Option value="true">
-                {t('stores.fields.isActive.true')}
+              <Select.Option value="0">
+                {t('partners.fields.status.inactive')}
               </Select.Option>
-              <Select.Option value="false">
-                {t('stores.fields.isActive.false')}
+              <Select.Option value="1">
+                {t('partners.fields.status.active')}
               </Select.Option>
             </Select>
           </FilterDropdown>
         )}
-        render={(value) => <StoreStatus value={value} />}
+        render={(value) => <PartnerStatus value={value} />}
       />
-      <Table.Column<IStore>
+      <Table.Column<IPartner>
         fixed="right"
         title={t('table.actions')}
         dataIndex="actions"

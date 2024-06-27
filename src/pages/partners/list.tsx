@@ -1,21 +1,22 @@
+// PartnerList.tsx
 import { EnvironmentOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { CreateButton, List } from '@refinedev/antd';
 import { useTranslate } from '@refinedev/core';
 import { Flex, Segmented } from 'antd';
 import { useState } from 'react';
 
-import { AllStoresMap, StoreListTable } from '../../components';
+import { AllPartnersMap, PartnerListTable } from '../../components';
 
 type View = 'table' | 'map';
 
-export const StoreList = () => {
+export const PartnerList = () => {
   const [view, setView] = useState<View>(
-    (localStorage.getItem('store-view') as View) || 'table',
+    (localStorage.getItem('partner-view') as View) || 'table',
   );
 
   const handleViewChange = (value: View) => {
     setView(value);
-    localStorage.setItem('store-view', value);
+    localStorage.setItem('partner-view', value);
   };
 
   const t = useTranslate();
@@ -45,11 +46,11 @@ export const StoreList = () => {
             onChange={handleViewChange}
           />,
           <CreateButton {...props.createButtonProps} key="create" size="large">
-            {t('stores.addNewStore')}
+            {t('partners.addNewPartner')}
           </CreateButton>,
         ]}
       >
-        {view === 'table' && <StoreListTable />}
+        {view === 'table' && <PartnerListTable />}
         {view === 'map' && (
           <Flex
             style={{
@@ -57,7 +58,7 @@ export const StoreList = () => {
               marginTop: '32px',
             }}
           >
-            <AllStoresMap />
+            <AllPartnersMap />
           </Flex>
         )}
       </List>

@@ -1,18 +1,40 @@
 import type { AuthProvider } from '@refinedev/core';
 import { notification } from 'antd';
+import axios from 'axios';
 
-import { disableAutoLogin, enableAutoLogin } from './hooks';
+import { disableAutoLogin } from './hooks';
 
 export const TOKEN_KEY = 'o4r-auth';
 
 export const authProvider: AuthProvider = {
   login: async ({ email, password }) => {
-    enableAutoLogin();
-    localStorage.setItem(TOKEN_KEY, `${email}-${password}`);
-    return {
-      success: true,
-      redirectTo: '/',
-    };
+    try {
+      const response = await axios.get(
+        `https://api.outfit4rent.online/auth/admin/${email}/${password}`,
+      );
+
+      if (response.data.statusCode === 'OK') {
+        const { token } = response.data.data;
+        localStorage.setItem(TOKEN_KEY, token);
+        // enableAutoLogin();
+        return {
+          success: true,
+          redirectTo: '/',
+        };
+      }
+      throw new Error(response.data.message);
+    } catch (error) {
+      notification.error({
+        message: 'Login failed',
+      });
+      return {
+        success: false,
+        error: {
+          message: 'Login failed',
+          name: 'Invalid email or password',
+        },
+      };
+    }
   },
   register: async ({ email, password }) => {
     try {

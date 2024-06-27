@@ -2,6 +2,7 @@ import 'dayjs/locale/de';
 import '@refinedev/antd/dist/reset.css';
 
 import {
+  BuildOutlined,
   DashboardOutlined,
   ProductOutlined,
   ShopOutlined,
@@ -45,13 +46,13 @@ import { CourierCreate, CourierEdit, CourierList } from './pages/couriers';
 import { CustomerList, CustomerShow } from './pages/customers';
 import { DashboardPage } from './pages/dashboard';
 import { OrderList, OrderShow } from './pages/orders';
+import { PartnerCreate, PartnerEdit, PartnerList } from './pages/partners';
 import {
   ProductCreate,
   ProductEdit,
   ProductList,
   ProductShow,
 } from './pages/products';
-import { StoreCreate, StoreEdit, StoreList } from './pages/stores';
 import { dataProvider } from './rest-data-provider';
 
 interface TitleHandlerOptions {
@@ -147,10 +148,20 @@ const App: React.FC = () => {
                   },
                 },
                 {
-                  name: 'stores',
-                  list: '/stores',
-                  create: '/stores/new',
-                  edit: '/stores/:id/edit',
+                  name: 'brands',
+                  list: '/brands',
+                  create: '/brands/new',
+                  edit: '/brands/:id/edit',
+                  show: '/brands/:id',
+                  meta: {
+                    icon: <BuildOutlined />,
+                  },
+                },
+                {
+                  name: 'partners',
+                  list: '/partners',
+                  create: '/partners/new',
+                  edit: '/partners/:id/edit',
                   meta: {
                     icon: <ShopOutlined />,
                   },
@@ -164,13 +175,6 @@ const App: React.FC = () => {
                   meta: {
                     icon: <BikeWhiteIcon />,
                   },
-                },
-                {
-                  name: 'brands',
-                  list: '/brands',
-                  create: '/brands/new',
-                  edit: '/brands/:id/edit',
-                  show: '/brands/:id',
                 },
               ]}
             >
@@ -226,10 +230,10 @@ const App: React.FC = () => {
                     <Route path=":id/edit" element={<ProductEdit />} />
                   </Route>
 
-                  <Route path="/stores">
-                    <Route index element={<StoreList />} />
-                    <Route path="new" element={<StoreCreate />} />
-                    <Route path=":id/edit" element={<StoreEdit />} />
+                  <Route path="/partners">
+                    <Route index element={<PartnerList />} />
+                    <Route path="new" element={<PartnerCreate />} />
+                    <Route path=":id/edit" element={<PartnerEdit />} />
                   </Route>
 
                   <Route

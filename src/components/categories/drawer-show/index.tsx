@@ -8,7 +8,16 @@ import {
   useShow,
   useTranslate,
 } from '@refinedev/core';
-import { Button, Divider, Grid, List, theme, Typography } from 'antd';
+import {
+  Avatar,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  List,
+  theme,
+  Typography,
+} from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
 import type { ICategory } from '../../../interfaces';
@@ -62,25 +71,28 @@ export const CategoryDrawerShow = (props: Props) => {
   return (
     <Drawer
       open={true}
-      width={breakpoint.sm ? '736px' : '100%'}
+      width={breakpoint.sm ? '378px' : '100%'}
       zIndex={1001}
       onClose={handleDrawerClose}
     >
-      {category?.images && category.images.length > 0 && (
-        <div style={{ textAlign: 'center', padding: '16px' }}>
-          <img
-            src={category.images[0].url}
-            alt={category.name}
-            style={{
-              maxWidth: '100%',
-              maxHeight: '240px',
-              objectFit: 'contain',
-            }}
-          />
-        </div>
-      )}
+      <Flex vertical align="center" justify="center">
+        <Avatar
+          shape="square"
+          style={{
+            aspectRatio: 1,
+            objectFit: 'contain',
+            width: '240px',
+            height: '240px',
+            margin: '16px auto',
+            borderRadius: '8px',
+          }}
+          src={category?.url}
+          alt={category?.url}
+        />
+      </Flex>
 
-      <div
+      <Flex
+        vertical
         style={{
           backgroundColor: token.colorBgContainer,
         }}
@@ -106,7 +118,7 @@ export const CategoryDrawerShow = (props: Props) => {
             {
               label: (
                 <Typography.Text type="secondary">
-                  {t('categories.fields.status')}
+                  {t('categories.fields.status.label')}
                 </Typography.Text>
               ),
               value: <CategoryStatus value={category?.status ?? 0} />,
@@ -114,12 +126,14 @@ export const CategoryDrawerShow = (props: Props) => {
             {
               label: (
                 <Typography.Text type="secondary">
-                  {t('categories.fields.isFeatured')}
+                  {t('categories.fields.isFeatured.label')}
                 </Typography.Text>
               ),
               value: (
                 <Typography.Text>
-                  {category?.isFeatured ? t('common.yes') : t('common.no')}
+                  {category?.isFeatured
+                    ? t('categories.fields.isFeatured.1')
+                    : t('categories.fields.isFeatured.0')}
                 </Typography.Text>
               ),
             },
@@ -136,7 +150,7 @@ export const CategoryDrawerShow = (props: Props) => {
             </List.Item>
           )}
         />
-      </div>
+      </Flex>
       <div
         style={{
           display: 'flex',

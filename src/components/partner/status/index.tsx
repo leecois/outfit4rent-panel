@@ -3,23 +3,25 @@ import { useTranslate } from '@refinedev/core';
 import { Tag, theme, Typography } from 'antd';
 
 import { useConfigProvider } from '../../../context';
-import type { IStore } from '../../../interfaces';
+import type { IPartner } from '../../../interfaces';
 
 type Props = {
-  value: IStore['isActive'];
+  value: IPartner['status'];
 };
 
-export const StoreStatus = ({ value }: Props) => {
+export const PartnerStatus = ({ value }: Props) => {
   const t = useTranslate();
   const { token } = theme.useToken();
   const { mode } = useConfigProvider();
   const isDark = mode === 'dark';
+
   let color;
   if (value) {
-    color = isDark ? token.green7 : '#3C8618';
+    color = isDark ? token.colorSuccess : '#3C8618';
   } else {
-    color = isDark ? token.colorTextTertiary : token.colorTextTertiary;
+    color = token.colorTextTertiary;
   }
+
   return (
     <Tag
       color={value ? 'green' : 'default'}
@@ -34,7 +36,7 @@ export const StoreStatus = ({ value }: Props) => {
           color,
         }}
       >
-        {t(`stores.fields.isActive.${value}`)}
+        {t(`partners.fields.status.${value}`)}
       </Typography.Text>
     </Tag>
   );

@@ -34,7 +34,7 @@ export const CategoryStatus = ({ value }: Props) => {
           color: textColor,
         }}
       >
-        {t(`categories.fields.isActive.${value}`)}
+        {t(`categories.fields.status.${value}`)}
       </Typography.Text>
     </Tag>
   );

@@ -2,7 +2,17 @@ import { UploadOutlined } from '@ant-design/icons';
 import { getValueFromEvent, SaveButton, useDrawerForm } from '@refinedev/antd';
 import type { BaseKey } from '@refinedev/core';
 import { useApiUrl, useGetToPath, useGo, useTranslate } from '@refinedev/core';
-import { Button, Form, Grid, Input, Segmented, Spin, Upload } from 'antd';
+import {
+  Avatar,
+  Button,
+  Flex,
+  Form,
+  Grid,
+  Input,
+  Segmented,
+  Spin,
+  Upload,
+} from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
 import type { ICategory } from '../../../interfaces';
@@ -29,7 +39,7 @@ export const CategoryDrawerForm = (props: Props) => {
   const t = useTranslate();
   const apiUrl = useApiUrl();
   const breakpoint = Grid.useBreakpoint();
-  const { styles } = useStyles();
+  const { styles, theme } = useStyles();
 
   const { drawerProps, formProps, close, saveButtonProps, formLoading } =
     useDrawerForm<ICategory>({
@@ -39,6 +49,9 @@ export const CategoryDrawerForm = (props: Props) => {
       redirect: false,
       onMutationSuccess: () => {
         props.onMutationSuccess?.();
+      },
+      meta: {
+        populate: ['images'],
       },
     });
 
@@ -66,7 +79,9 @@ export const CategoryDrawerForm = (props: Props) => {
       type: 'replace',
     });
   };
-
+  const watchedImages = Form.useWatch('images', formProps.form);
+  const image = watchedImages?.[0] || null;
+  const previewImageURL = image?.url || image?.response?.url;
   const title = props.action === 'edit' ? null : t('categories.actions.add');
 
   const handleUploadChange = (info: any) => {
@@ -77,48 +92,90 @@ export const CategoryDrawerForm = (props: Props) => {
           url: (file.response as UploadResponse).data,
         };
       }
+      if (file.url) {
+        return { url: file.url };
+      }
       return file;
     });
     formProps.form?.setFieldsValue({ images: updatedFileList });
   };
 
+  const handleFinish = (values: any) => {
+    const { images, ...restValues } = values;
+    const url = images && images[0] ? images[0].url : null;
+
+    const transformedValues = {
+      url,
+      ...restValues,
+    };
+    formProps.onFinish?.(transformedValues);
+  };
   return (
     <Drawer
       {...drawerProps}
       open={true}
       title={title}
-      width={breakpoint.sm ? '736px' : '100%'}
+      width={breakpoint.sm ? '378px' : '100%'}
       zIndex={1001}
       onClose={onDrawerClose}
     >
       <Spin spinning={formLoading}>
-        <Form {...formProps} layout="vertical">
+        <Form {...formProps} layout="vertical" onFinish={handleFinish}>
           <Form.Item
             name="images"
             valuePropName="fileList"
             getValueFromEvent={getValueFromEvent}
-            style={{
-              margin: 0,
-            }}
-            rules={[
-              {
-                required: true,
-                message: 'Please upload at least one image.',
-              },
-            ]}
+            style={{ margin: 0 }}
+            rules={[{ required: true }]}
+            initialValue={
+              formProps.initialValues?.url
+                ? [{ url: formProps.initialValues.url }]
+                : []
+            }
           >
             <Upload.Dragger
               name="file"
-              action={`${apiUrl}/categories/uploaded-file`}
-              multiple
+              action={`${apiUrl}/brands/uploaded-file`}
+              maxCount={1}
               accept=".png,.jpg,.jpeg"
-              showUploadList={true}
+              className={styles.uploadDragger}
               onChange={handleUploadChange}
-              listType="picture-card"
+              showUploadList={false}
             >
-              <Button icon={<UploadOutlined />}>
-                {t('categories.fields.images.description')}
-              </Button>
+              <Flex
+                vertical
+                align="center"
+                justify="center"
+                style={{ position: 'relative', height: '100%' }}
+              >
+                <Avatar
+                  shape="square"
+                  style={{
+                    aspectRatio: 1,
+                    objectFit: 'contain',
+                    width: previewImageURL ? '100%' : '48px',
+                    height: previewImageURL ? '100%' : '48px',
+                    marginTop: previewImageURL ? undefined : 'auto',
+                    transform: previewImageURL ? undefined : 'translateY(50%)',
+                  }}
+                  src={previewImageURL || '/images/product-default-img.png'}
+                  alt="Product Image"
+                />
+                <Button
+                  icon={<UploadOutlined />}
+                  style={{
+                    marginTop: 'auto',
+                    marginBottom: '16px',
+                    backgroundColor: theme.colorBgContainer,
+                    ...(!!previewImageURL && {
+                      position: 'absolute',
+                      bottom: 0,
+                    }),
+                  }}
+                >
+                  {t('products.fields.images.description')}
+                </Button>
+              </Flex>
             </Upload.Dragger>
           </Form.Item>
           <Form.Item
@@ -148,7 +205,7 @@ export const CategoryDrawerForm = (props: Props) => {
             <Input.TextArea rows={6} />
           </Form.Item>
           <Form.Item
-            label={t('categories.fields.isFeatured')}
+            label={t('categories.fields.isFeatured.label')}
             name="isFeatured"
             className={styles.formItem}
             initialValue={false}
@@ -158,18 +215,18 @@ export const CategoryDrawerForm = (props: Props) => {
               size="large"
               options={[
                 {
-                  label: t('common.yes'),
+                  label: t('categories.fields.isFeatured.1'),
                   value: true,
                 },
                 {
-                  label: t('common.no'),
+                  label: t('categories.fields.isFeatured.0'),
                   value: false,
                 },
               ]}
             />
           </Form.Item>
           <Form.Item
-            label={t('categories.fields.isActive.label')}
+            label={t('categories.fields.status.label')}
             name="status"
             className={styles.formItem}
             initialValue={0}
@@ -179,11 +236,11 @@ export const CategoryDrawerForm = (props: Props) => {
               size="large"
               options={[
                 {
-                  label: t('common.active'),
+                  label: t('categories.fields.status.1'),
                   value: 1,
                 },
                 {
-                  label: t('common.inactive'),
+                  label: t('categories.fields.status.0'),
                   value: 0,
                 },
               ]}

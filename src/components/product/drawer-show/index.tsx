@@ -169,7 +169,7 @@ export const ProductDrawerShow = (props: Props) => {
             {
               label: (
                 <Typography.Text type="secondary">
-                  {t('products.fields.isActive.label')}
+                  {t('products.fields.status.label')}
                 </Typography.Text>
               ),
               value: <ProductStatus value={product?.status ?? 0} />,

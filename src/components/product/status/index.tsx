@@ -35,7 +35,7 @@ export const ProductStatus = ({ value }: Props) => {
           color,
         }}
       >
-        {t(`products.fields.isActive.${value}`)}
+        {t(`products.fields.status.${value}`)}
       </Typography.Text>
     </Tag>
   );

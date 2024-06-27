@@ -13,6 +13,6 @@ export * from './order';
 export * from './order/actions';
 export * from './order/status';
 export * from './paginationTotal';
+export * from './partner';
 export * from './product';
-export * from './store';
 export * from './title';

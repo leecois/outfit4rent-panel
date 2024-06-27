@@ -2,7 +2,7 @@ import { EyeOutlined } from '@ant-design/icons';
 import { List, useTable } from '@refinedev/antd';
 import type { HttpError } from '@refinedev/core';
 import { useGo, useNavigation, useTranslate } from '@refinedev/core';
-import { Button, Table, Tag } from 'antd';
+import { Avatar, Button, Table, Tag } from 'antd';
 import type { PropsWithChildren } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -34,20 +34,13 @@ export const BrandList = ({ children }: PropsWithChildren) => {
         }}
       >
         <Table.Column<IBrand>
-          key="images"
-          dataIndex="images"
+          key="url"
+          dataIndex="url"
           width={100}
           title={t('categories.fields.image')}
-          render={(images) =>
-            images &&
-            images.length > 0 && (
-              <img
-                src={images[0].url}
-                alt="Brand Image"
-                style={{ width: 50, height: 50 }}
-              />
-            )
-          }
+          render={(url: string) => {
+            return <Avatar shape="square" src={url} alt="Brand Image" />;
+          }}
         />
         <Table.Column
           key="name"
@@ -68,7 +61,7 @@ export const BrandList = ({ children }: PropsWithChildren) => {
         <Table.Column<IBrand>
           key="status"
           dataIndex="status"
-          title={t('categories.fields.isActive.label')}
+          title={t('brands.fields.status.label')}
           render={(_, record) => {
             return <BrandStatus value={record.status} />;
           }}
@@ -76,10 +69,12 @@ export const BrandList = ({ children }: PropsWithChildren) => {
         <Table.Column<IBrand>
           key="isFeatured"
           dataIndex="isFeatured"
-          title={t('categories.fields.isFeatured')}
+          title={t('categories.fields.isFeatured.label')}
           render={(isFeatured) => (
             <Tag color={isFeatured ? 'green' : 'volcano'}>
-              {isFeatured ? t('common.yes') : t('common.no')}
+              {isFeatured
+                ? t('categories.fields.isFeatured.1')
+                : t('categories.fields.isFeatured.0')}
             </Tag>
           )}
         />

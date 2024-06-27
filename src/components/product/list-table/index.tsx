@@ -283,9 +283,9 @@ export const ProductListTable = () => {
         render={(_, record) => <ProductTableColumnRating product={record} />}
       />
       <Table.Column
-        title={t('products.fields.status')}
+        title={t('products.fields.status.label')}
         dataIndex="status"
-        key="status"
+        key="_status"
         sorter
         defaultSortOrder={getDefaultSortOrder('status', sorters)}
         defaultFilteredValue={getDefaultFilter('status', filters, 'in')}

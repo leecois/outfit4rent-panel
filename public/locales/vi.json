@@ -135,7 +135,7 @@
       "id": "ID",
       "title": "Tiêu đề",
       "products": "Sản phẩm",
-      "isActive": {
+      "status": {
         "label": "Trạng thái",
         "true": "Hiển thị",
         "false": "Ẩn"

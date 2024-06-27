@@ -34,7 +34,7 @@ export const BrandStatus = ({ value }: Props) => {
           color: textColor,
         }}
       >
-        {t(`categories.fields.isActive.${value}`)}
+        {t(`brands.fields.status.${value}`)}
       </Typography.Text>
     </Tag>
   );

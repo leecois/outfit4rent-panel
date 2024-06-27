@@ -94,14 +94,29 @@ export interface ICourier {
   status: ICourierStatus;
   vehicle: IVehicle;
 }
+// Define the interface for the partner data
+export interface ICoordinate {
+  x: string;
+  y: string;
+}
+
+export interface IArea {
+  id: number;
+  address: string;
+  district: string;
+  city: string;
+}
+
 export interface IPartner {
   id: number;
   name: string;
   address: string;
   phone: string;
   email: string;
-  areaId: number;
   status: number;
+  areaId: number;
+  area: IArea;
+  coordinate: ICoordinate;
 }
 
 export interface IOrder {
@@ -121,12 +136,7 @@ export interface IOrder {
 export interface IBrand {
   id: number;
   name: string;
-  images: [
-    {
-      id: number;
-      url: string;
-    },
-  ];
+  url: string;
   description: string;
   status: number;
   isFeatured: boolean;
@@ -161,12 +171,7 @@ export interface ICategory {
   name: string;
   description: string;
   status: number;
-  images: [
-    {
-      id: number;
-      url: string;
-    },
-  ];
+  url: string;
   isFeatured: boolean;
 }
 

@@ -201,7 +201,7 @@ export const ProductListCard = () => {
                     View
                   </Tag>
                   <img
-                    src={item.images[0]?.url || 'default-image-url.jpg'}
+                    src={item?.images[0]?.url || 'default-image-url.jpg'}
                     alt={`Product image ${item.id}`}
                     style={{
                       aspectRatio: 288 / 160,

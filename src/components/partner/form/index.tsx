@@ -1,18 +1,17 @@
 import type { UseFormProps } from '@refinedev/antd';
 import { Col, Row, Spin } from 'antd';
 
-import { StoreCourierTable } from '../courier-table';
-import { StoreMap } from '../map';
-import { StoreFormFields } from './fields';
-import { useStoreForm } from './useStoreForm';
+import { PartnerMap } from '../map';
+import { PartnerFormFields } from './fields';
+import { usePartnerForm } from './usePartnerForm';
 
 type Props = {
   action: UseFormProps['action'];
 };
 
-export const StoreForm = (props: Props) => {
+export const PartnerForm = (props: Props) => {
   const {
-    store,
+    partner,
     handleMapOnDragEnd,
     formProps,
     saveButtonProps,
@@ -21,7 +20,7 @@ export const StoreForm = (props: Props) => {
     isFormDisabled,
     setIsFormDisabled,
     latLng,
-  } = useStoreForm({
+  } = usePartnerForm({
     action: props.action,
   });
 
@@ -29,7 +28,7 @@ export const StoreForm = (props: Props) => {
     <Spin spinning={formLoading}>
       <Row gutter={16} wrap>
         <Col xs={24} md={12} lg={9}>
-          <StoreFormFields
+          <PartnerFormFields
             formProps={formProps}
             saveButtonProps={saveButtonProps}
             action={props.action}
@@ -47,11 +46,11 @@ export const StoreForm = (props: Props) => {
             marginTop: '64px',
           }}
         >
-          <StoreMap
+          <PartnerMap
             lat={latLng?.lat}
             lng={latLng?.lng}
             zoom={props.action === 'create' ? 4 : 10}
-            store={store}
+            partner={partner}
             isDisabled={isFormDisabled}
             onDragEnd={handleMapOnDragEnd}
           />
@@ -66,17 +65,7 @@ export const StoreForm = (props: Props) => {
             span: 15,
             offset: 9,
           }}
-        >
-          {props.action === 'edit' && (
-            <div
-              style={{
-                marginTop: '16px',
-              }}
-            >
-              <StoreCourierTable store={store} />
-            </div>
-          )}
-        </Col>
+        ></Col>
       </Row>
     </Spin>
   );

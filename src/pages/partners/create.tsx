@@ -3,18 +3,20 @@ import { ListButton } from '@refinedev/antd';
 import { useTranslate } from '@refinedev/core';
 import { Divider, Flex } from 'antd';
 
-import { StoreForm } from '../../components';
+import { PartnerForm } from '../../components';
 
-export const StoreCreate = () => {
+export const PartnerCreate = () => {
   const t = useTranslate();
 
   return (
     <>
       <Flex>
-        <ListButton icon={<LeftOutlined />}>{t('stores.stores')}</ListButton>
+        <ListButton icon={<LeftOutlined />}>
+          {t('partners.partners')}
+        </ListButton>
       </Flex>
       <Divider />
-      <StoreForm action="create" />
+      <PartnerForm action="create" />
     </>
   );
 };
