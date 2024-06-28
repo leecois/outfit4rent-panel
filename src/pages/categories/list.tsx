@@ -76,7 +76,7 @@ export const CategoryList = ({ children }: PropsWithChildren) => {
         <Table.Column<ICategory>
           key="status"
           dataIndex="status"
-          title={t('categories.fields.isActive.label')}
+          title={t('categories.fields.status.label')}
           render={(_, record) => {
             return <CategoryStatus value={record.status} />;
           }}

@@ -137,7 +137,7 @@ export const AllPartnersMap = () => {
                     dataSource={[
                       {
                         title: <EnvironmentOutlined />,
-                        value: partner.area.address,
+                        value: partner.address,
                       },
                       {
                         title: <UserOutlined />,

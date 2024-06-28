@@ -167,7 +167,7 @@ const App: React.FC = () => {
                   },
                 },
                 {
-                  name: 'couriers',
+                  name: 'packages',
                   list: '/couriers',
                   create: '/couriers/new',
                   edit: '/couriers/:id/edit',

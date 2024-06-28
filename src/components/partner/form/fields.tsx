@@ -168,7 +168,30 @@ export const PartnerFormFields = ({
             },
           ]}
         >
-          <InputMask mask="(999) 999 99 99">
+          <InputMask mask="999 999 9999">
+            {/* 
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore */}
+            {(props: InputProps) => <Input {...props} />}
+          </InputMask>
+        </FormItemHorizontal>
+        <Divider
+          style={{
+            margin: 0,
+          }}
+        />
+        <FormItemHorizontal
+          name="areaId"
+          icon={<PhoneOutlined />}
+          label={t('partners.fields.phone')}
+          rules={[
+            {
+              required: true,
+              message: 'Please input a valid phone number!',
+            },
+          ]}
+        >
+          <InputMask mask="9">
             {/* 
                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                     // @ts-ignore */}

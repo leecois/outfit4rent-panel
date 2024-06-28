@@ -266,7 +266,7 @@ export const ProductDrawerForm = (props: Props) => {
             <Select {...brandSelectProps} />
           </Form.Item>
           <Form.Item
-            label={t('products.fields.isActive.label')}
+            label={t('products.fields.status.label')}
             name="status"
             className={styles.formItem}
             initialValue={1}
@@ -276,11 +276,11 @@ export const ProductDrawerForm = (props: Props) => {
               size="large"
               options={[
                 {
-                  label: t('products.fields.isActive.true'),
+                  label: t('products.fields.status.true'),
                   value: 1,
                 },
                 {
-                  label: t('products.fields.isActive.false'),
+                  label: t('products.fields.status.false'),
                   value: 0,
                 },
               ]}
@@ -297,11 +297,11 @@ export const ProductDrawerForm = (props: Props) => {
               size="large"
               options={[
                 {
-                  label: t('products.fields.isActive.true'),
+                  label: t('products.fields.status.true'),
                   value: true,
                 },
                 {
-                  label: t('products.fields.isActive.false'),
+                  label: t('products.fields.status.false'),
                   value: false,
                 },
               ]}

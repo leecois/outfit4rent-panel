@@ -426,7 +426,10 @@
       "image": "Image",
       "deposit": "Deposit",
       "isFeatured": "Featured",
-      "rating": "Rating"
+      "rating": "Rating",
+      "size": "Size",
+      "type": "Type",
+      "quantity": "Quantity"
     },
     "filter": {
       "title": "Filters",
@@ -581,7 +584,8 @@
       "status": {
         "title": "Status",
         "active": "Active",
-        "inactive": "Inactive"
+        "inactive": "Inactive",
+        "label": "Status"
       }
     },
     "filter": {
@@ -635,9 +639,9 @@
         "false": "No"
       },
       "status": {
-        "label": "Status",
         "0": "Inactive",
         "1": "Active",
+        "label": "Status",
         "active": "Active",
         "inactive": "Inactive"
       }
@@ -675,6 +679,11 @@
       "status": {
         "placeholder": "Status"
       }
+    }
+  },
+  "customers": {
+    "fields": {
+      "phone": "Phone"
     }
   }
 }
