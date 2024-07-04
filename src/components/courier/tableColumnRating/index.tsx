@@ -1,10 +1,10 @@
 import { useList } from '@refinedev/core';
 import { Rate } from 'antd';
 
-import type { ICourier, IReview } from '../../../interfaces';
+import type { IPackage, IReview } from '../../../interfaces';
 
 type Props = {
-  courier?: ICourier;
+  courier?: IPackage;
 };
 
 export const CourierTableColumnRating = (props: Props) => {

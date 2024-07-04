@@ -78,21 +78,16 @@ export interface ICourierStatus {
   text: 'Available' | 'Offline' | 'On delivery';
 }
 
-export interface ICourier {
+export interface IPackage {
   id: number;
+  url: string;
   name: string;
-  surname: string;
-  email: string;
-  gender: string;
-  gsm: string;
-  createdAt: string;
-  accountNumber: string;
-  licensePlate: string;
-  address: string;
-  avatar: Array<IFile>;
-  store: IStore;
-  status: ICourierStatus;
-  vehicle: IVehicle;
+  price: number;
+  availableRentDays: number;
+  description: string;
+  status: number;
+  numOfProduct: number;
+  isFeatured: boolean;
 }
 // Define the interface for the partner data
 export interface ICoordinate {
@@ -214,4 +209,11 @@ export interface ITrendingProducts {
   id: number;
   product: IProduct;
   orderCount: number;
+}
+export interface ICategoryPackage {
+  id: number;
+  maxAvailableQuantity: number;
+  categoryId: number;
+  status: number;
+  packageId: number;
 }
