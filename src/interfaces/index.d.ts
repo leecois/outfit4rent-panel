@@ -15,9 +15,18 @@ export interface IOrderTotalCount {
   totalDelivered: number;
 }
 
-export interface ISalesChart {
+interface ApiResponse<T> {
+  message: string;
+  statusCode: string;
+  data: {
+    data: T[];
+    trend: number;
+    total: number;
+  };
+}
+
+interface ISalesChart {
   date: string;
-  title?: 'Order Count' | 'Order Amount';
   value: number;
 }
 

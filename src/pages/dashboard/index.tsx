@@ -27,7 +27,7 @@ import {
   TrendingMenu,
   TrendUpIcon,
 } from '../../components';
-import type { ISalesChart } from '../../interfaces';
+import type { ApiResponse, ISalesChart } from '../../interfaces';
 
 type DateFilter = 'lastWeek' | 'lastMonth';
 
@@ -95,36 +95,24 @@ export const DashboardPage: React.FC = () => {
     }
   }, [selecetedDateFilter]);
 
-  const { data: dailyRevenueData } = useCustom<{
-    data: Array<ISalesChart>;
-    total: number;
-    trend: number;
-  }>({
-    url: `${API_URL}/dailyRevenue`,
+  const { data: dailyRevenueData } = useCustom<ApiResponse<ISalesChart>>({
+    url: `${API_URL}/admin/daily-revenue`,
     method: 'get',
     config: {
       query: dateFilterQuery,
     },
   });
 
-  const { data: dailyOrdersData } = useCustom<{
-    data: Array<ISalesChart>;
-    total: number;
-    trend: number;
-  }>({
-    url: `${API_URL}/dailyOrders`,
+  const { data: dailyOrdersData } = useCustom<ApiResponse<ISalesChart>>({
+    url: `${API_URL}/admin/daily-orders`,
     method: 'get',
     config: {
       query: dateFilterQuery,
     },
   });
 
-  const { data: newCustomersData } = useCustom<{
-    data: Array<ISalesChart>;
-    total: number;
-    trend: number;
-  }>({
-    url: `${API_URL}/newCustomers`,
+  const { data: newCustomersData } = useCustom<ApiResponse<ISalesChart>>({
+    url: `${API_URL}/admin/new-customers`,
     method: 'get',
     config: {
       query: dateFilterQuery,
@@ -132,12 +120,8 @@ export const DashboardPage: React.FC = () => {
   });
 
   const revenue = useMemo(() => {
-    const data = dailyRevenueData?.data?.data;
-    if (!data)
-      return {
-        data: [],
-        trend: 0,
-      };
+    const data = dailyRevenueData?.data?.data.data;
+    if (!data) return { data: [], trend: 0 };
 
     const plotData = data.map((item) => {
       const date = dayjs(item.date);
@@ -151,12 +135,12 @@ export const DashboardPage: React.FC = () => {
 
     return {
       data: plotData,
-      trend: dailyRevenueData?.data?.trend || 0,
+      trend: dailyRevenueData.data.data.trend,
     };
   }, [dailyRevenueData]);
 
   const orders = useMemo(() => {
-    const data = dailyOrdersData?.data?.data;
+    const data = dailyOrdersData?.data?.data.data;
     if (!data) return { data: [], trend: 0 };
 
     const plotData = data.map((order) => {
@@ -171,12 +155,12 @@ export const DashboardPage: React.FC = () => {
 
     return {
       data: plotData,
-      trend: dailyOrdersData?.data?.trend || 0,
+      trend: dailyOrdersData.data.data.trend,
     };
   }, [dailyOrdersData]);
 
   const newCustomers = useMemo(() => {
-    const data = newCustomersData?.data?.data;
+    const data = newCustomersData?.data?.data?.data;
     if (!data) return { data: [], trend: 0 };
 
     const plotData = data.map((customer) => {
@@ -191,7 +175,7 @@ export const DashboardPage: React.FC = () => {
 
     return {
       data: plotData,
-      trend: newCustomersData?.data?.trend || 0,
+      trend: newCustomersData.data.data.trend,
     };
   }, [newCustomersData]);
 
