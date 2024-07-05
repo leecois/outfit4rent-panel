@@ -1,6 +1,5 @@
 /* eslint-disable import/export */
 export * from './categories';
-export * from './courier';
 export * from './customer';
 export * from './customer/userStatus';
 export * from './dashboard';
@@ -12,6 +11,7 @@ export * from './map';
 export * from './order';
 export * from './order/actions';
 export * from './order/status';
+export * from './packages';
 export * from './paginationTotal';
 export * from './partner';
 export * from './product';

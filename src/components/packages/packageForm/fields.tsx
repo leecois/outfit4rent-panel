@@ -126,7 +126,7 @@ export const PackageFormFields = ({
         />
         <FormItemHorizontal
           icon={<MailOutlined />}
-          label={t('packages.fields.availableRentDays')}
+          label={t('packages.fields.rentalPeriod.label')}
           name="availableRentDays"
           rules={[
             {
@@ -145,7 +145,7 @@ export const PackageFormFields = ({
         <FormItemHorizontal
           name="price"
           icon={<PhoneOutlined />}
-          label={t('packages.fields.price')}
+          label={t('packages.fields.price.label')}
           rules={[
             {
               required: true,
@@ -163,7 +163,7 @@ export const PackageFormFields = ({
         <FormItemHorizontal
           name="numOfProduct"
           icon={<PhoneOutlined />}
-          label={t('packages.fields.numOfProduct')}
+          label={t('packages.fields.numOfProduct.label')}
           rules={[
             {
               required: true,
@@ -181,7 +181,7 @@ export const PackageFormFields = ({
         <FormItemHorizontal
           name="description"
           icon={<PhoneOutlined />}
-          label={t('packages.fields.description')}
+          label={t('packages.fields.description.label')}
           rules={[
             {
               required: true,

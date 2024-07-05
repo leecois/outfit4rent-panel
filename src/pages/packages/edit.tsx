@@ -3,7 +3,7 @@ import { ListButton } from '@refinedev/antd';
 import { useTranslate } from '@refinedev/core';
 import { Divider, Flex } from 'antd';
 
-import { PackageForm } from '../../components/packages/form';
+import { PackageForm } from '../../components/packages/packageForm';
 
 export const PackagesEdit = () => {
   const t = useTranslate();

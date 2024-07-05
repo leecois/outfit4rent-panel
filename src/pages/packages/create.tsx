@@ -1,7 +1,7 @@
 import { UploadOutlined } from '@ant-design/icons';
 import type { UseFormReturnType } from '@refinedev/antd';
 import { SaveButton, useSelect, useStepsForm } from '@refinedev/antd';
-import { useGetToPath, useGo, useTranslate } from '@refinedev/core';
+import { useApiUrl, useGetToPath, useGo, useTranslate } from '@refinedev/core';
 import {
   Button,
   Card,
@@ -21,6 +21,7 @@ import type { ICategory, IPackage } from '../../interfaces';
 
 const useFormList = (props: UseFormListProps) => {
   const t = useTranslate();
+  const apiUrl = useApiUrl();
 
   const { selectProps: categoriesSelectProps } = useSelect<ICategory>({
     resource: 'categories',
@@ -52,7 +53,7 @@ const useFormList = (props: UseFormListProps) => {
       >
         <Upload.Dragger
           name="file"
-          action={`https://api.outfit4rent.online/packages/uploaded-file`}
+          action={`${apiUrl}/packages/uploaded-file`}
           multiple
           accept=".png,.jpg,.jpeg"
           showUploadList={true}
@@ -84,13 +85,13 @@ const useFormList = (props: UseFormListProps) => {
           />
         </Form.Item>
         <Form.Item
-          label={t('packages.fields.availableRentDays.label')}
+          label={t('packages.fields.rentalPeriod.label')}
           name="availableRentDays"
           rules={[{ required: true }]}
         >
           <Input
             type="number"
-            placeholder={t('packages.fields.availableRentDays.placeholder')}
+            placeholder={t('packages.fields.rentalPeriod.placeholder')}
           />
         </Form.Item>
         <Form.Item
@@ -124,32 +125,32 @@ const useFormList = (props: UseFormListProps) => {
             size="large"
             options={[
               {
-                label: t('packages.fields.status.true'),
+                label: t('packages.fields.status.active'),
                 value: 1,
               },
               {
-                label: t('packages.fields.status.false'),
+                label: t('packages.fields.status.inactive'),
                 value: 0,
               },
             ]}
           />
         </Form.Item>
         <Form.Item
-          label={t('packages.fields.isFeatured')}
+          label={t('packages.fields.isFeatured.label')}
           name="isFeatured"
           // className={styles.formItem}
-          initialValue={1}
+          initialValue={true}
         >
           <Segmented
             block
             size="large"
             options={[
               {
-                label: t('packages.fields.status.true'),
+                label: t('packages.fields.status.active'),
                 value: true,
               },
               {
-                label: t('packages.fields.status.false'),
+                label: t('packages.fields.status.inactive'),
                 value: false,
               },
             ]}
@@ -201,12 +202,12 @@ const useFormList = (props: UseFormListProps) => {
                     />
                   </Form.Item>
                   <Button type="dashed" onClick={() => remove(name)}>
-                    {t('buttons.remove')}
+                    {t('buttons.delete')}
                   </Button>
                 </Card>
               ))}
               <Button type="dashed" onClick={() => add()} block>
-                {t('buttons.addCategory')}
+                {t('buttons.add')}
               </Button>
             </>
           )}

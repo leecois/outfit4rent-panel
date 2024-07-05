@@ -127,7 +127,7 @@ export const PackagesList = ({ children }: PropsWithChildren) => {
           <Table.Column<IPackage>
             key="url"
             dataIndex="url"
-            title={t('packages.fields.avatar.label')}
+            title={t('packages.fields.thumbnail.label')}
             render={(_, record) => (
               <Avatar src={record.url} alt={record.name} />
             )}
@@ -194,7 +194,7 @@ export const PackagesList = ({ children }: PropsWithChildren) => {
           <Table.Column
             dataIndex="availableRentDays"
             key="availableRentDays"
-            title={t('packages.fields.availableRentDays.label')}
+            title={t('packages.fields.rentalPeriod.label')}
             filterIcon={(filtered) => (
               <SearchOutlined
                 style={{

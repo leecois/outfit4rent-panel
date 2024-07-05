@@ -1,6 +1,6 @@
 import { Col, Row, Spin } from 'antd';
 
-import { CategoryPackageTable } from './categoryTable'; // Ensure correct import path
+import { TableCategoryPackage } from '../tableCategoryPackage';
 import { PackageFormFields } from './fields';
 import { usePackageForm } from './usePackageForm';
 
@@ -41,7 +41,7 @@ export const PackageForm = (props: Props) => {
             marginTop: '64px',
           }}
         >
-          <CategoryPackageTable
+          <TableCategoryPackage
             categoryPackageWithCategory={categoryPackageWithCategory}
           />
         </Col>

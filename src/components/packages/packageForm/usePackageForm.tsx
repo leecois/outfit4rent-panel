@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { useForm } from '@refinedev/antd';
+import { useApiUrl } from '@refinedev/core';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -18,6 +19,7 @@ export const usePackageForm = (props: Props) => {
     props.action === 'edit',
   );
   const [packageData, setPackageData] = useState<IPackage | null>(null);
+  const apiUrl = useApiUrl();
   const [categoryPackageWithCategory, setCategoryPackageWithCategory] =
     useState<Array<{ categoryPackage: ICategoryPackage; category: ICategory }>>(
       [],
@@ -39,19 +41,17 @@ export const usePackageForm = (props: Props) => {
       try {
         const packageId = form.queryResult?.data?.data?.id;
         if (!packageId) {
-          console.error('packageId is undefined or null');
           setError('Invalid package ID');
           setLoading(false);
           return;
         }
-
         const packageResponse = await axios.get(
-          `https://api.outfit4rent.online/packages/${packageId}`,
+          `${apiUrl}/packages/${packageId}`,
         );
         setPackageData(packageResponse.data.data);
 
         const categoryPackagesResponse = await axios.get(
-          `https://api.outfit4rent.online/category-packages/by-package-id/${packageId}`,
+          `${apiUrl}/category-packages/by-package-id/${packageId}`,
         );
         const fetchedCategoryPackages: ICategoryPackage[] =
           categoryPackagesResponse.data.data;
@@ -60,9 +60,7 @@ export const usePackageForm = (props: Props) => {
           (pkg) => pkg.categoryId,
         );
         const categoriesResponse = await Promise.all(
-          categoryIds.map((id) =>
-            axios.get(`https://api.outfit4rent.online/categories/${id}`),
-          ),
+          categoryIds.map((id) => axios.get(`${apiUrl}/categories/${id}`)),
         );
 
         const combinedData = fetchedCategoryPackages.map((pkg) => {
@@ -78,7 +76,6 @@ export const usePackageForm = (props: Props) => {
 
         setCategoryPackageWithCategory(combinedData);
       } catch (error) {
-        console.error('Error fetching data:', error);
         setError('Failed to fetch data');
       } finally {
         setLoading(false);

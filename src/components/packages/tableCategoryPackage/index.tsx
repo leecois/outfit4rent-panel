@@ -1,6 +1,5 @@
 import { useTranslate } from '@refinedev/core';
 import { Avatar, Table, Tag } from 'antd';
-import React from 'react';
 
 import type { ICategory, ICategoryPackage } from '../../../interfaces';
 
@@ -11,7 +10,7 @@ type Props = {
   }>;
 };
 
-export const CategoryPackageTable = ({
+export const TableCategoryPackage = ({
   categoryPackageWithCategory,
 }: Props) => {
   const t = useTranslate();
@@ -20,17 +19,20 @@ export const CategoryPackageTable = ({
     <Table
       dataSource={categoryPackageWithCategory}
       rowKey="categoryPackage.id"
-      scroll={{ x: 300, y: 300 }} // Adjust the y value to fit your needs
+      scroll={{ x: 400, y: 700 }} // Adjust the y value to fit your needs
     >
-      <Table.Column title={t('categories.id')} dataIndex={['category', 'id']} />
       <Table.Column
-        title={t('categories.name')}
+        title={t('categories.fields.id')}
+        dataIndex={['category', 'id']}
+      />
+      <Table.Column
+        title={t('categories.fields.name')}
         dataIndex={['category', 'name']}
       />
       <Table.Column
-        title={t('categories.url')}
+        title={t('categories.fields.image')}
         dataIndex={['category', 'url']}
-        key="avatar"
+        key="url"
         render={(category) => (
           <Avatar
             shape="circle"
@@ -40,7 +42,7 @@ export const CategoryPackageTable = ({
         )}
       />
       <Table.Column
-        title={t('categories.description')}
+        title={t('categories.fields.description')}
         dataIndex={['category', 'description']}
       />
       <Table.Column
@@ -48,20 +50,11 @@ export const CategoryPackageTable = ({
         dataIndex={['categoryPackage', 'maxAvailableQuantity']}
       />
       <Table.Column
-        title={t('categories.status')}
+        title={t('categories.fields.status.label')}
         dataIndex={['category', 'status']}
         render={(status: number) => (
           <Tag color={status === 0 ? 'red' : 'green'}>
             {status === 0 ? 'Inactive' : 'Active'}
-          </Tag>
-        )}
-      />
-      <Table.Column
-        title={t('categories.isFeatured')}
-        dataIndex={['category', 'isFeatured']}
-        render={(isFeatured: boolean) => (
-          <Tag color={isFeatured ? 'blue' : 'grey'}>
-            {isFeatured ? 'Featured' : 'Not Featured'}
           </Tag>
         )}
       />
