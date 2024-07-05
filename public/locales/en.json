@@ -146,9 +146,10 @@
         "1": "Visible",
         "label": "Status"
       },
-      "name": "Category name",
+      "name": "Name",
       "description": "Description"
-    }
+    },
+    "maxAvailableQuantity": "M-Quantity"
   },
   "couriers": {
     "couriers": "Couriers",
@@ -684,6 +685,71 @@
   "customers": {
     "fields": {
       "phone": "Phone"
+    }
+  },
+  "packages": {
+    "packages": "Packages",
+    "actions": {
+      "add": "Add new package"
+    },
+    "fields": {
+      "thumbnail": {
+        "label": "Image"
+      },
+      "name": {
+        "label": "Name",
+        "placeholder": "Package name"
+      },
+      "price": {
+        "label": "Price",
+        "placeholder": "Package price"
+      },
+      "numOfProduct": {
+        "label": "Number of products",
+        "placeholder": "Number of products"
+      },
+      "status": {
+        "label": "Status",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "rentalPeriod": {
+        "label": "Rental period",
+        "placeholder": "Rental period placeholder"
+      },
+      "images": {
+        "description": "Add package image"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Package description"
+      },
+      "isFeatured": {
+        "label": "isFeatured"
+      },
+      "category": {
+        "label": "Category",
+        "placeholder": "Select category"
+      },
+      "quantity": {
+        "label": "Quantity",
+        "placeholder": "Available quantity"
+      }
+    },
+    "filter": {
+      "name": {
+        "placeholder": "Search name"
+      },
+      "price": {
+        "placeholder": "Search price"
+      },
+      "status": {
+        "placeholder": "Filter status"
+      }
+    },
+    "steps": {
+      "general": "General",
+      "categories": "Categories"
     }
   }
 }

@@ -4,17 +4,17 @@ import { getValueFromEvent } from '@refinedev/antd';
 import { useApiUrl } from '@refinedev/core';
 import { Avatar, Flex, Form, Upload } from 'antd';
 
-import type { ICourier } from '../../../interfaces';
+import type { IPackage } from '../../../interfaces';
 import { useStyles } from './styled';
 
 type Props = {
-  formProps: UseFormReturnType<ICourier>['formProps'];
+  formProps: UseFormReturnType<IPackage>['formProps'];
   showUploadOverlay?: boolean;
   containerStyle?: React.CSSProperties;
   disabled?: boolean;
 };
 
-export const CourierFormItemAvatar = ({
+export const PackageFormItemAvatar = ({
   formProps,
   containerStyle,
   showUploadOverlay = true,
@@ -23,13 +23,13 @@ export const CourierFormItemAvatar = ({
   const apiUrl = useApiUrl();
   const { styles } = useStyles();
 
-  const avatars = Form.useWatch('avatar', formProps.form);
+  const avatars = Form.useWatch('url', formProps.form);
   const avatar = avatars?.[0] || null;
-  const previewImageURL = avatar?.url || avatar?.response?.url;
+  const previewImageURL = avatar?.url || avatar?.data?.url;
 
   return (
     <Form.Item
-      name="avatar"
+      name="url"
       valuePropName="fileList"
       getValueFromEvent={getValueFromEvent}
       className={styles.formItem}
@@ -45,7 +45,7 @@ export const CourierFormItemAvatar = ({
     >
       <Upload.Dragger
         name="file"
-        action={`${apiUrl}/media/upload`}
+        action={`${apiUrl}/packages/uploaded-file`}
         maxCount={1}
         accept=".png"
         showUploadList={false}
@@ -60,8 +60,8 @@ export const CourierFormItemAvatar = ({
           <Avatar
             shape="circle"
             className={styles.avatar}
-            src={previewImageURL || '/images/courier-default-avatar.png'}
-            alt="Courier Avatar"
+            src={previewImageURL || '/images/package-default-avatar.png'}
+            alt="Package Avatar"
           />
           {showUploadOverlay && !disabled && (
             <div className={styles.overlay}>

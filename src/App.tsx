@@ -42,10 +42,10 @@ import {
   CategoryList,
   CategoryShow,
 } from './pages/categories';
-import { CourierCreate, CourierEdit, CourierList } from './pages/couriers';
 import { CustomerList, CustomerShow } from './pages/customers';
 import { DashboardPage } from './pages/dashboard';
 import { OrderList, OrderShow } from './pages/orders';
+import { PackagesCreate, PackagesEdit, PackagesList } from './pages/packages';
 import { PartnerCreate, PartnerEdit, PartnerList } from './pages/partners';
 import {
   ProductCreate,
@@ -168,10 +168,10 @@ const App: React.FC = () => {
                 },
                 {
                   name: 'packages',
-                  list: '/couriers',
-                  create: '/couriers/new',
-                  edit: '/couriers/:id/edit',
-                  show: '/couriers/:id',
+                  list: '/packages',
+                  create: '/packages/new',
+                  edit: '/packages/:id/edit',
+                  show: '/packages/:id',
                   meta: {
                     icon: <BikeWhiteIcon />,
                   },
@@ -262,19 +262,19 @@ const App: React.FC = () => {
                     <Route path=":id/edit" element={<BrandEdit />} />
                   </Route>
 
-                  <Route path="/couriers">
+                  <Route path="/packages">
                     <Route
                       path=""
                       element={
-                        <CourierList>
+                        <PackagesList>
                           <Outlet />
-                        </CourierList>
+                        </PackagesList>
                       }
                     >
-                      <Route path="new" element={<CourierCreate />} />
+                      <Route path="new" element={<PackagesCreate />} />
                     </Route>
 
-                    <Route path=":id/edit" element={<CourierEdit />} />
+                    <Route path=":id/edit" element={<PackagesEdit />} />
                   </Route>
                 </Route>
 
@@ -292,8 +292,8 @@ const App: React.FC = () => {
                         type="login"
                         formProps={{
                           initialValues: {
-                            email: 'demo@outfit4rent.dev',
-                            password: 'demodemo',
+                            email: 'leecois@gmail.com',
+                            password: '123456',
                           },
                         }}
                       />

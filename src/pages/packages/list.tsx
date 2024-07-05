@@ -12,40 +12,34 @@ import {
   useNavigation,
   useTranslate,
 } from '@refinedev/core';
-import { Avatar, Input, InputNumber, Table, theme, Typography } from 'antd';
+import {
+  Avatar,
+  Input,
+  InputNumber,
+  Select,
+  Table,
+  theme,
+  Typography,
+} from 'antd';
 import type { PropsWithChildren } from 'react';
 import InputMask from 'react-input-mask';
 import { useLocation } from 'react-router-dom';
 
-import {
-  CourierStatus,
-  CourierTableColumnRating,
-  PaginationTotal,
-} from '../../components';
-import type { ICourier } from '../../interfaces';
+import { PackageStatus, PaginationTotal } from '../../components';
+import type { IPackage } from '../../interfaces';
 
-export const CourierList = ({ children }: PropsWithChildren) => {
+export const PackagesList = ({ children }: PropsWithChildren) => {
   const go = useGo();
   const { pathname } = useLocation();
   const { createUrl } = useNavigation();
   const t = useTranslate();
   const { token } = theme.useToken();
 
-  const { tableProps, filters } = useTable<ICourier>({
+  const { tableProps, filters } = useTable<IPackage>({
     filters: {
       initial: [
         {
           field: 'name',
-          operator: 'contains',
-          value: '',
-        },
-        {
-          field: 'licensePlate',
-          operator: 'contains',
-          value: '',
-        },
-        {
-          field: 'email',
           operator: 'contains',
           value: '',
         },
@@ -64,7 +58,7 @@ export const CourierList = ({ children }: PropsWithChildren) => {
             size="large"
             onClick={() => {
               return go({
-                to: `${createUrl('couriers')}`,
+                to: `${createUrl('packages')}`,
                 query: {
                   to: pathname,
                 },
@@ -75,7 +69,7 @@ export const CourierList = ({ children }: PropsWithChildren) => {
               });
             }}
           >
-            {t('couriers.actions.add')}
+            {t('packages.actions.add')}
           </CreateButton>,
         ]}
       >
@@ -130,21 +124,18 @@ export const CourierList = ({ children }: PropsWithChildren) => {
               </FilterDropdown>
             )}
           />
-          <Table.Column<ICourier>
-            key="avatar"
-            dataIndex="avatar"
-            title={t('couriers.fields.avatar.label')}
+          <Table.Column<IPackage>
+            key="url"
+            dataIndex="url"
+            title={t('packages.fields.thumbnail.label')}
             render={(_, record) => (
-              <Avatar
-                src={record.avatar?.[0]?.url}
-                alt={record?.avatar?.[0].name}
-              />
+              <Avatar src={record.url} alt={record.name} />
             )}
           />
-          <Table.Column<ICourier>
+          <Table.Column<IPackage>
             key="name"
             dataIndex="name"
-            title={t('couriers.fields.name.label')}
+            title={t('packages.fields.name.label')}
             filterIcon={(filtered) => (
               <SearchOutlined
                 style={{
@@ -155,13 +146,13 @@ export const CourierList = ({ children }: PropsWithChildren) => {
             defaultFilteredValue={getDefaultFilter('name', filters, 'contains')}
             filterDropdown={(props) => (
               <FilterDropdown {...props}>
-                <Input placeholder={t('couriers.filter.name.placeholder')} />
+                <Input placeholder={t('packages.filter.name.placeholder')} />
               </FilterDropdown>
             )}
           />
           <Table.Column
-            key="licensePlate"
-            dataIndex="licensePlate"
+            key="price"
+            dataIndex="price"
             title={() => {
               return (
                 <Typography.Text
@@ -169,7 +160,7 @@ export const CourierList = ({ children }: PropsWithChildren) => {
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  {t('couriers.fields.licensePlate.label')}
+                  {t('packages.fields.price.label')}
                 </Typography.Text>
               );
             }}
@@ -181,15 +172,13 @@ export const CourierList = ({ children }: PropsWithChildren) => {
               />
             )}
             defaultFilteredValue={getDefaultFilter(
-              'licensePlate',
+              'price',
               filters,
               'contains',
             )}
             filterDropdown={(props) => (
               <FilterDropdown {...props}>
-                <Input
-                  placeholder={t('couriers.filter.licensePlate.placeholder')}
-                />
+                <Input placeholder={t('packages.filter.price.placeholder')} />
               </FilterDropdown>
             )}
             render={(value) => (
@@ -203,9 +192,9 @@ export const CourierList = ({ children }: PropsWithChildren) => {
             )}
           />
           <Table.Column
-            dataIndex="gsm"
-            key="gsm"
-            title={t('couriers.fields.gsm.label')}
+            dataIndex="availableRentDays"
+            key="availableRentDays"
+            title={t('packages.fields.rentalPeriod.label')}
             filterIcon={(filtered) => (
               <SearchOutlined
                 style={{
@@ -234,25 +223,44 @@ export const CourierList = ({ children }: PropsWithChildren) => {
               </Typography.Text>
             )}
           />
-          <Table.Column<ICourier>
-            dataIndex={['store', 'title']}
-            key="store"
-            title={t('couriers.fields.store.label')}
+          <Table.Column<IPackage>
+            dataIndex="numOfProduct"
+            key="numOfProduct"
+            title={t('packages.fields.numOfProduct.label')}
+            render={(value) => (
+              <Typography.Text
+                style={{
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {value}
+              </Typography.Text>
+            )}
           />
-          <Table.Column<ICourier>
-            dataIndex="id"
-            key="ratings"
-            title={t('couriers.fields.rating.label')}
-            render={(_, record) => {
-              return <CourierTableColumnRating courier={record} />;
-            }}
-          />
-          <Table.Column<ICourier>
+          <Table.Column<IPackage>
             dataIndex="status"
             key="status"
-            title={t('couriers.fields.status.label')}
+            title={t('packages.fields.status.label')}
+            sorter
+            filterDropdown={(props) => (
+              <FilterDropdown {...props}>
+                <Select
+                  style={{ width: '200px' }}
+                  allowClear
+                  mode="multiple"
+                  placeholder={t('packages.filter.status.placeholder')}
+                >
+                  <Select.Option value="1">
+                    {t('packages.fields.status.active')}
+                  </Select.Option>
+                  <Select.Option value="0">
+                    {t('packages.fields.status.inactive')}
+                  </Select.Option>
+                </Select>
+              </FilterDropdown>
+            )}
             render={(_, record) => {
-              return <CourierStatus value={record.status} />;
+              return <PackageStatus value={record.status} />;
             }}
           />
           <Table.Column
@@ -260,7 +268,7 @@ export const CourierList = ({ children }: PropsWithChildren) => {
             key="actions"
             fixed="right"
             align="center"
-            render={(_, record: ICourier) => {
+            render={(_, record: IPackage) => {
               return (
                 <EditButton
                   icon={<EyeOutlined />}
