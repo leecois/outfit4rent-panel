@@ -53,6 +53,7 @@ import {
   ProductList,
   ProductShow,
 } from './pages/products';
+import { ReturnOrderList, ReturnOrderShow } from './pages/return-order';
 import { dataProvider } from './rest-data-provider';
 
 interface TitleHandlerOptions {
@@ -115,6 +116,14 @@ const App: React.FC = () => {
                   name: 'orders',
                   list: '/orders',
                   show: '/orders/:id',
+                  meta: {
+                    icon: <ShoppingOutlined />,
+                  },
+                },
+                {
+                  name: 'return-orders',
+                  list: '/return-orders',
+                  show: '/return-orders/:id',
                   meta: {
                     icon: <ShoppingOutlined />,
                   },
@@ -200,12 +209,10 @@ const App: React.FC = () => {
                   }
                 >
                   <Route index element={<DashboardPage />} />
-
                   <Route path="/orders">
                     <Route index element={<OrderList />} />
                     <Route path=":id" element={<OrderShow />} />
                   </Route>
-
                   <Route
                     path="/customers"
                     element={
@@ -216,7 +223,6 @@ const App: React.FC = () => {
                   >
                     <Route path=":id" element={<CustomerShow />} />
                   </Route>
-
                   <Route
                     path="/products"
                     element={
@@ -229,13 +235,16 @@ const App: React.FC = () => {
                     <Route path=":id" element={<ProductShow />} />
                     <Route path=":id/edit" element={<ProductEdit />} />
                   </Route>
-
+                  ///
+                  <Route path="/return-orders">
+                    <Route index element={<ReturnOrderList />} />
+                    <Route path=":id" element={<ReturnOrderShow />} />
+                  </Route>
                   <Route path="/partners">
                     <Route index element={<PartnerList />} />
                     <Route path="new" element={<PartnerCreate />} />
                     <Route path=":id/edit" element={<PartnerEdit />} />
                   </Route>
-
                   <Route
                     path="/categories"
                     element={
@@ -248,7 +257,6 @@ const App: React.FC = () => {
                     <Route path=":id" element={<CategoryShow />} />
                     <Route path=":id/edit" element={<CategoryEdit />} />
                   </Route>
-
                   <Route
                     path="/brands"
                     element={
@@ -261,7 +269,6 @@ const App: React.FC = () => {
                     <Route path=":id" element={<BrandShow />} />
                     <Route path=":id/edit" element={<BrandEdit />} />
                   </Route>
-
                   <Route path="/packages">
                     <Route
                       path=""

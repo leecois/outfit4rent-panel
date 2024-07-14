@@ -5,7 +5,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import type { IOrder } from '../../../interfaces';
-import { OrderStatus } from '../../order/status';
 
 dayjs.extend(relativeTime);
 
@@ -82,7 +81,7 @@ export const OrderTimeline = ({ height = '432px' }: Props) => {
                     }}
                     key={'createdAt'}
                   >
-                    {dayjs(item.createdAt).fromNow()}
+                    {/* {dayjs(item.createdAt).fromNow()} */}
                   </Typography.Text>,
                 ]}
               >
@@ -101,10 +100,10 @@ export const OrderTimeline = ({ height = '432px' }: Props) => {
                     }}
                   >
                     <div style={{ width: '128px' }}>
-                      <OrderStatus status={item.status.text} />
+                      {/* <OrderStatus status={item.status.toString} /> */}
                     </div>
                     <Typography.Text strong>
-                      #{item.orderNumber}
+                      {/* #{item.orderNumber} */}
                     </Typography.Text>
                   </div>
                 </Skeleton>

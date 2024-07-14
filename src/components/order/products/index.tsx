@@ -1,108 +1,113 @@
 import { NumberField } from '@refinedev/antd';
+import { useApiUrl } from '@refinedev/core';
 import { Avatar, Flex, Table, Typography } from 'antd';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-import type { IOrder } from '../../../interfaces';
-import { getUniqueListWithCount } from '../../../utils';
+import type { IOrder, IProductList } from '../../../interfaces';
 
 type Props = {
   order?: IOrder;
 };
 
 export const OrderProducts = ({ order }: Props) => {
-  const products = order?.products || [];
-  const uniqueProducts = getUniqueListWithCount({
-    list: products,
-    field: 'id',
+  const apiUrl = useApiUrl();
+  const [products, setProducts] = useState<IProductList[]>([]);
+  const [loading, setLoading] = useState<boolean>(false); // Thêm state loading
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true); // Bắt đầu loading
+      try {
+        const response = await axios.get(
+          `${apiUrl}/orders/${order?.id}/products`,
+        );
+        setProducts(response.data.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false); // Kết thúc loading
+      }
+    };
+
+    if (order?.id) {
+      fetchProducts();
+    }
+  }, [apiUrl, order?.id]);
+
+  let total = order?.price || 0;
+  products.forEach((product) => {
+    total += product.quantity * (order?.price || 0) * product.deposit;
   });
 
   return (
     <Table
-      dataSource={uniqueProducts}
-      loading={!order}
+      dataSource={products}
+      loading={loading}
       pagination={false}
-      scroll={{
-        x: true,
-      }}
-      footer={(footerProducts) => {
-        return (
+      scroll={{ x: true }}
+      footer={() => (
+        <Flex justify="flex-end" vertical>
           <Flex justify="flex-end" gap={16}>
-            <Typography.Text>Total</Typography.Text>
+            <Typography.Text>Package Price</Typography.Text>
             <NumberField
-              value={footerProducts.reduce(
-                (accumulator, product) =>
-                  accumulator + product.count * product.price,
-                0,
-              )}
+              value={order?.price || 0}
               options={{ style: 'currency', currency: 'USD' }}
             />
           </Flex>
-        );
-      }}
+          <Flex justify="flex-end" gap={16}>
+            <Typography.Text>Total</Typography.Text>
+            <NumberField
+              value={total}
+              options={{ style: 'currency', currency: 'USD' }}
+            />
+          </Flex>
+        </Flex>
+      )}
     >
-      <Table.Column<(typeof uniqueProducts)[number]>
+      <Table.Column<IProductList>
         title="Product"
         dataIndex="name"
         key="name"
         render={(_, record) => {
           const image = record.images?.[0];
-
           return (
-            <Flex
-              gap={16}
-              align="center"
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <Avatar
-                shape="square"
-                src={image?.thumbnailUrl || image?.url}
-                alt={image?.name}
-              />
+            <Flex gap={16} align="center">
+              <Avatar shape="square" src={image?.url} alt={record.name} />
               <Typography.Text>{record.name}</Typography.Text>
             </Flex>
           );
         }}
       />
-      <Table.Column
+      <Table.Column<IProductList>
         align="end"
         title="Quantity"
-        dataIndex="count"
-        key="count"
+        dataIndex="quantity"
+        key="quantity"
       />
-      <Table.Column
-        title="Price"
-        dataIndex="price"
+      <Table.Column<IProductList>
+        title="Deposit"
+        dataIndex="deposit"
         align="end"
-        key="price"
-        render={(value) => {
-          return (
-            <NumberField
-              value={value}
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-              options={{ style: 'currency', currency: 'USD' }}
-            />
-          );
-        }}
+        key="deposit"
+        render={(value) => (
+          <NumberField
+            value={value * (order?.price || 0)}
+            options={{ style: 'currency', currency: 'USD' }}
+          />
+        )}
       />
-      <Table.Column<(typeof uniqueProducts)[number]>
+      <Table.Column<IProductList>
         title="Total"
         dataIndex="id"
         align="end"
         key="total"
-        render={(_, record) => {
-          return (
-            <NumberField
-              value={record.count * record.price}
-              options={{ style: 'currency', currency: 'USD' }}
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-            />
-          );
-        }}
+        render={(_, record) => (
+          <NumberField
+            value={record.quantity * (order?.price || 0) * record.deposit}
+            options={{ style: 'currency', currency: 'USD' }}
+          />
+        )}
       />
     </Table>
   );

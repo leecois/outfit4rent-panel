@@ -2,42 +2,40 @@ import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useApiUrl, useTranslate } from '@refinedev/core';
 import { Dropdown, Menu, message } from 'antd';
 
-import type { IOrder } from '../../../interfaces';
+import type { IReturnOrder } from '../../../interfaces';
 import { TableActionButton } from '../../tableActionButton';
 
 type OrderActionProps = {
-  record: IOrder;
-  onStatusUpdated: () => void; // Add this prop for the callback
+  record: IReturnOrder;
 };
 
-export const OrderActions: React.FC<OrderActionProps> = ({
-  record,
-  onStatusUpdated,
-}) => {
+export const ReturnOrderActions: React.FC<OrderActionProps> = ({ record }) => {
   const t = useTranslate();
   const apiUrl = useApiUrl();
 
   const handleUpdateStatus = async (id: number, status: number) => {
     try {
-      const response = await fetch(`${apiUrl}/orders/${id}/status/${status}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${apiUrl}/return-orders/${id}/status/${status}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
 
-      message.success(`Order ${id} status updated to ${status}`);
-      onStatusUpdated(); // Trigger the callback to refresh the table
+      message.success(`Return order ${id} status updated to ${status}`);
     } catch (error) {
-      message.error(`Failed to update order ${id} status`);
+      message.error(`Failed to update return order ${id} status`);
     }
   };
 
-  const moreMenu = (_order: IOrder) => (
+  const moreMenu = (_order: IReturnOrder) => (
     <Menu
       mode="vertical"
       onClick={({ domEvent }) => {

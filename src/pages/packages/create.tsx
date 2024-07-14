@@ -39,7 +39,7 @@ const useFormList = (props: UseFormListProps) => {
       }
       return file;
     });
-    props.formProps.form?.setFieldsValue({ images: updatedFileList });
+    props.formProps.form?.setFieldsValue({ url: updatedFileList[0].url });
   };
 
   const formList = useMemo(() => {
@@ -54,7 +54,6 @@ const useFormList = (props: UseFormListProps) => {
         <Upload.Dragger
           name="file"
           action={`${apiUrl}/packages/uploaded-file`}
-          multiple
           accept=".png,.jpg,.jpeg"
           showUploadList={true}
           onChange={handleUploadChange}

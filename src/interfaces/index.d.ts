@@ -1,5 +1,18 @@
 import type { Dayjs } from 'dayjs';
 
+export interface IProductInOrder {
+  id: number;
+  deposit: number;
+  status: number;
+  productId: number;
+  userPackageId: number;
+  dateGive: Date;
+  dateReceive: Date;
+  tornMoney: number;
+  quantity: number;
+}
+
+///
 export interface IOrderChart {
   count: number;
   status:
@@ -125,16 +138,20 @@ export interface IPartner {
 
 export interface IOrder {
   id: number;
-  user: IUser;
-  createdAt: string;
-  products: Array<IProduct>;
-  status: IOrderStatus;
-  adress: IAddress;
-  store: IStore;
-  courier: ICourier;
-  events: Array<IEvent>;
-  orderNumber: number;
-  amount: number;
+  customerId: number;
+  packageId: number;
+  packageName: string;
+  dateFrom: Date;
+  dateTo: Date;
+  price: number;
+  receiverName: string;
+  receiverPhone: string;
+  receiverAddress: string;
+  status: number;
+  transactionId: number;
+  quantityOfItems: number;
+  totalDeposit: number;
+  createdAt: Date;
 }
 
 export interface IBrand {
@@ -225,4 +242,29 @@ export interface ICategoryPackage {
   categoryId: number;
   status: number;
   packageId: number;
+}
+
+export interface IReturnOrder {
+  id: number;
+  dateReturn: Date;
+  name: string;
+  address: string;
+  phone: string;
+  status: number;
+  totalThornMoney: number;
+  customerId: number;
+  partnerId: number;
+  quantityOfItems: number;
+  customerPackageId: number;
+  createdAt: Date;
+}
+export interface IProductInReturnOrder {
+  id: number;
+  quantity: string;
+  thornMoney: number;
+  status: number;
+  returnOrderId: number;
+  productId: number;
+  product: IProductList;
+  description: string;
 }

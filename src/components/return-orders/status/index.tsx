@@ -1,5 +1,4 @@
 import {
-  BellOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
   CloseCircleOutlined,
@@ -7,11 +6,13 @@ import {
 import { useTranslate } from '@refinedev/core';
 import { Tag } from 'antd';
 
-type OrderStatusProps = {
+type ReturnOrderStatusProps = {
   status: number;
 };
 
-export const OrderStatus: React.FC<OrderStatusProps> = ({ status }) => {
+export const ReturnOrderStatus: React.FC<ReturnOrderStatusProps> = ({
+  status,
+}) => {
   const t = useTranslate();
   let color;
   let icon;
@@ -23,11 +24,6 @@ export const OrderStatus: React.FC<OrderStatusProps> = ({ status }) => {
       break;
     }
     case 1: {
-      color = 'cyan';
-      icon = <BellOutlined />;
-      break;
-    }
-    case 2: {
       color = 'green';
       icon = <CheckCircleOutlined />;
       break;
@@ -46,7 +42,7 @@ export const OrderStatus: React.FC<OrderStatusProps> = ({ status }) => {
 
   return (
     <Tag color={color} icon={icon}>
-      {t(`enum.orderStatuses.${status}`)}
+      {t(`enum.return-orderStatuses.${status}`)}
     </Tag>
   );
 };

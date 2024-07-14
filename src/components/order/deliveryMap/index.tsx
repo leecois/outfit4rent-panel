@@ -1,10 +1,11 @@
 import type { IOrder } from '../../../interfaces';
-import { Map, MapMarker } from '../../map';
+import { Map } from '../../map';
 
 type Props = {
   order?: IOrder;
 };
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 export const OrderDeliveryMap = ({ order }: Props) => {
   return (
     <Map
@@ -16,7 +17,7 @@ export const OrderDeliveryMap = ({ order }: Props) => {
         zoom: 9,
       }}
     >
-      <MapMarker
+      {/* <MapMarker
         key={`user-marker-${order?.user.id}`}
         icon={{
           url: '/images/marker-customer.svg',
@@ -35,7 +36,7 @@ export const OrderDeliveryMap = ({ order }: Props) => {
           lat: Number(order?.store.address.coordinate[0]),
           lng: Number(order?.store.address.coordinate[1]),
         }}
-      />
+      /> */}
     </Map>
   );
 };
