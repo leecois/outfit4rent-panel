@@ -3,7 +3,6 @@ import { useNavigation } from '@refinedev/core';
 import { Space, Table, theme, Typography } from 'antd';
 
 import type { IOrder } from '../../../interfaces';
-import { OrderActions } from '../..';
 import { useStyles } from './styled';
 
 export const RecentOrders: React.FC = () => {
@@ -148,13 +147,13 @@ export const RecentOrders: React.FC = () => {
           );
         }}
       /> */}
-      <Table.Column<IOrder>
+      {/* <Table.Column<IOrder>
         fixed="right"
         key="actions"
         className={styles.column}
         align="end"
-        render={(_, record) => <OrderActions record={record} />}
-      />
+        render={(_, record) => <OrderActions record={record as IOrder} />}
+      /> */}
     </Table>
   );
 };

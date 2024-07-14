@@ -7,7 +7,7 @@ import { TableActionButton } from '../../tableActionButton';
 
 type OrderActionProps = {
   record: IOrder;
-  onStatusUpdated: () => void; // Add this prop for the callback
+  onStatusUpdated: () => void;
 };
 
 export const OrderActions: React.FC<OrderActionProps> = ({
