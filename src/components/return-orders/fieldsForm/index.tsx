@@ -24,7 +24,16 @@ export const ReturnOrderDetails = ({ order }: Props) => {
   // eslint-disable-next-line unused-imports/no-unused-vars
   const breakpoints = Grid.useBreakpoint();
   const { mode } = useConfigProvider();
-
+  const getOrderStatusDescription = (status: number) => {
+    switch (status) {
+      case 0:
+        return 'return-orders.fields.status.0';
+      case -1:
+        return 'return-orders.fields.status.-1';
+      default:
+        return 'return-orders.fields.status.1';
+    }
+  };
   const details = useMemo(() => {
     const list: Array<{
       icon: React.ReactNode;
@@ -33,43 +42,43 @@ export const ReturnOrderDetails = ({ order }: Props) => {
     }> = [
       {
         icon: <ClockCircleOutlined />,
-        title: t('orders.fields.dateReturn'),
+        title: t('return-orders.fields.dateReturn'),
         description: dayjs(order?.dateReturn as Date).format('DD/MM/YYYY'),
       },
       {
         icon: <MoneyCollectOutlined />,
-        title: t('orders.fields.dateReturn'),
+        title: t('return-orders.fields.dateReturn'),
         description: `${order?.totalThornMoney} $`,
       },
       {
         icon: <ShopOutlined />,
-        title: t('orders.fields.address'),
+        title: t('return-orders.fields.address'),
         description: order?.address,
       },
       {
         icon: <BikeWhiteIcon />,
-        title: t('orders.fields.name'),
+        title: t('return-orders.fields.name'),
         description: order?.name,
       },
       {
         icon: <PhoneOutlined />,
-        title: t('orders.fields.phone'),
+        title: t('return-orders.fields.phone'),
         description: order?.phone,
       },
       {
         icon: <UserOutlined />,
-        title: t('orders.fields.customerId'),
+        title: t('return-orders.fields.customerId'),
         description: `${order?.customerId}`,
       },
       {
         icon: <ShopOutlined />,
-        title: t('orders.fields.partnerId'),
+        title: t('return-orders.fields.partnerId'),
         description: `${order?.partnerId}`,
       },
       {
         icon: <ShopOutlined />,
-        title: t('orders.fields.status'),
-        description: `${order?.status}`,
+        title: t('return-orders.fields.status'),
+        description: getOrderStatusDescription(order?.status),
       },
     ];
 

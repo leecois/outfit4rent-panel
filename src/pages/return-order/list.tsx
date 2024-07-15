@@ -136,7 +136,7 @@ export const ReturnOrderList = () => {
         <Table.Column
           key="id"
           dataIndex="id"
-          title={t('orders.fields.id')}
+          title={t('return-orders.fields.id')}
           render={(value) => (
             <Typography.Text
               style={{
@@ -167,7 +167,7 @@ export const ReturnOrderList = () => {
         <Table.Column<IReturnOrder>
           key="status"
           dataIndex="status"
-          title={t('orders.fields.status')}
+          title={t('return-orders.fields.status')}
           render={(_, record) => {
             return <ReturnOrderStatus status={record.status} />;
           }}
@@ -195,7 +195,7 @@ export const ReturnOrderList = () => {
           align="right"
           key="name"
           dataIndex="name"
-          title={t('orders.fields.name')}
+          title={t('return-orders.fields.name')}
           defaultSortOrder={getDefaultSortOrder('name', sorters)}
           sorter
           defaultFilteredValue={getDefaultFilter('name', filters, 'contains')}
@@ -220,7 +220,7 @@ export const ReturnOrderList = () => {
           align="right"
           key="address"
           dataIndex="address"
-          title={t('orders.fields.address')}
+          title={t('return-orders.fields.address')}
           defaultSortOrder={getDefaultSortOrder('address', sorters)}
           sorter
           defaultFilteredValue={getDefaultFilter(
@@ -249,7 +249,7 @@ export const ReturnOrderList = () => {
           align="right"
           key="phone"
           dataIndex="phone"
-          title={t('orders.fields.phone')}
+          title={t('return-orders.fields.phone')}
           defaultSortOrder={getDefaultSortOrder('phone', sorters)}
           defaultFilteredValue={getDefaultFilter('phone', filters, 'contains')}
           sorter
@@ -265,7 +265,7 @@ export const ReturnOrderList = () => {
               <Input
                 addonBefore="#"
                 style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
+                placeholder={t('return-orders.filter.id.placeholder')}
               />
             </FilterDropdown>
           )}
@@ -274,7 +274,7 @@ export const ReturnOrderList = () => {
           align="right"
           key="partnerId"
           dataIndex="partnerId"
-          title={t('orders.fields.partnerId')}
+          title={t('return-orders.fields.partnerId')}
           defaultSortOrder={getDefaultSortOrder('partnerId', sorters)}
           defaultFilteredValue={getDefaultFilter('partnerId', filters, 'eq')}
           sorter
@@ -299,7 +299,7 @@ export const ReturnOrderList = () => {
           align="right"
           key="customerId"
           dataIndex="customerId"
-          title={t('orders.fields.customerId')}
+          title={t('return-orders.fields.customerId')}
           defaultSortOrder={getDefaultSortOrder('customerId', sorters)}
           defaultFilteredValue={getDefaultFilter('customerId', filters, 'eq')}
           sorter
@@ -324,7 +324,7 @@ export const ReturnOrderList = () => {
           align="right"
           key="customerPackageId"
           dataIndex="customerPackageId"
-          title={t('orders.fields.customerPackageId')}
+          title={t('return-orders.fields.orderId')}
           defaultSortOrder={getDefaultSortOrder('customerPackageId', sorters)}
           defaultFilteredValue={getDefaultFilter(
             'customerPackageId',
@@ -352,7 +352,7 @@ export const ReturnOrderList = () => {
         <Table.Column<IReturnOrder>
           key="dateReturn"
           dataIndex="dateReturn"
-          title={t('orders.fields.dateReturn')}
+          title={t('return-orders.fields.dateReturn')}
           render={(value) => <DateField value={value} format="LLL" />}
           sorter
           defaultFilteredValue={getDefaultFilter('dateReturn', filters, 'gte')}
@@ -368,7 +368,7 @@ export const ReturnOrderList = () => {
               <Input
                 addonBefore="#"
                 style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
+                placeholder={t('return-orders.filter.id.placeholder')}
               />
             </FilterDropdown>
           )}
@@ -376,7 +376,7 @@ export const ReturnOrderList = () => {
         <Table.Column<IReturnOrder>
           key="quantityOfItems"
           dataIndex="quantityOfItems"
-          title={t('orders.fields.quantityOfItems')}
+          title={t('return-orders.fields.quantityOfItems')}
           sorter
           defaultSortOrder={getDefaultSortOrder('quantityOfItems', sorters)}
           defaultFilteredValue={getDefaultFilter(
@@ -404,7 +404,7 @@ export const ReturnOrderList = () => {
         <Table.Column<IReturnOrder>
           key="totalThornMoney"
           dataIndex="totalThornMoney"
-          title={t('orders.fields.totalThornMoney')}
+          title={t('return-orders.fields.totalThornMoney')}
           sorter
           defaultSortOrder={getDefaultSortOrder('totalThornMoney', sorters)}
           defaultFilteredValue={getDefaultFilter(
@@ -424,7 +424,7 @@ export const ReturnOrderList = () => {
               <InputNumber
                 addonBefore="#"
                 style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
+                placeholder={t('return-orders.filter.id.placeholder')}
               />
             </FilterDropdown>
           )}

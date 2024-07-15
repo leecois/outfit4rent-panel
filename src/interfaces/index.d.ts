@@ -261,6 +261,7 @@ export interface IReturnOrder {
 export interface IProductInReturnOrder {
   id: number;
   quantity: string;
+  damagedLevel: number;
   thornMoney: number;
   status: number;
   returnOrderId: number;

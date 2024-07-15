@@ -14,8 +14,8 @@ export const ReturnOrderStatus: React.FC<ReturnOrderStatusProps> = ({
   status,
 }) => {
   const t = useTranslate();
-  let color;
-  let icon;
+  let color: string | undefined;
+  let icon: React.ReactNode;
 
   switch (status) {
     case 0: {
@@ -34,7 +34,7 @@ export const ReturnOrderStatus: React.FC<ReturnOrderStatusProps> = ({
       break;
     }
     default: {
-      color = 'default';
+      color = undefined;
       icon = null;
       break;
     }
@@ -42,7 +42,7 @@ export const ReturnOrderStatus: React.FC<ReturnOrderStatusProps> = ({
 
   return (
     <Tag color={color} icon={icon}>
-      {t(`enum.return-orderStatuses.${status}`)}
+      {t(`enum.return-order.status.${status}`)}
     </Tag>
   );
 };
