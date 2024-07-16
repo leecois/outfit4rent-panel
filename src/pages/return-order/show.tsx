@@ -1,13 +1,15 @@
 import { CloseCircleOutlined, LeftOutlined } from '@ant-design/icons';
 import { List, ListButton } from '@refinedev/antd';
-import { useApiUrl, useShow, useTranslate, useUpdate } from '@refinedev/core';
+import { useApiUrl, useShow, useTranslate } from '@refinedev/core';
 import {
   Button,
   Col,
   Divider,
   Flex,
   Form,
+  Image,
   Input,
+  InputNumber,
   message,
   Modal,
   Row,
@@ -27,13 +29,18 @@ export const ReturnOrderShow = () => {
   const t = useTranslate();
   const { queryResult } = useShow<IReturnOrder>();
   const { data, isLoading } = queryResult;
-  const record = data?.data;
-  const { mutate } = useUpdate();
+  const [record, setRecord] = useState<IReturnOrder>();
   const apiUrl = useApiUrl();
   const [products, setProducts] = useState<IProductInReturnOrder[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (data?.data) {
+      setRecord(data.data);
+    }
+  }, [data]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -55,24 +62,24 @@ export const ReturnOrderShow = () => {
     }
   }, [apiUrl, data?.data?.id]);
 
-  const handleMutate = (status: number) => {
-    if (record) {
-      mutate({
-        resource: 'return-orders',
-        id: record.id.toString(),
-        values: {
-          status,
-        },
-      });
-    }
-  };
-
-  const handleUpdateProducts = async (values: any) => {
+  const handleUpdateProducts = async (values: any, status: number) => {
     setLoading(true);
     try {
-      const response = await axios.put(
-        `${apiUrl}/return-orders/${record?.id}/products`,
-        values,
+      const formattedValues = {
+        products: Object.keys(values).map((key) => ({
+          id: key.split('_')[1],
+          thornMoney: values[key].thornMoney,
+          damagedLevel: values[key].damagedLevel,
+        })),
+      };
+      const updatedReturnOrder = await axios.put(
+        `${apiUrl}/return-orders/${record?.id}/status/${status}`,
+        formattedValues,
+      );
+      const updatedRecord = updatedReturnOrder.data.data;
+      setRecord(updatedRecord);
+      const response = await axios.patch(
+        `${apiUrl}/return-orders/${updatedRecord.id}/products`,
       );
       setProducts(response.data.data);
       message.success('Products updated successfully');
@@ -117,26 +124,30 @@ export const ReturnOrderShow = () => {
             </>
           )
         }
-        headerButtons={[
-          <ButtonSuccess
-            disabled={!canAcceptOrder}
-            key="accept"
-            onClick={() => setIsModalVisible(true)}
-          >
-            {t('return-orders.buttons.confirm')}
-          </ButtonSuccess>,
-          <Button
-            disabled={!canRejectOrder}
-            key="reject"
-            danger
-            icon={<CloseCircleOutlined />}
-            onClick={() => {
-              handleMutate(1);
-            }}
-          >
-            {t('return-orders.buttons.cancelled')}
-          </Button>,
-        ]}
+        headerButtons={
+          record?.status !== 0 ? (
+            <ReturnOrderStatus status={record?.status as number} />
+          ) : (
+            <>
+              <ButtonSuccess
+                disabled={!canAcceptOrder}
+                key="accept"
+                onClick={() => setIsModalVisible(true)}
+              >
+                {t('return-orders.buttons.confirm')}
+              </ButtonSuccess>
+              <Button
+                disabled={!canRejectOrder}
+                key="reject"
+                danger
+                icon={<CloseCircleOutlined />}
+                onClick={() => handleUpdateProducts({}, -1)}
+              >
+                {t('return-orders.buttons.cancelled')}
+              </Button>
+            </>
+          )
+        }
       >
         <Row gutter={[16, 16]}>
           <Col xl={15} lg={24} md={24} sm={24} xs={24}>
@@ -164,20 +175,54 @@ export const ReturnOrderShow = () => {
       </List>
 
       <Modal
-        title="Update Products"
+        title="Confirm returned products"
         visible={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         onOk={() => form.submit()}
         confirmLoading={loading}
       >
-        <Form form={form} onFinish={handleUpdateProducts}>
-          <Form.Item
-            name="products"
-            label="Products"
-            rules={[{ required: true, message: 'Please input the products!' }]}
-          >
-            <Input.TextArea rows={4} placeholder="Enter product details" />
-          </Form.Item>
+        <Form
+          form={form}
+          onFinish={(values) => handleUpdateProducts(values, 1)}
+        >
+          {products.map((product) => (
+            <div key={product.id} style={{ marginBottom: 16 }}>
+              <Image
+                width={50}
+                src={product.product.images[0].url}
+                alt={product.product.name}
+                style={{ marginRight: 16 }}
+              />
+              <Form.Item
+                label={product.product.name}
+                style={{ display: 'flex', alignItems: 'center' }}
+              >
+                <Input.Group compact>
+                  <Form.Item
+                    name={[`product_${product.id}`, 'thornMoney']}
+                    noStyle
+                    rules={[
+                      { required: true, message: 'Please input thorn money!' },
+                    ]}
+                  >
+                    <InputNumber placeholder="Thorn Money" />
+                  </Form.Item>
+                  <Form.Item
+                    name={[`product_${product.id}`, 'damagedLevel']}
+                    noStyle
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input damaged level!',
+                      },
+                    ]}
+                  >
+                    <InputNumber placeholder="Damaged Level" />
+                  </Form.Item>
+                </Input.Group>
+              </Form.Item>
+            </div>
+          ))}
         </Form>
       </Modal>
     </>
