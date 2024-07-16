@@ -15,12 +15,12 @@
       "buttons": {
         "submit": "Đăng nhập",
         "forgotPassword": "Quên mật khẩu?",
-        "noAccount": "Không có tài khoản?",
-        "rememberMe": "Ghi nhớ đăng nhập"
+        "noAccount": "Chưa có tài khoản?",
+        "rememberMe": "Nhớ mật khẩu"
       }
     },
     "forgotPassword": {
-      "title": "Quên mật khẩu?",
+      "title": "Quên mật khẩu của bạn?",
       "fields": {
         "email": "Email"
       },
@@ -28,7 +28,7 @@
         "validEmail": "Địa chỉ email không hợp lệ"
       },
       "buttons": {
-        "submit": "Gửi hướng dẫn đặt lại"
+        "submit": "Gửi hướng dẫn đặt lại mật khẩu"
       }
     },
     "register": {
@@ -59,19 +59,19 @@
       }
     },
     "error": {
-      "404": "Xin lỗi, trang bạn đã truy cập không tồn tại.",
-      "info": "Bạn có thể đã quên thêm thành phần {{action}} vào tài nguyên {{resource}}.",
-      "resource404": "Bạn có chắc chắn đã tạo tài nguyên {{resource}} không.",
-      "backHome": "Quay về Trang chủ"
+      "404": "Xin lỗi, trang bạn truy cập không tồn tại.",
+      "info": "Có thể bạn đã quên thêm thành phần {{action}} vào tài nguyên {{resource}}.",
+      "resource404": "Bạn có chắc chắn rằng bạn đã tạo tài nguyên {{resource}} không.",
+      "backHome": "Quay lại trang chủ"
     }
   },
   "actions": {
-    "list": "Liệt kê",
-    "create": "Tạo",
+    "list": "Danh sách",
+    "create": "Tạo mới",
     "edit": "Chỉnh sửa",
     "show": "Hiển thị",
     "delete": "Xóa",
-    "cancel": "Hủy bỏ"
+    "cancel": "Hủy"
   },
   "buttons": {
     "add": "Thêm",
@@ -79,23 +79,23 @@
     "save": "Lưu",
     "logout": "Đăng xuất",
     "delete": "Xóa",
-    "edit": "Sửa",
+    "edit": "Chỉnh sửa",
     "cancel": "Hủy",
-    "confirm": "Bạn có chắc không?",
+    "confirm": "Bạn có chắc chắn?",
     "filter": "Lọc",
     "clear": "Xóa",
     "refresh": "Làm mới",
     "show": "Hiển thị",
     "undo": "Hoàn tác",
-    "import": "Nhập",
-    "export": "Xuất",
+    "import": "Nhập khẩu",
+    "export": "Xuất khẩu",
     "clone": "Nhân bản",
     "accept": "Chấp nhận",
     "acceptAll": "Chấp nhận tất cả",
     "reject": "Từ chối",
     "rejectAll": "Từ chối tất cả",
-    "nextStep": "Bước tiếp",
-    "previousStep": "Bước trước"
+    "nextStep": "Tiếp theo",
+    "previousStep": "Quay lại"
   },
   "loading": "Đang tải",
   "tags": {
@@ -106,62 +106,73 @@
     "inTotal": "tổng cộng"
   },
   "search": {
-    "placeholder": "Tìm kiếm theo ID cửa hàng, Email, Từ khóa",
+    "placeholder": "Tìm kiếm theo ID cửa hàng, E-mail, Từ khóa",
     "more": "thêm"
   },
   "status": {
     "enable": "Kích hoạt",
     "disable": "Vô hiệu hóa"
   },
-  "warnWhenUnsavedChanges": "Bạn có chắc bạn muốn rời đi? Bạn có những thay đổi chưa được lưu.",
+  "warnWhenUnsavedChanges": "Bạn có chắc chắn muốn rời đi? Bạn có thay đổi chưa lưu.",
   "notifications": {
     "success": "Thành công",
     "error": "Lỗi (mã trạng thái: {{statusCode}})",
     "undoable": "Bạn có {{seconds}} giây để hoàn tác",
-    "createSuccess": "Tạo {{resource}} thành công",
-    "createError": "Có lỗi khi tạo {{resource}} (mã trạng thái: {{statusCode}})",
-    "deleteSuccess": "Xóa {{resource}} thành công",
+    "createSuccess": "Tạo thành công {{resource}}",
+    "createError": "Có lỗi xảy ra khi tạo {{resource}} (mã trạng thái: {{statusCode}})",
+    "deleteSuccess": "Xóa thành công {{resource}}",
     "deleteError": "Lỗi khi xóa {{resource}} (mã trạng thái: {{statusCode}})",
-    "editSuccess": "Chỉnh sửa {{resource}} thành công",
+    "editSuccess": "Chỉnh sửa thành công {{resource}}",
     "editError": "Lỗi khi chỉnh sửa {{resource}} (mã trạng thái: {{statusCode}})",
     "importProgress": "Đang nhập: {{processed}}/{{total}}"
   },
   "categories": {
     "categories": "Danh mục",
     "titles": {
-      "list": "Danh sách Danh mục"
+      "list": "Danh mục"
     },
     "fields": {
       "id": "ID",
       "title": "Tiêu đề",
       "products": "Sản phẩm",
+      "image": "Hình ảnh",
+      "isFeatured": {
+        "0": "Không",
+        "1": "Có",
+        "label": "Nổi bật"
+      },
       "status": {
+        "0": "Không hiển thị",
+        "1": "Hiển thị",
         "label": "Trạng thái",
-        "true": "Hiển thị",
-        "false": "Ẩn"
-      }
-    }
+        "false": "Không hiển thị",
+        "true": "Hiển thị"
+      },
+      "name": "Tên",
+      "description": "Mô tả"
+    },
+    "maxAvailableQuantity": "Số lượng tối đa"
   },
   "couriers": {
-    "couriers": "Người giao hàng",
+    "couriers": "Nhân viên giao hàng",
     "titles": {
-      "create": "Tạo Người giao hàng",
-      "list": "Danh sách Người giao hàng",
-      "edit": "Chỉnh sửa Người giao hàng"
+      "create": "Tạo nhân viên giao hàng",
+      "list": "Nhân viên giao hàng",
+      "edit": "Chỉnh sửa nhân viên giao hàng"
     },
     "fields": {
       "id": "ID",
       "avatar": {
-        "label": "Ảnh đại diện",
-        "description": "Nhấp hoặc kéo hình ảnh vào khu vực này để tải lên."
+        "label": "Hình đại diện",
+        "description": "Nhấp hoặc kéo hình ảnh đại diện vào khu vực này để tải lên."
       },
       "name": {
         "label": "Tên",
-        "placeholder": "Vui lòng nhập tên người giao hàng"
+        "placeholder": "Vui lòng nhập tên nhân viên giao hàng"
       },
       "surname": {
         "label": "Họ",
-        "placeholder": "Vui lòng nhập họ người giao hàng"
+        "placeholder": "Vui lòng nhập họ nhân viên giao hàng"
       },
       "gender": {
         "label": "Giới tính",
@@ -169,27 +180,27 @@
         "female": "Nữ"
       },
       "gsm": {
-        "label": "Điện thoại di động",
-        "placeholder": "Vui lòng nhập số điện thoại người giao hàng"
+        "label": "Số điện thoại",
+        "placeholder": "Vui lòng nhập số điện thoại của nhân viên giao hàng"
       },
       "email": {
         "label": "Email",
-        "placeholder": "Vui lòng nhập email người giao hàng"
+        "placeholder": "Vui lòng nhập email của nhân viên giao hàng"
       },
       "address": {
         "label": "Địa chỉ",
-        "placeholder": "Vui lòng nhập địa chỉ người giao hàng"
+        "placeholder": "Vui lòng nhập địa chỉ của nhân viên giao hàng"
       },
       "createdAt": "Ngày tạo",
       "status": {
-        "label": "Tình trạng",
+        "label": "Trạng thái",
         "Available": "Sẵn sàng",
         "Offline": "Ngoại tuyến",
         "On delivery": "Đang giao hàng"
       },
       "vehicleType": {
-        "label": "Loại xe",
-        "placeholder": "Vui lòng nhập loại xe"
+        "label": "Loại phương tiện",
+        "placeholder": "Vui lòng nhập loại phương tiện"
       },
       "licensePlate": {
         "label": "Biển số xe",
@@ -197,21 +208,21 @@
         "patternMessage": "Vui lòng nhập biển số xe hợp lệ. Ví dụ: ABC 123"
       },
       "rating": {
-        "label": "Xếp hạng",
-        "placeholder": "Vui lòng nhập xếp hạng"
+        "label": "Đánh giá",
+        "placeholder": "Vui lòng nhập đánh giá"
       },
       "images": {
         "label": "Hình ảnh",
         "description": "Thêm hình ảnh người dùng",
-        "validation": "phải là 480x480 px"
+        "validation": "phải có kích thước 480x480 px"
       },
       "store": {
         "label": "Cửa hàng",
         "placeholder": "Chọn cửa hàng"
       },
       "vehicle": {
-        "label": "Xe",
-        "placeholder": "Chọn xe"
+        "label": "Phương tiện",
+        "placeholder": "Chọn phương tiện"
       },
       "accountNumber": {
         "label": "Số tài khoản",
@@ -222,30 +233,30 @@
       "title": "Bộ lọc",
       "name": {
         "label": "Tên",
-        "placeholder": "Tìm kiếm theo tên"
+        "placeholder": "Tìm kiếm tên"
       },
       "licensePlate": {
         "label": "Biển số xe",
-        "placeholder": "Tìm kiếm theo biển số xe"
+        "placeholder": "Tìm kiếm biển số xe"
       },
       "gsm": {
-        "label": "Điện thoại di động",
-        "placeholder": "Tìm kiếm theo số điện thoại"
+        "label": "Số điện thoại",
+        "placeholder": "Tìm kiếm số điện thoại"
       },
       "email": {
         "label": "Email",
-        "placeholder": "Tìm kiếm theo email"
+        "placeholder": "Tìm kiếm email"
       },
       "submit": "Lọc"
     },
     "steps": {
       "personal": "Cá nhân",
       "company": "Công ty",
-      "vehicle": "Xe"
+      "vehicle": "Phương tiện"
     },
     "actions": {
-      "add": "Thêm người giao hàng mới",
-      "edit": "Chỉnh sửa người giao hàng"
+      "add": "Thêm nhân viên giao hàng mới",
+      "edit": "Chỉnh sửa nhân viên giao hàng"
     }
   },
   "dashboard": {
@@ -287,8 +298,8 @@
       "orderStatuses": {
         "pending": "Đang chuẩn bị đơn hàng",
         "ready": "Đơn hàng đã sẵn sàng",
-        "on the way": "Đơn hàng đang được giao",
-        "delivered": "Đơn hàng đã giao",
+        "on the way": "Đơn hàng đang trên đường",
+        "delivered": "Đơn hàng đã được giao",
         "cancelled": "Đơn hàng đã hủy"
       }
     },
@@ -296,19 +307,31 @@
       "title": "Đơn hàng gần đây"
     },
     "trendingMenus": {
-      "title": "Thực đơn phổ biến hàng ngày"
+      "title": "Thực đơn thịnh hành hàng ngày"
     },
     "trendingProducts": {
-      "title": "Sản phẩm đang thịnh hành"
+      "title": "Sản phẩm thịnh hành"
     }
   },
   "enum": {
     "orderStatuses": {
-      "Pending": "Chờ xử lý",
+      "0": "Đang xử lý",
+      "1": "Hoàn thành",
+      "2": "Hết hạn",
+      "-1": "Đã hủy",
+      "Pending": "Đang chờ",
       "Ready": "Sẵn sàng",
-      "On The Way": "Đang giao",
-      "Delivered": "Đã giao",
+      "On The Way": "Đang trên đường",
+      "Delivered": "Đã giao hàng",
       "Cancelled": "Đã hủy"
+    },
+    "return-order": {
+      "status": {
+        "0": "Đang chờ",
+        "1": "Hoàn thành",
+        "2": "Bị từ chối",
+        "-1": "Đã hủy"
+      }
     }
   },
   "orders": {
@@ -319,23 +342,36 @@
       "deliveryDetails": "Chi tiết giao hàng",
       "products": "Sản phẩm",
       "list": "Danh sách đơn hàng",
-      "show": "Xem đơn hàng"
+      "show": "Đơn hàng",
+      "return-orders": {
+        "products": "Sản phẩm"
+      }
     },
     "fields": {
-      "orderNumber": "Đơn hàng #",
-      "orderID": "Mã đơn hàng",
+      "orderNumber": "Số đơn hàng",
+      "orderID": "ID đơn hàng",
       "status": "Trạng thái",
       "store": "Cửa hàng",
       "user": "Người dùng",
       "products": "Sản phẩm",
       "createdAt": "Ngày tạo",
       "amount": "Số tiền",
-      "itemsAmount": "{{amount}} mặt hàng",
+      "itemsAmount": "{{amount}} sản phẩm",
       "order": "Đơn hàng",
       "customer": "Khách hàng",
-      "courier": "Người giao hàng",
+      "courier": "Nhân viên giao hàng",
       "phone": "Điện thoại",
-      "deliveryTime": "Thời gian giao hàng"
+      "deliveryTime": "Thời gian giao hàng",
+      "id": "ID",
+      "totalDeposit": "Tổng tiền cọc",
+      "quantityOfItems": "Số lượng sản phẩm",
+      "receiverName": "Tên người nhận",
+      "receiverPhone": "Điện thoại người nhận",
+      "receiverAddress": "Địa chỉ người nhận",
+      "dateFrom": "Ngày bắt đầu",
+      "dateTo": "Ngày kết thúc",
+      "packageName": "Tên gói hàng",
+      "customerId": "ID khách hàng"
     },
     "filter": {
       "title": "Bộ lọc",
@@ -366,19 +402,25 @@
         "label": "Số đơn hàng",
         "placeholder": "Tìm kiếm số đơn hàng"
       },
-      "submit": "Lọc"
+      "submit": "Lọc",
+      "name": {
+        "placeholder": "Tên bộ lọc"
+      },
+      "address": {
+        "placeholder": "Địa chỉ bộ lọc"
+      }
     },
     "courier": {
       "deliveryTime": "Thời gian giao hàng",
       "phone": "Điện thoại"
     },
     "deliverables": {
-      "deliverables": "Hàng hóa",
+      "deliverables": "Sản phẩm giao",
       "fields": {
-        "items": "Mặt hàng",
+        "items": "Sản phẩm",
         "quantity": "Số lượng",
         "price": "Giá",
-        "total": "Tổng"
+        "total": "Tổng cộng"
       },
       "mainTotal": "TỔNG CỘNG"
     }
@@ -394,28 +436,39 @@
       "id": "ID",
       "name": "Tên",
       "description": "Mô tả",
-      "isActive": {
-        "label": "Hoạt động",
-        "true": "Hoạt động",
-        "false": "Không hoạt động"
+      "status": {
+        "0": "Không khả dụng",
+        "1": "Khả dụng",
+        "label": "Trạng thái",
+        "true": "Khả dụng",
+        "false": "Không khả dụng",
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
       },
       "price": "Giá",
       "category": "Danh mục",
       "images": {
         "label": "Hình ảnh",
-        "description": "Tải lên một bức ảnh.",
-        "validation": "Độ phân giải ảnh: 1080x1080px."
+        "description": "Tải lên hình ảnh",
+        "validation": "phải có kích thước 1080x1080 px"
       },
-      "createdAt": "Tạo vào",
-      "status": {
-        "active": "Hoạt động",
-        "label": "Nhãn",
-        "inactive": "Không hoạt động"
-      },
+      "createdAt": "Ngày tạo",
+      "brand": "Thương hiệu",
       "imgUrl": {
-        "label": "Ảnh"
+        "label": "Hình ảnh"
       },
-      "deposit": "Tiền cọc"
+      "image": "Hình ảnh",
+      "deposit": "Tiền cọc",
+      "isFeatured": "Nổi bật",
+      "rating": "Đánh giá",
+      "size": "Kích thước",
+      "type": "Loại",
+      "quantity": "Số lượng",
+      "isActive": {
+        "false": "Không hiển thị",
+        "true": "Hoạt động",
+        "label": "Trạng thái"
+      }
     },
     "filter": {
       "title": "Bộ lọc",
@@ -440,12 +493,18 @@
         "placeholder": "Tìm kiếm danh mục"
       },
       "createdAt": {
-        "label": "Tạo vào"
+        "label": "Ngày tạo"
       },
-      "isActive": {
+      "status": {
         "label": "Trạng thái",
         "placeholder": "Chọn trạng thái",
+        "true": "Khả dụng",
+        "false": "Không khả dụng"
+      },
+      "isActive": {
         "true": "Hoạt động",
+        "placeholder": "Chọn trạng thái",
+        "label": "Trạng thái",
         "false": "Không hoạt động"
       }
     },
@@ -461,9 +520,9 @@
     },
     "fields": {
       "user": "Người dùng",
-      "orderId": "Mã đơn hàng",
-      "review": "Bình luận",
-      "rating": "Điểm đánh giá"
+      "orderId": "Đơn hàng",
+      "review": "Đánh giá",
+      "rating": "Đánh giá"
     }
   },
   "stores": {
@@ -476,14 +535,14 @@
     },
     "fields": {
       "id": "ID cửa hàng",
-      "title": "Tên",
+      "title": "Tiêu đề",
       "isActive": {
         "label": "Trạng thái",
         "placeholder": "Chọn trạng thái",
-        "true": "Hoạt động",
-        "false": "Không hoạt động"
+        "true": "Mở cửa",
+        "false": "Đóng cửa"
       },
-      "createdAt": "Tạo vào",
+      "createdAt": "Ngày tạo",
       "address": "Địa chỉ",
       "email": "Email",
       "gsm": "Điện thoại"
@@ -494,12 +553,12 @@
         "placeholder": "Tìm kiếm ID"
       },
       "title": {
-        "label": "Tên",
-        "placeholder": "Tìm kiếm tên"
+        "label": "Tiêu đề",
+        "placeholder": "Tìm kiếm tiêu đề"
       },
       "email": {
         "label": "Email",
-        "placeholder": "Tìm kiếm Email"
+        "placeholder": "Tìm kiếm email"
       },
       "gsm": {
         "label": "Điện thoại",
@@ -507,10 +566,10 @@
       },
       "search": {
         "label": "Tìm kiếm",
-        "placeholder": "Họ, Tên, Điện thoại, v.v."
+        "placeholder": "Tên, họ, điện thoại, v.v."
       },
       "createdAt": {
-        "label": "Tạo vào"
+        "label": "Ngày tạo"
       },
       "isActive": {
         "label": "Trạng thái",
@@ -522,30 +581,30 @@
     },
     "buttons": {
       "editProducts": "Chỉnh sửa sản phẩm",
-      "addProduct": "Thêm sản phẩm mới",
+      "addProduct": "Thêm sản phẩm",
       "outOfStock": "Hết hàng",
       "edit": "Chỉnh sửa sản phẩm"
     },
-    "selectLocation": "Chọn địa điểm",
+    "selectLocation": "Chọn vị trí cửa hàng trên bản đồ",
     "storeProducts": "Sản phẩm của cửa hàng",
-    "tagFilterDescription": "Lọc theo nhãn",
+    "tagFilterDescription": "Sử dụng thẻ để lọc tìm kiếm của bạn",
     "all": "Tất cả",
     "productSearch": "Tìm kiếm sản phẩm",
-    "addNewStore": "Thêm cửa hàng mới"
+    "addNewStore": "Thêm cửa hàng mới",
+    "addNewPartner": "Thêm đối tác mới"
   },
   "users": {
     "users": "Khách hàng",
-    "resourceLabel": "Khách hàng",
     "titles": {
       "edit": "Chỉnh sửa khách hàng",
       "list": "Danh sách khách hàng",
-      "show": "Thông tin khách hàng"
+      "show": "Chi tiết khách hàng"
     },
     "fields": {
       "id": "ID",
       "avatar": {
-        "label": "Ảnh đại diện",
-        "description": "Tải lên một bức ảnh"
+        "label": "Hình đại diện",
+        "description": "Nhấp hoặc kéo hình ảnh đại diện vào khu vực này để tải lên."
       },
       "firstName": "Tên",
       "lastName": "Họ",
@@ -556,38 +615,44 @@
         "Female": "Nữ"
       },
       "gsm": "Số điện thoại",
-      "createdAt": "Tạo vào",
+      "createdAt": "Ngày tạo",
       "addresses": "Địa chỉ",
       "isActive": {
         "label": "Trạng thái",
         "true": "Hoạt động",
         "false": "Không hoạt động"
       },
-      "picture": "Ảnh",
+      "picture": "Hình đại diện",
       "email": "Email",
-      "phone": "Số điện thoại",
-      "address": "Địa chỉ"
+      "phone": "Điện thoại",
+      "address": "Địa chỉ",
+      "status": {
+        "title": "Trạng thái",
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động",
+        "label": "Trạng thái"
+      }
     },
     "filter": {
       "title": "Bộ lọc",
       "id": {
         "label": "ID",
-        "placeholder": "ID"
+        "placeholder": "Tìm kiếm ID"
       },
       "name": {
         "label": "Tên",
-        "placeholder": "Tên"
+        "placeholder": "Tìm kiếm tên"
       },
       "gsm": {
         "label": "Số điện thoại",
-        "placeholder": "Số điện thoại"
+        "placeholder": "Tìm kiếm số điện thoại"
       },
       "search": {
         "label": "Tìm kiếm",
-        "placeholder": "Tên, Họ, Số điện thoại..."
+        "placeholder": "Tên, họ, số điện thoại, v.v."
       },
       "createdAt": {
-        "label": "Tạo vào"
+        "label": "Ngày tạo"
       },
       "gender": {
         "label": "Giới tính",
@@ -596,8 +661,8 @@
         "female": "Nữ"
       },
       "isActive": {
-        "label": "Hoạt động?",
-        "placeholder": "Hoạt động?",
+        "label": "Hoạt động",
+        "placeholder": "Chọn trạng thái",
         "true": "Có",
         "false": "Không"
       },
@@ -606,13 +671,154 @@
     "addresses": {
       "addresses": "Địa chỉ",
       "address": "Địa chỉ"
+    },
+    "resourceLabel": "Khách hàng"
+  },
+  "brands": {
+    "brands": "Thương hiệu",
+    "fields": {
+      "name": "Tên thương hiệu",
+      "description": "Mô tả",
+      "isFeatured": {
+        "label": "Nổi bật",
+        "true": "Có",
+        "false": "Không"
+      },
+      "status": {
+        "0": "Không hoạt động",
+        "1": "Hoạt động",
+        "label": "Trạng thái",
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      }
     }
   },
-  "errors": {
-    "minLength": "Tối thiểu {{min}} ký tự",
-    "maxLength": "Tối đa {{max}} ký tự",
-    "required": {
-      "field": "Trường này là bắt buộc."
+  "partners": {
+    "partners": "Đối tác",
+    "fields": {
+      "phone": "Điện thoại",
+      "address": "Địa chỉ",
+      "email": "Email",
+      "status": {
+        "0": "Không hoạt động",
+        "1": "Hoạt động",
+        "label": "Trạng thái",
+        "inactive": "Không hoạt động",
+        "active": "Hoạt động",
+        "inActive": "Không hoạt động",
+        "name": "Tên"
+      },
+      "name": "Tên",
+      "area": "Khu vực"
+    },
+    "addNewPartner": "Thêm đối tác mới",
+    "filter": {
+      "id": {
+        "placeholder": "ID"
+      },
+      "name": {
+        "placeholder": "Tên"
+      },
+      "email": {
+        "placeholder": "Email"
+      },
+      "status": {
+        "placeholder": "Trạng thái"
+      }
     }
+  },
+  "customers": {
+    "fields": {
+      "phone": "Điện thoại"
+    }
+  },
+  "packages": {
+    "packages": "Gói hàng",
+    "actions": {
+      "add": "Thêm gói hàng mới"
+    },
+    "fields": {
+      "thumbnail": {
+        "label": "Hình ảnh"
+      },
+      "name": {
+        "label": "Tên",
+        "placeholder": "Tên gói hàng"
+      },
+      "price": {
+        "label": "Giá",
+        "placeholder": "Giá gói hàng"
+      },
+      "numOfProduct": {
+        "label": "Số lượng sản phẩm",
+        "placeholder": "Số lượng sản phẩm"
+      },
+      "status": {
+        "label": "Trạng thái",
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "rentalPeriod": {
+        "label": "Thời gian thuê",
+        "placeholder": "Thời gian thuê"
+      },
+      "images": {
+        "description": "Thêm hình ảnh gói hàng"
+      },
+      "description": {
+        "label": "Mô tả",
+        "placeholder": "Mô tả gói hàng"
+      },
+      "isFeatured": {
+        "label": "Nổi bật"
+      },
+      "category": {
+        "label": "Danh mục",
+        "placeholder": "Chọn danh mục"
+      },
+      "quantity": {
+        "label": "Số lượng",
+        "placeholder": "Số lượng có sẵn"
+      }
+    },
+    "filter": {
+      "name": {
+        "placeholder": "Tìm kiếm tên"
+      },
+      "price": {
+        "placeholder": "Tìm kiếm giá"
+      },
+      "status": {
+        "placeholder": "Lọc theo trạng thái"
+      }
+    },
+    "steps": {
+      "general": "Chung",
+      "categories": "Danh mục"
+    }
+  },
+  "return-orders": {
+    "fields": {
+      "status": "Trạng thái",
+      "id": "ID",
+      "name": "Tên",
+      "address": "Địa chỉ",
+      "phone": "Điện thoại",
+      "partnerId": "Đối tác",
+      "customerId": "Khách hàng",
+      "orderId": "ID đơn hàng",
+      "dateReturn": "Ngày trả hàng",
+      "quantityOfItems": "Số lượng sản phẩm",
+      "totalThornMoney": "Tiền trả lại"
+    },
+    "id": "ID đơn trả hàng",
+    "return-orders": "Đơn trả hàng"
+  },
+  "errors": {
+    "required": {
+      "field": "Bắt buộc"
+    },
+    "minLength": "Tối thiểu {{min}} ký tự",
+    "maxLength": "Tối đa {{max}} ký tự"
   }
 }

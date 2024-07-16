@@ -166,23 +166,6 @@ export const OrderList = () => {
               #{value}
             </Typography.Text>
           )}
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          defaultFilteredValue={getDefaultFilter('id', filters, 'eq')}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <InputNumber
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
         />
         <Table.Column<IOrder>
           key="status"
@@ -202,10 +185,10 @@ export const OrderList = () => {
                 mode="multiple"
                 placeholder={t('orders.filter.status.placeholder')}
                 options={[
-                  { label: t('orders.status.pending'), value: 0 },
-                  { label: t('orders.status.processing'), value: 1 },
-                  { label: t('orders.status.completed'), value: 2 },
-                  { label: t('orders.status.cancelled'), value: -1 },
+                  { label: t('enum.orderStatuses.0'), value: 0 },
+                  { label: t('enum.orderStatuses.1'), value: 1 },
+                  { label: t('enum.orderStatuses.2'), value: 2 },
+                  { label: t('enum.orderStatuses.-1'), value: -1 },
                 ]}
               />
             </FilterDropdown>
@@ -219,22 +202,6 @@ export const OrderList = () => {
           defaultSortOrder={getDefaultSortOrder('totalDeposit', sorters)}
           sorter
           defaultFilteredValue={getDefaultFilter('totalDeposit', filters, 'eq')}
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <InputNumber
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
           render={(value) => {
             return (
               <NumberField

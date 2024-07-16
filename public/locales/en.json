@@ -144,7 +144,9 @@
       "status": {
         "0": "Invisible",
         "1": "Visible",
-        "label": "Status"
+        "label": "Status",
+        "false": "Unvisible",
+        "true": "Visible"
       },
       "name": "Name",
       "description": "Description"
@@ -313,11 +315,23 @@
   },
   "enum": {
     "orderStatuses": {
+      "0": "Processing",
+      "1": "Completed",
+      "2": "Expired",
+      "-1": "Cancelled",
       "Pending": "Pending",
       "Ready": "Ready",
       "On The Way": "On the way",
       "Delivered": "Delivered",
       "Cancelled": "Cancelled"
+    },
+    "return-order": {
+      "status": {
+        "0": "Pending",
+        "1": "Completed",
+        "2": "Rejected",
+        "-1": "Cancelled"
+      }
     }
   },
   "orders": {
@@ -328,7 +342,10 @@
       "deliveryDetails": "Delivery Details",
       "products": "Products",
       "list": "Orders",
-      "show": "Order"
+      "show": "Order",
+      "return-orders": {
+        "products": "Products"
+      }
     },
     "fields": {
       "orderNumber": "Order Number",
@@ -344,7 +361,17 @@
       "customer": "Customer",
       "courier": "Courier",
       "phone": "Phone",
-      "deliveryTime": "Delivery Time"
+      "deliveryTime": "Delivery Time",
+      "id": "ID",
+      "totalDeposit": "Total Deposit",
+      "quantityOfItems": "Quantity Of Items",
+      "receiverName": "Customer",
+      "receiverPhone": "Phone",
+      "receiverAddress": "Address",
+      "dateFrom": "Date From",
+      "dateTo": "Date End",
+      "packageName": "Package Name",
+      "customerId": "CustomerID"
     },
     "filter": {
       "title": "Filters",
@@ -375,7 +402,13 @@
         "label": "Order Number",
         "placeholder": "Search Order Number"
       },
-      "submit": "Filter"
+      "submit": "Filter",
+      "name": {
+        "placeholder": "Filter name"
+      },
+      "address": {
+        "placeholder": "Filter address"
+      }
     },
     "courier": {
       "deliveryTime": "Delivery Time",
@@ -430,7 +463,12 @@
       "rating": "Rating",
       "size": "Size",
       "type": "Type",
-      "quantity": "Quantity"
+      "quantity": "Quantity",
+      "isActive": {
+        "false": "Unvisible",
+        "true": "Active",
+        "label": "Status"
+      }
     },
     "filter": {
       "title": "Filters",
@@ -462,6 +500,12 @@
         "placeholder": "Select Status",
         "true": "Available",
         "false": "Unavailable"
+      },
+      "isActive": {
+        "true": "Active",
+        "placeholder": "Choose Status",
+        "label": "Status",
+        "false": "Inactive"
       }
     },
     "actions": {
@@ -627,7 +671,8 @@
     "addresses": {
       "addresses": "Addresses",
       "address": "Address"
-    }
+    },
+    "resourceLabel": "Customer"
   },
   "brands": {
     "brands": "Brand",
@@ -751,5 +796,29 @@
       "general": "General",
       "categories": "Categories"
     }
+  },
+  "return-orders": {
+    "fields": {
+      "status": "Status",
+      "id": "ID",
+      "name": "Name",
+      "address": "Address",
+      "phone": "Phone",
+      "partnerId": "Partner",
+      "customerId": "Customer",
+      "orderId": "OrderID",
+      "dateReturn": "Date Return",
+      "quantityOfItems": "Quantity Items",
+      "totalThornMoney": "Thorn Money"
+    },
+    "id": "Return Order ID",
+    "return-orders": "Return Order"
+  },
+  "errors": {
+    "required": {
+      "field": "Required"
+    },
+    "minLength": "Min {{min}} character",
+    "maxLength": "Max {{max}} character"
   }
 }

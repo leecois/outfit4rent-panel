@@ -85,7 +85,6 @@ export const ReturnOrderShow = () => {
       message.success('Products updated successfully');
       setIsModalVisible(false);
     } catch (error) {
-      console.error('Error updating products:', error);
       message.error('Failed to update products');
     } finally {
       setLoading(false);
@@ -134,7 +133,7 @@ export const ReturnOrderShow = () => {
                 key="accept"
                 onClick={() => setIsModalVisible(true)}
               >
-                {t('return-orders.buttons.confirm')}
+                {t('buttons.accept')}
               </ButtonSuccess>
               <Button
                 disabled={!canRejectOrder}
@@ -143,7 +142,7 @@ export const ReturnOrderShow = () => {
                 icon={<CloseCircleOutlined />}
                 onClick={() => handleUpdateProducts({}, -1)}
               >
-                {t('return-orders.buttons.cancelled')}
+                {t('buttons.reject')}
               </Button>
             </>
           )

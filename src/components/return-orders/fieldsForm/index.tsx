@@ -27,11 +27,11 @@ export const ReturnOrderDetails = ({ order }: Props) => {
   const getOrderStatusDescription = (status: number) => {
     switch (status) {
       case 0:
-        return 'return-orders.fields.status.0';
+        return t('enum.return-order.status.0');
       case -1:
-        return 'return-orders.fields.status.-1';
+        return t('enum.return-order.status.-1');
       default:
-        return 'return-orders.fields.status.1';
+        return t('enum.return-order.status.1');
     }
   };
   const details = useMemo(() => {
@@ -47,7 +47,7 @@ export const ReturnOrderDetails = ({ order }: Props) => {
       },
       {
         icon: <MoneyCollectOutlined />,
-        title: t('return-orders.fields.dateReturn'),
+        title: t('return-orders.fields.totalThornMoney'),
         description: `${order?.totalThornMoney} $`,
       },
       {

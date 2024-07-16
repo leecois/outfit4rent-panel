@@ -14,7 +14,7 @@ import {
   useNavigation,
   useTranslate,
 } from '@refinedev/core';
-import { Input, InputNumber, Select, Table, theme, Typography } from 'antd';
+import { Input, Select, Table, theme, Typography } from 'antd';
 
 import { PaginationTotal } from '../../components';
 import { ReturnOrderStatus } from '../../components/return-orders/status';
@@ -146,23 +146,6 @@ export const ReturnOrderList = () => {
               #{value}
             </Typography.Text>
           )}
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          defaultFilteredValue={getDefaultFilter('id', filters, 'eq')}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <InputNumber
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
         />
         <Table.Column<IReturnOrder>
           key="status"
@@ -182,10 +165,10 @@ export const ReturnOrderList = () => {
                 mode="multiple"
                 placeholder={t('orders.filter.status.placeholder')}
                 options={[
-                  { label: t('orders.status.pending'), value: 0 },
-                  { label: t('orders.status.processing'), value: 1 },
-                  { label: t('orders.status.completed'), value: 2 },
-                  { label: t('orders.status.cancelled'), value: -1 },
+                  { label: t('enum.return-order.status.0'), value: 0 },
+                  { label: t('enum.return-order.status.1'), value: 1 },
+                  { label: t('enum.return-order.status.2'), value: 2 },
+                  { label: t('enum.return-order.status.-1'), value: -1 },
                 ]}
               />
             </FilterDropdown>
@@ -211,7 +194,7 @@ export const ReturnOrderList = () => {
               <Input
                 addonBefore="#"
                 style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
+                placeholder={t('orders.filter.name.placeholder')}
               />
             </FilterDropdown>
           )}
@@ -240,7 +223,7 @@ export const ReturnOrderList = () => {
               <Input
                 addonBefore="#"
                 style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
+                placeholder={t('orders.filter.address.placeholder')}
               />
             </FilterDropdown>
           )}
@@ -253,22 +236,6 @@ export const ReturnOrderList = () => {
           defaultSortOrder={getDefaultSortOrder('phone', sorters)}
           defaultFilteredValue={getDefaultFilter('phone', filters, 'contains')}
           sorter
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('return-orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
         />
         <Table.Column<IReturnOrder>
           align="right"
@@ -278,22 +245,6 @@ export const ReturnOrderList = () => {
           defaultSortOrder={getDefaultSortOrder('partnerId', sorters)}
           defaultFilteredValue={getDefaultFilter('partnerId', filters, 'eq')}
           sorter
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
         />
         <Table.Column<IReturnOrder>
           align="right"
@@ -303,22 +254,6 @@ export const ReturnOrderList = () => {
           defaultSortOrder={getDefaultSortOrder('customerId', sorters)}
           defaultFilteredValue={getDefaultFilter('customerId', filters, 'eq')}
           sorter
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
         />
         <Table.Column<IReturnOrder>
           align="right"
@@ -332,22 +267,6 @@ export const ReturnOrderList = () => {
             'eq',
           )}
           sorter
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
         />
         <Table.Column<IReturnOrder>
           key="dateReturn"
@@ -356,22 +275,6 @@ export const ReturnOrderList = () => {
           render={(value) => <DateField value={value} format="LLL" />}
           sorter
           defaultFilteredValue={getDefaultFilter('dateReturn', filters, 'gte')}
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('return-orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
         />
         <Table.Column<IReturnOrder>
           key="quantityOfItems"
@@ -384,22 +287,6 @@ export const ReturnOrderList = () => {
             filters,
             'eq',
           )}
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <InputNumber
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
         />
         <Table.Column<IReturnOrder>
           key="totalThornMoney"
@@ -411,22 +298,6 @@ export const ReturnOrderList = () => {
             'totalThornMoney',
             filters,
             'eq',
-          )}
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <InputNumber
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('return-orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
           )}
         />
       </Table>
