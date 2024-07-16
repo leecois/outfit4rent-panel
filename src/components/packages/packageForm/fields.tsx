@@ -3,14 +3,29 @@ import {
   MailOutlined,
   PhoneOutlined,
   RightCircleOutlined,
+  UploadOutlined,
 } from '@ant-design/icons';
 import type { UseFormReturnType } from '@refinedev/antd';
-import { DeleteButton, ListButton, SaveButton } from '@refinedev/antd';
+import {
+  DeleteButton,
+  ImageField,
+  ListButton,
+  SaveButton,
+} from '@refinedev/antd';
 import type { UseFormProps } from '@refinedev/core';
-import { useNavigation, useTranslate } from '@refinedev/core';
+import { useApiUrl, useNavigation, useTranslate } from '@refinedev/core';
 import type { InputRef } from 'antd';
-import { Button, Card, Divider, Form, Input, Segmented, Tag } from 'antd';
-import { useEffect, useRef } from 'react';
+import {
+  Button,
+  Card,
+  Divider,
+  Form,
+  Input,
+  Segmented,
+  Tag,
+  Upload,
+} from 'antd';
+import { useEffect, useRef, useState } from 'react';
 
 import type { IPackage } from '../../../interfaces';
 import { FormItemEditable, FormItemHorizontal } from '../../form';
@@ -24,6 +39,12 @@ type Props = {
   setIsFormDisabled: (value: boolean) => void;
 };
 
+type UploadResponse = {
+  message: string;
+  statusCode: string;
+  data: string;
+};
+
 export const PackageFormFields = ({
   formProps,
   saveButtonProps,
@@ -32,9 +53,11 @@ export const PackageFormFields = ({
   setIsFormDisabled,
 }: Props) => {
   const titleInputRef = useRef<InputRef>(null);
-
+  const apiUrl = useApiUrl();
   const t = useTranslate();
   const { list } = useNavigation();
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isFormDisabled) {
@@ -44,6 +67,20 @@ export const PackageFormFields = ({
 
   const statusField = Form.useWatch('status', formProps.form);
   const isFeaturedField = Form.useWatch('isFeatured', formProps.form);
+
+  const handleUploadChange = (info: any) => {
+    const { fileList } = info;
+    const updatedFileList = fileList.map((file: any) => {
+      if (file.response) {
+        return {
+          url: (file.response as UploadResponse).data,
+        };
+      }
+      return file;
+    });
+    setImageUrl(updatedFileList[0]?.url || null);
+    formProps.form?.setFieldsValue({ url: updatedFileList[0]?.url });
+  };
 
   return (
     <Form {...formProps} layout="horizontal" disabled={isFormDisabled}>
@@ -72,6 +109,37 @@ export const PackageFormFields = ({
           padding: 0,
         }}
       >
+        <FormItemHorizontal
+          name="url"
+          icon={<RightCircleOutlined />}
+          label={t('packages.fields.image.label')}
+        >
+          {isFormDisabled ? (
+            <ImageField
+              value={formProps.form?.getFieldValue('url')}
+              width={175}
+              height={175}
+            />
+          ) : (
+            <Upload.Dragger
+              name="file"
+              action={`${apiUrl}/packages/uploaded-file`}
+              accept=".png,.jpg,.jpeg"
+              showUploadList={true}
+              onChange={handleUploadChange}
+              listType="picture-card"
+            >
+              <Button icon={<UploadOutlined />}>
+                {t('packages.fields.images.description')}
+              </Button>
+            </Upload.Dragger>
+          )}
+        </FormItemHorizontal>
+        <Divider
+          style={{
+            margin: 0,
+          }}
+        />
         <FormItemHorizontal
           name="status"
           initialValue={0}

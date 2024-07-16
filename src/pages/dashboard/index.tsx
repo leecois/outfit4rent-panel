@@ -15,7 +15,6 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
-  AllOrdersMap,
   CardWithContent,
   CardWithPlot,
   DailyOrders,
@@ -294,9 +293,7 @@ export const DashboardPage: React.FC = () => {
               />
             }
             title={t('dashboard.deliveryMap.title')}
-          >
-            <AllOrdersMap />
-          </CardWithContent>
+          ></CardWithContent>
         </Col>
         <Col xl={9} lg={9} md={24} sm={24} xs={24}>
           <CardWithContent

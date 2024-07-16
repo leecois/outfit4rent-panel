@@ -5,7 +5,6 @@ import {
   FilterDropdown,
   getDefaultSortOrder,
   List,
-  NumberField,
   useTable,
 } from '@refinedev/antd';
 import type { HttpError } from '@refinedev/core';
@@ -16,20 +15,16 @@ import {
   useTranslate,
 } from '@refinedev/core';
 import { Input, InputNumber, Select, Table, theme, Typography } from 'antd';
-import { useState } from 'react';
 
-import { OrderActions, OrderStatus, PaginationTotal } from '../../components';
-import type { IOrder } from '../../interfaces';
+import { PaginationTotal } from '../../components';
+import { ReturnOrderStatus } from '../../components/return-orders/status';
+import type { IReturnOrder } from '../../interfaces';
 
-export const OrderList = () => {
+export const ReturnOrderList = () => {
   const { token } = theme.useToken();
-  const t = useTranslate();
-  const { show } = useNavigation();
 
-  const [reload, setReload] = useState(false); // State to trigger re-fetch
-
-  const { tableProps, sorters, filters } = useTable<IOrder, HttpError>({
-    resource: 'orders',
+  const { tableProps, sorters, filters } = useTable<IReturnOrder, HttpError>({
+    resource: 'return-orders',
     pagination: {
       current: 1,
       pageSize: 10,
@@ -88,17 +83,12 @@ export const OrderList = () => {
         },
       ],
     },
-    syncWithLocation: true, // Ensure filters and sorting sync with URL location
-    queryOptions: {
-      retry: false, // Disable retries on failed queries
-      refetchOnWindowFocus: false, // Do not refetch data on window focus
-    },
-    meta: {
-      key: reload ? 'reload' : 'default', // Use reload state to trigger refetch
-    },
   });
 
-  const { isLoading, triggerExport } = useExport<IOrder>({
+  const t = useTranslate();
+  const { show } = useNavigation();
+
+  const { isLoading, triggerExport } = useExport<IReturnOrder>({
     sorters,
     filters,
     pageSize: 50,
@@ -106,26 +96,16 @@ export const OrderList = () => {
     mapData: (item) => {
       return {
         id: item.id,
+        address: item.address,
         customerId: item.customerId,
-        packageId: item.packageId,
-        packageName: item.packageName,
-        dateFrom: item.dateFrom,
-        dateTo: item.dateTo,
-        price: item.price,
-        receiverName: item.receiverName,
-        receiverPhone: item.receiverPhone,
-        receiverAddress: item.receiverAddress,
+        dateReturn: item.dateReturn,
+        name: item.name,
+        partnerId: item.partnerId,
+        phone: item.phone,
         status: item.status,
-        transactionId: item.transactionId,
-        quantityOfItems: item.quantityOfItems,
-        totalDeposit: item.totalDeposit,
       };
     },
   });
-
-  const refreshTable = () => {
-    setReload((prev) => !prev); // Toggle reload state to trigger refetch
-  };
 
   return (
     <List
@@ -142,21 +122,21 @@ export const OrderList = () => {
         onRow={(record) => {
           return {
             onClick: () => {
-              show('orders', record.id);
+              show('return-orders', record.id);
             },
           };
         }}
         pagination={{
           ...tableProps.pagination,
           showTotal: (total) => (
-            <PaginationTotal total={total} entityName="orders" />
+            <PaginationTotal total={total} entityName="return-orders" />
           ),
         }}
       >
         <Table.Column
           key="id"
           dataIndex="id"
-          title={t('orders.fields.id')}
+          title={t('return-orders.fields.id')}
           render={(value) => (
             <Typography.Text
               style={{
@@ -184,12 +164,12 @@ export const OrderList = () => {
             </FilterDropdown>
           )}
         />
-        <Table.Column<IOrder>
+        <Table.Column<IReturnOrder>
           key="status"
           dataIndex="status"
-          title={t('orders.fields.status')}
+          title={t('return-orders.fields.status')}
           render={(_, record) => {
-            return <OrderStatus status={record.status} />;
+            return <ReturnOrderStatus status={record.status} />;
           }}
           sorter
           defaultSortOrder={getDefaultSortOrder('status', sorters)}
@@ -211,14 +191,14 @@ export const OrderList = () => {
             </FilterDropdown>
           )}
         />
-        <Table.Column<IOrder>
+        <Table.Column<IReturnOrder>
           align="right"
-          key="totalDeposit"
-          dataIndex="totalDeposit"
-          title={t('orders.fields.totalDeposit')}
-          defaultSortOrder={getDefaultSortOrder('totalDeposit', sorters)}
+          key="name"
+          dataIndex="name"
+          title={t('return-orders.fields.name')}
+          defaultSortOrder={getDefaultSortOrder('name', sorters)}
           sorter
-          defaultFilteredValue={getDefaultFilter('totalDeposit', filters, 'eq')}
+          defaultFilteredValue={getDefaultFilter('name', filters, 'contains')}
           filterIcon={(filtered) => (
             <SearchOutlined
               style={{
@@ -228,32 +208,177 @@ export const OrderList = () => {
           )}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
-              <InputNumber
+              <Input
                 addonBefore="#"
                 style={{ width: '100%' }}
                 placeholder={t('orders.filter.id.placeholder')}
               />
             </FilterDropdown>
           )}
-          render={(value) => {
-            return (
-              <NumberField
-                options={{
-                  currency: 'USD',
-                  style: 'currency',
-                }}
-                value={value / 100}
-              />
-            );
-          }}
         />
-        <Table.Column<IOrder>
+        <Table.Column<IReturnOrder>
           align="right"
+          key="address"
+          dataIndex="address"
+          title={t('return-orders.fields.address')}
+          defaultSortOrder={getDefaultSortOrder('address', sorters)}
+          sorter
+          defaultFilteredValue={getDefaultFilter(
+            'address',
+            filters,
+            'contains',
+          )}
+          filterIcon={(filtered) => (
+            <SearchOutlined
+              style={{
+                color: filtered ? token.colorPrimary : undefined,
+              }}
+            />
+          )}
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input
+                addonBefore="#"
+                style={{ width: '100%' }}
+                placeholder={t('orders.filter.id.placeholder')}
+              />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column<IReturnOrder>
+          align="right"
+          key="phone"
+          dataIndex="phone"
+          title={t('return-orders.fields.phone')}
+          defaultSortOrder={getDefaultSortOrder('phone', sorters)}
+          defaultFilteredValue={getDefaultFilter('phone', filters, 'contains')}
+          sorter
+          filterIcon={(filtered) => (
+            <SearchOutlined
+              style={{
+                color: filtered ? token.colorPrimary : undefined,
+              }}
+            />
+          )}
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input
+                addonBefore="#"
+                style={{ width: '100%' }}
+                placeholder={t('return-orders.filter.id.placeholder')}
+              />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column<IReturnOrder>
+          align="right"
+          key="partnerId"
+          dataIndex="partnerId"
+          title={t('return-orders.fields.partnerId')}
+          defaultSortOrder={getDefaultSortOrder('partnerId', sorters)}
+          defaultFilteredValue={getDefaultFilter('partnerId', filters, 'eq')}
+          sorter
+          filterIcon={(filtered) => (
+            <SearchOutlined
+              style={{
+                color: filtered ? token.colorPrimary : undefined,
+              }}
+            />
+          )}
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input
+                addonBefore="#"
+                style={{ width: '100%' }}
+                placeholder={t('orders.filter.id.placeholder')}
+              />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column<IReturnOrder>
+          align="right"
+          key="customerId"
+          dataIndex="customerId"
+          title={t('return-orders.fields.customerId')}
+          defaultSortOrder={getDefaultSortOrder('customerId', sorters)}
+          defaultFilteredValue={getDefaultFilter('customerId', filters, 'eq')}
+          sorter
+          filterIcon={(filtered) => (
+            <SearchOutlined
+              style={{
+                color: filtered ? token.colorPrimary : undefined,
+              }}
+            />
+          )}
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input
+                addonBefore="#"
+                style={{ width: '100%' }}
+                placeholder={t('orders.filter.id.placeholder')}
+              />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column<IReturnOrder>
+          align="right"
+          key="customerPackageId"
+          dataIndex="customerPackageId"
+          title={t('return-orders.fields.orderId')}
+          defaultSortOrder={getDefaultSortOrder('customerPackageId', sorters)}
+          defaultFilteredValue={getDefaultFilter(
+            'customerPackageId',
+            filters,
+            'eq',
+          )}
+          sorter
+          filterIcon={(filtered) => (
+            <SearchOutlined
+              style={{
+                color: filtered ? token.colorPrimary : undefined,
+              }}
+            />
+          )}
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input
+                addonBefore="#"
+                style={{ width: '100%' }}
+                placeholder={t('orders.filter.id.placeholder')}
+              />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column<IReturnOrder>
+          key="dateReturn"
+          dataIndex="dateReturn"
+          title={t('return-orders.fields.dateReturn')}
+          render={(value) => <DateField value={value} format="LLL" />}
+          sorter
+          defaultFilteredValue={getDefaultFilter('dateReturn', filters, 'gte')}
+          filterIcon={(filtered) => (
+            <SearchOutlined
+              style={{
+                color: filtered ? token.colorPrimary : undefined,
+              }}
+            />
+          )}
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input
+                addonBefore="#"
+                style={{ width: '100%' }}
+                placeholder={t('return-orders.filter.id.placeholder')}
+              />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column<IReturnOrder>
           key="quantityOfItems"
           dataIndex="quantityOfItems"
-          title={t('orders.fields.quantityOfItems')}
-          defaultSortOrder={getDefaultSortOrder('quantityOfItems', sorters)}
+          title={t('return-orders.fields.quantityOfItems')}
           sorter
+          defaultSortOrder={getDefaultSortOrder('quantityOfItems', sorters)}
           defaultFilteredValue={getDefaultFilter(
             'quantityOfItems',
             filters,
@@ -275,22 +400,18 @@ export const OrderList = () => {
               />
             </FilterDropdown>
           )}
-          render={(value) => {
-            return <NumberField value={value} />;
-          }}
         />
-        <Table.Column
-          align="right"
-          key="receiverName"
-          dataIndex="receiverName"
-          title={t('orders.fields.receiverName')}
-          defaultSortOrder={getDefaultSortOrder('receiverName', sorters)}
+        <Table.Column<IReturnOrder>
+          key="totalThornMoney"
+          dataIndex="totalThornMoney"
+          title={t('return-orders.fields.totalThornMoney')}
+          sorter
+          defaultSortOrder={getDefaultSortOrder('totalThornMoney', sorters)}
           defaultFilteredValue={getDefaultFilter(
-            'receiverName',
+            'totalThornMoney',
             filters,
-            'contains',
+            'eq',
           )}
-          sorter
           filterIcon={(filtered) => (
             <SearchOutlined
               style={{
@@ -300,192 +421,12 @@ export const OrderList = () => {
           )}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
-              <Input
+              <InputNumber
                 addonBefore="#"
                 style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
+                placeholder={t('return-orders.filter.id.placeholder')}
               />
             </FilterDropdown>
-          )}
-        />
-        <Table.Column<IOrder>
-          align="right"
-          key="receiverPhone"
-          dataIndex="receiverPhone"
-          title={t('orders.fields.receiverPhone')}
-          defaultSortOrder={getDefaultSortOrder('receiverPhone', sorters)}
-          defaultFilteredValue={getDefaultFilter(
-            'receiverPhone',
-            filters,
-            'contains',
-          )}
-          sorter
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column
-          align="right"
-          key="receiverAddress"
-          dataIndex="receiverAddress"
-          title={t('orders.fields.receiverAddress')}
-          defaultSortOrder={getDefaultSortOrder('receiverAddress', sorters)}
-          defaultFilteredValue={getDefaultFilter(
-            'receiverAddress',
-            filters,
-            'contains',
-          )}
-          sorter
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column<IOrder>
-          key="dateFrom"
-          dataIndex="dateFrom"
-          title={t('orders.fields.dateFrom')}
-          render={(value) => <DateField value={value} format="LLL" />}
-          sorter
-          defaultFilteredValue={getDefaultFilter('dateFrom', filters, 'gte')}
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column<IOrder>
-          key="dateTo"
-          dataIndex="dateTo"
-          title={t('orders.fields.dateTo')}
-          render={(value) => <DateField value={value} format="LLL" />}
-          sorter
-          defaultSortOrder={getDefaultSortOrder('dateTo', sorters)}
-          defaultFilteredValue={getDefaultFilter('dateTo', filters, 'lte')}
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column<IOrder>
-          align="right"
-          key="packageName"
-          dataIndex="packageName"
-          title={t('orders.fields.packageName')}
-          defaultSortOrder={getDefaultSortOrder('packageName', sorters)}
-          defaultFilteredValue={getDefaultFilter(
-            'packageName',
-            filters,
-            'contains',
-          )}
-          sorter
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column<IOrder>
-          align="right"
-          key="customerId"
-          dataIndex="customerId"
-          title={t('orders.fields.customerId')}
-          defaultSortOrder={getDefaultSortOrder('customerId', sorters)}
-          sorter
-          defaultFilteredValue={getDefaultFilter('customerId', filters, 'eq')}
-          render={(value) => {
-            return <NumberField value={value} />;
-          }}
-        />
-        <Table.Column<IOrder>
-          key="createdAt"
-          dataIndex="createdAt"
-          title={t('orders.fields.createdAt')}
-          render={(value) => <DateField value={value} format="LLL" />}
-          sorter
-          defaultFilteredValue={getDefaultFilter('createdAt', filters, 'gte')}
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? token.colorPrimary : undefined,
-              }}
-            />
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input
-                addonBefore="#"
-                style={{ width: '100%' }}
-                placeholder={t('orders.filter.id.placeholder')}
-              />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column<IOrder>
-          key="actions"
-          title={t('table.actions')}
-          dataIndex="actions"
-          render={(_, record) => (
-            <OrderActions record={record} onStatusUpdated={refreshTable} />
           )}
         />
       </Table>

@@ -25,21 +25,14 @@ export const TableCategoryPackage = ({
         title={t('categories.fields.id')}
         dataIndex={['category', 'id']}
       />
-      <Table.Column
+      <Table.Column<ICategory>
         title={t('categories.fields.name')}
         dataIndex={['category', 'name']}
       />
       <Table.Column
         title={t('categories.fields.image')}
         dataIndex={['category', 'url']}
-        key="url"
-        render={(category) => (
-          <Avatar
-            shape="circle"
-            src={(category as ICategory).url}
-            alt="Avatar"
-          />
-        )}
+        render={(value) => <Avatar src={value} alt={value} />}
       />
       <Table.Column
         title={t('categories.fields.description')}

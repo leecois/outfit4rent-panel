@@ -10,11 +10,8 @@ export const useOrderCustomKbarActions = (order?: IOrder): void => {
   const t = useTranslate();
   const { mutate } = useUpdate();
 
-  const canAcceptOrder = order?.status.text === 'Pending';
-  const canRejectOrder =
-    order?.status.text === 'Pending' ||
-    order?.status.text === 'Ready' ||
-    order?.status.text === 'On The Way';
+  const canAcceptOrder = order?.status === 0;
+  const canRejectOrder = order?.status === 0;
 
   const [actions, setActions] = useState<Array<Action>>([]);
 

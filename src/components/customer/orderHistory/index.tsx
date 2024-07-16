@@ -4,7 +4,7 @@ import { useNavigation, useTranslate } from '@refinedev/core';
 import { Table, Typography } from 'antd';
 
 import type { IOrder, IOrderFilterVariables, IUser } from '../../../interfaces';
-import { OrderStatus, OrderTableColumnProducts } from '../../order';
+import { OrderStatus } from '../../order';
 
 type Props = {
   customer?: IUser;
@@ -74,14 +74,7 @@ export const CustomerOrderHistory = ({ customer }: Props) => {
           return <OrderStatus status={status.text} />;
         }}
       />
-      <Table.Column<IOrder>
-        key="products"
-        dataIndex="products"
-        title={t('orders.fields.products')}
-        render={(_, record) => {
-          return <OrderTableColumnProducts order={record} />;
-        }}
-      />
+
       <Table.Column<IOrder>
         dataIndex="amount"
         align="end"

@@ -1,10 +1,8 @@
-import { NumberField, useTable } from '@refinedev/antd';
+import { useTable } from '@refinedev/antd';
 import { useNavigation } from '@refinedev/core';
-import { Flex, Space, Table, theme, Typography } from 'antd';
+import { Space, Table, theme, Typography } from 'antd';
 
 import type { IOrder } from '../../../interfaces';
-import { getUniqueListWithCount } from '../../../utils';
-import { OrderActions } from '../..';
 import { useStyles } from './styled';
 
 export const RecentOrders: React.FC = () => {
@@ -58,7 +56,7 @@ export const RecentOrders: React.FC = () => {
               color: token.colorTextHeading,
             }}
           >
-            #{record.orderNumber}
+            #{record.id}
           </Typography.Link>
         )}
       />
@@ -79,7 +77,7 @@ export const RecentOrders: React.FC = () => {
                   fontSize: 14,
                 }}
               >
-                {record?.user?.name} {record?.user?.name}
+                {record?.customerId}
               </Typography.Text>
               <Typography.Text
                 ellipsis
@@ -88,13 +86,13 @@ export const RecentOrders: React.FC = () => {
                 }}
                 type="secondary"
               >
-                {record?.user?.address?.[0]}
+                {record?.receiverAddress}
               </Typography.Text>
             </Space>
           );
         }}
       />
-      <Table.Column<IOrder>
+      {/* <Table.Column<IOrder>
         dataIndex="products"
         className={styles.column}
         render={(products: IOrder['products']) => {
@@ -129,8 +127,8 @@ export const RecentOrders: React.FC = () => {
             </Space>
           );
         }}
-      />
-      <Table.Column<IOrder>
+      /> */}
+      {/* <Table.Column<IOrder>
         dataIndex="amount"
         className={styles.column}
         align="end"
@@ -148,14 +146,14 @@ export const RecentOrders: React.FC = () => {
             />
           );
         }}
-      />
-      <Table.Column<IOrder>
+      /> */}
+      {/* <Table.Column<IOrder>
         fixed="right"
         key="actions"
         className={styles.column}
         align="end"
-        render={(_, record) => <OrderActions record={record} />}
-      />
+        render={(_, record) => <OrderActions record={record as IOrder} />}
+      /> */}
     </Table>
   );
 };

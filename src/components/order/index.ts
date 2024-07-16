@@ -3,4 +3,4 @@ export * from './deliveryDetails';
 export * from './deliveryMap';
 export * from './products';
 export * from './status';
-export * from './tableColumnProducts';
+// export * from './tableColumnProducts';

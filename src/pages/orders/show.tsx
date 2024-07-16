@@ -1,13 +1,14 @@
 import { CloseCircleOutlined, LeftOutlined } from '@ant-design/icons';
 import { List, ListButton } from '@refinedev/antd';
-import { useShow, useTranslate, useUpdate } from '@refinedev/core';
-import { Button, Col, Divider, Flex, Row, Skeleton } from 'antd';
+import { useApiUrl, useShow, useTranslate } from '@refinedev/core';
+import { Button, Col, Divider, Flex, message, Row, Skeleton } from 'antd';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 import { ButtonSuccess } from '../../button';
 import {
   CardWithContent,
   OrderDeliveryDetails,
-  OrderDeliveryMap,
   OrderProducts,
 } from '../../components';
 import type { IOrder } from '../../interfaces';
@@ -16,32 +17,69 @@ export const OrderShow = () => {
   const t = useTranslate();
   const { queryResult } = useShow<IOrder>();
   const { data, isLoading } = queryResult;
-  const record = data?.data;
-  const { mutate } = useUpdate();
+  const [record, setRecord] = useState<IOrder | undefined>(data?.data);
 
-  const handleMutate = (status: { id: number; text: string }) => {
-    if (record) {
-      mutate({
-        resource: 'orders',
-        id: record.id.toString(),
-        values: {
-          status,
+  useEffect(() => {
+    if (data?.data) {
+      setRecord(data.data);
+    }
+  }, [data]);
+
+  const apiUrl = useApiUrl();
+
+  const handleUpdateStatus = async (id: number, status: number) => {
+    try {
+      const response = await axios.patch(
+        `${apiUrl}/orders/${id}/status/${status}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
+
+      if (response.status === 500) {
+        throw new Error('Network response was not ok');
+      }
+
+      const updatedOrder = (await response.data.data) as IOrder;
+      message.success(`Order ${id} status updated to ${status}`);
+      setRecord(updatedOrder);
+    } catch (error) {
+      message.error(`Failed to update order ${id} status`);
     }
   };
 
-  const canAcceptOrder = isLoading ? false : record?.status.text === 'Pending';
-  const canRejectOrder = isLoading
-    ? false
-    : record?.status.text === 'Pending' ||
-      record?.status.text === 'Ready' ||
-      record?.status.text === 'On The Way';
+  const canAcceptOrder = isLoading ? false : record?.status === 0;
+  const canRejectOrder = isLoading ? false : record?.status === 0;
 
   return (
     <>
-      <Flex>
+      <Flex style={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <ListButton icon={<LeftOutlined />}>{t('orders.orders')}</ListButton>
+        <Divider type="vertical" />
+        <div>
+          <ButtonSuccess
+            disabled={!canAcceptOrder}
+            style={{ marginRight: 8 }}
+            onClick={() => {
+              handleUpdateStatus((record as IOrder)?.id, 1);
+            }}
+          >
+            {t('buttons.accept')}
+          </ButtonSuccess>
+          <Button
+            disabled={!canRejectOrder}
+            danger
+            icon={<CloseCircleOutlined />}
+            onClick={() => {
+              handleUpdateStatus((record as IOrder)?.id, -1);
+            }}
+          >
+            {t('buttons.reject')}
+          </Button>
+        </div>
       </Flex>
       <Divider />
       <List
@@ -52,56 +90,18 @@ export const OrderShow = () => {
               active
               style={{
                 width: '144px',
-                minWidth: '144pxpx',
+                minWidth: '144px',
                 height: '28px',
               }}
             />
           ) : (
-            `${t('orders.titles.list')} #${record?.orderNumber}`
+            `${t('orders.titles.list')} #${record?.id}`
           )
         }
-        headerButtons={[
-          <ButtonSuccess
-            disabled={!canAcceptOrder}
-            key="accept"
-            onClick={() => {
-              handleMutate({
-                id: 2,
-                text: 'Ready',
-              });
-            }}
-          >
-            {t('buttons.accept')}
-          </ButtonSuccess>,
-          <Button
-            disabled={!canRejectOrder}
-            key="reject"
-            danger
-            icon={<CloseCircleOutlined />}
-            onClick={() => {
-              handleMutate({
-                id: 5,
-                text: 'Cancelled',
-              });
-            }}
-          >
-            {t('buttons.reject')}
-          </Button>,
-        ]}
       >
         <Row gutter={[16, 16]}>
           <Col xl={15} lg={24} md={24} sm={24} xs={24}>
             <Flex gap={16} vertical>
-              <CardWithContent
-                bodyStyles={{
-                  height: '378px',
-                  overflow: 'hidden',
-                  padding: 0,
-                }}
-                title={t('orders.titles.deliveryMap')}
-              >
-                <OrderDeliveryMap order={record} />
-              </CardWithContent>
               <OrderProducts order={record} />
             </Flex>
           </Col>
@@ -109,7 +109,10 @@ export const OrderShow = () => {
           <Col xl={9} lg={24} md={24} sm={24} xs={24}>
             <CardWithContent
               bodyStyles={{
-                padding: 0,
+                padding: '16px',
+                border: '1px solid #f0f0f0',
+                borderRadius: '8px',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
               }}
               title={t('orders.titles.deliveryDetails')}
             >

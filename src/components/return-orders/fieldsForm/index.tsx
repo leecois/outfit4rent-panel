@@ -1,5 +1,6 @@
 import {
   ClockCircleOutlined,
+  MoneyCollectOutlined,
   PhoneOutlined,
   ShopOutlined,
   UserOutlined,
@@ -10,44 +11,29 @@ import dayjs from 'dayjs';
 import { useMemo } from 'react';
 
 import { useConfigProvider } from '../../../context';
-import type { IOrder } from '../../../interfaces';
+import type { IReturnOrder } from '../../../interfaces';
 import { BikeWhiteIcon } from '../../icons';
 
 type Props = {
-  order: IOrder;
+  order: IReturnOrder;
 };
-// const getCurrentStep = (order: IOrder) => {
-//   return order?.events.findIndex(
-//     (element) => element.status === order?.status?.text,
-//   );
-// };
 
-// const getNotFinishedCurrentStep = (
-//   order: IOrder,
-//   event: IEvent,
-//   index: number,
-// ) => {
-//   return (
-//     event.status !== 'Cancelled' &&
-//     event.status !== 'Delivered' &&
-//     order?.events.findIndex(
-//       (element) => element.status === order?.status?.text,
-//     ) === index
-//   );
-// };
-// const getStepStatus = (order: IOrder, event: IEvent, index: number) => {
-//   if (!event.date) return 'wait';
-//   if (event.status === 'Cancelled') return 'error';
-//   if (getNotFinishedCurrentStep(order, event, index)) return 'process';
-//   return 'finish';
-// };
-export const OrderDeliveryDetails = ({ order }: Props) => {
+export const ReturnOrderDetails = ({ order }: Props) => {
   const t = useTranslate();
   const { token } = theme.useToken();
   // eslint-disable-next-line unused-imports/no-unused-vars
   const breakpoints = Grid.useBreakpoint();
   const { mode } = useConfigProvider();
-
+  const getOrderStatusDescription = (status: number) => {
+    switch (status) {
+      case 0:
+        return 'return-orders.fields.status.0';
+      case -1:
+        return 'return-orders.fields.status.-1';
+      default:
+        return 'return-orders.fields.status.1';
+    }
+  };
   const details = useMemo(() => {
     const list: Array<{
       icon: React.ReactNode;
@@ -56,33 +42,43 @@ export const OrderDeliveryDetails = ({ order }: Props) => {
     }> = [
       {
         icon: <ClockCircleOutlined />,
-        title: t('orders.fields.dateFrom'),
-        description: dayjs(order.dateFrom).format('DD/MM/YYYY'),
+        title: t('return-orders.fields.dateReturn'),
+        description: dayjs(order?.dateReturn as Date).format('DD/MM/YYYY'),
       },
       {
-        icon: <ClockCircleOutlined />,
-        title: t('orders.fields.dateTo'),
-        description: dayjs(order.dateTo).format('DD/MM/YYYY'),
+        icon: <MoneyCollectOutlined />,
+        title: t('return-orders.fields.dateReturn'),
+        description: `${order?.totalThornMoney} $`,
       },
       {
         icon: <ShopOutlined />,
-        title: t('orders.fields.receiverAddress'),
-        description: order.receiverAddress,
+        title: t('return-orders.fields.address'),
+        description: order?.address,
       },
       {
         icon: <BikeWhiteIcon />,
-        title: t('orders.fields.receiverName'),
-        description: order.receiverName,
+        title: t('return-orders.fields.name'),
+        description: order?.name,
       },
       {
         icon: <PhoneOutlined />,
-        title: t('orders.fields.receiverPhone'),
-        description: order.receiverPhone,
+        title: t('return-orders.fields.phone'),
+        description: order?.phone,
       },
       {
         icon: <UserOutlined />,
-        title: t('orders.fields.customerId'),
-        description: `${order.customerId}`,
+        title: t('return-orders.fields.customerId'),
+        description: `${order?.customerId}`,
+      },
+      {
+        icon: <ShopOutlined />,
+        title: t('return-orders.fields.partnerId'),
+        description: `${order?.partnerId}`,
+      },
+      {
+        icon: <ShopOutlined />,
+        title: t('return-orders.fields.status'),
+        description: getOrderStatusDescription(order?.status),
       },
     ];
 
