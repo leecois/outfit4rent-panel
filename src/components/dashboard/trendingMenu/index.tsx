@@ -2,7 +2,7 @@ import { NumberField, useSimpleList } from '@refinedev/antd';
 import { Avatar, Flex, List as AntdList, Typography } from 'antd';
 import type { ReactNode } from 'react';
 
-import type { ITrendingProducts } from '../../../interfaces';
+import type { ITrendingPackages } from '../../../interfaces';
 import {
   Rank1Icon,
   Rank2Icon,
@@ -20,8 +20,8 @@ const RankIcons: Record<number, ReactNode> = {
 };
 
 export const TrendingMenu: React.FC = () => {
-  const { listProps } = useSimpleList<ITrendingProducts>({
-    resource: 'trendingProducts',
+  const { listProps } = useSimpleList<ITrendingPackages>({
+    resource: 'admin/trending-packages',
     pagination: { pageSize: 5, current: 1 },
     syncWithLocation: false,
   });
@@ -65,7 +65,7 @@ export const TrendingMenu: React.FC = () => {
                     xl: 120,
                     xxl: 120,
                   }}
-                  src={item.product?.images[0]?.url}
+                  src={item.url}
                 />
                 <div
                   style={{
@@ -93,7 +93,7 @@ export const TrendingMenu: React.FC = () => {
                         rows: 1,
                         tooltip: {
                           placement: 'top',
-                          title: item.product?.name,
+                          title: item.name,
                         },
                       }}
                       style={{
@@ -102,9 +102,10 @@ export const TrendingMenu: React.FC = () => {
                       }}
                       strong={index <= 2}
                     >
-                      {item.product?.name}
+                      {item.name}
                     </Typography.Paragraph>
                   </div>
+
                   <NumberField
                     type="secondary"
                     options={{
@@ -112,19 +113,19 @@ export const TrendingMenu: React.FC = () => {
                       style: 'currency',
                       notation: 'standard',
                     }}
-                    value={item.orderCount * item.product.price}
+                    value={item.value * 200}
                   />
+                  <Typography.Text
+                    style={{
+                      fontSize: 16,
+                    }}
+                    type="secondary"
+                  >
+                    Ordered{' '}
+                    <Typography.Text strong>{item.value} </Typography.Text>
+                    times
+                  </Typography.Text>
                 </Flex>
-                <Typography.Text
-                  style={{
-                    fontSize: 16,
-                  }}
-                  type="secondary"
-                >
-                  Ordered{' '}
-                  <Typography.Text strong>{item.orderCount} </Typography.Text>
-                  times
-                </Typography.Text>
               </Flex>
             </Flex>
           </AntdList.Item>

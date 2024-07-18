@@ -1,40 +1,35 @@
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { useApiUrl, useTranslate } from '@refinedev/core';
-import { Dropdown, Menu, message } from 'antd';
+import { BellOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { useInvalidate, useTranslate, useUpdate } from '@refinedev/core';
+import { Dropdown, Menu } from 'antd';
 
 import type { IOrder } from '../../../interfaces';
 import { TableActionButton } from '../../tableActionButton';
 
 type OrderActionProps = {
   record: IOrder;
-  onStatusUpdated: () => void;
 };
 
-export const OrderActions: React.FC<OrderActionProps> = ({
-  record,
-  onStatusUpdated,
-}) => {
+export const OrderActions: React.FC<OrderActionProps> = ({ record }) => {
   const t = useTranslate();
-  const apiUrl = useApiUrl();
+  const { mutate } = useUpdate();
+  const invalidate = useInvalidate();
 
-  const handleUpdateStatus = async (id: number, status: number) => {
-    try {
-      const response = await fetch(`${apiUrl}/orders/${id}/status/${status}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
+  const updateStatus = (orderId: number, status: number) => {
+    mutate(
+      {
+        resource: `orders`,
+        id: orderId,
+        values: { status },
+      },
+      {
+        onSuccess: () => {
+          invalidate({
+            resource: 'orders',
+            invalidates: ['list'],
+          });
         },
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      message.success(`Order ${id} status updated to ${status}`);
-      onStatusUpdated(); // Trigger the callback to refresh the table
-    } catch (error) {
-      message.error(`Failed to update order ${id} status`);
-    }
+      },
+    );
   };
 
   const moreMenu = (_order: IOrder) => (
@@ -54,20 +49,22 @@ export const OrderActions: React.FC<OrderActionProps> = ({
         }}
         disabled={record.status !== 0}
         icon={
-          <CheckCircleOutlined
+          <BellOutlined
             style={{
-              color: '#52c41a',
+              color: '#13c2c2',
               fontSize: 17,
               fontWeight: 500,
             }}
           />
         }
-        onClick={() => handleUpdateStatus(record.id, 1)}
+        onClick={() => {
+          updateStatus(record.id, 1);
+        }}
       >
         {t('buttons.accept')}
       </Menu.Item>
       <Menu.Item
-        key="reject"
+        key="cancel"
         style={{
           fontSize: 15,
           display: 'flex',
@@ -83,9 +80,11 @@ export const OrderActions: React.FC<OrderActionProps> = ({
             }}
           />
         }
-        onClick={() => handleUpdateStatus(record.id, -1)}
+        onClick={() => {
+          updateStatus(record.id, -1);
+        }}
       >
-        {t('buttons.reject')}
+        {t('buttons.cancel')}
       </Menu.Item>
     </Menu>
   );

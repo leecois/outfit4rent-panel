@@ -24,7 +24,7 @@ export const OrderProducts = ({ order }: Props) => {
         );
         setProducts(response.data.data);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error(error);
       } finally {
         setLoading(false); // Kết thúc loading
       }

@@ -16,7 +16,6 @@ import {
   useTranslate,
 } from '@refinedev/core';
 import { Input, InputNumber, Select, Table, theme, Typography } from 'antd';
-import { useState } from 'react';
 
 import { OrderActions, OrderStatus, PaginationTotal } from '../../components';
 import type { IOrder } from '../../interfaces';
@@ -25,8 +24,6 @@ export const OrderList = () => {
   const { token } = theme.useToken();
   const t = useTranslate();
   const { show } = useNavigation();
-
-  const [reload, setReload] = useState(false); // State to trigger re-fetch
 
   const { tableProps, sorters, filters } = useTable<IOrder, HttpError>({
     resource: 'orders',
@@ -88,14 +85,6 @@ export const OrderList = () => {
         },
       ],
     },
-    syncWithLocation: true, // Ensure filters and sorting sync with URL location
-    queryOptions: {
-      retry: false, // Disable retries on failed queries
-      refetchOnWindowFocus: false, // Do not refetch data on window focus
-    },
-    meta: {
-      key: reload ? 'reload' : 'default', // Use reload state to trigger refetch
-    },
   });
 
   const { isLoading, triggerExport } = useExport<IOrder>({
@@ -122,10 +111,6 @@ export const OrderList = () => {
       };
     },
   });
-
-  const refreshTable = () => {
-    setReload((prev) => !prev); // Toggle reload state to trigger refetch
-  };
 
   return (
     <List
@@ -448,12 +433,12 @@ export const OrderList = () => {
           )}
         />
         <Table.Column<IOrder>
+          fixed="right"
           key="actions"
           title={t('table.actions')}
           dataIndex="actions"
-          render={(_, record) => (
-            <OrderActions record={record} onStatusUpdated={refreshTable} />
-          )}
+          align="center"
+          render={(_value, record) => <OrderActions record={record} />}
         />
       </Table>
     </List>

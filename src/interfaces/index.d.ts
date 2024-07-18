@@ -141,6 +141,7 @@ export interface IOrder {
   customerId: number;
   packageId: number;
   packageName: string;
+  orderCode: string;
   dateFrom: Date;
   dateTo: Date;
   price: number;
@@ -152,6 +153,16 @@ export interface IOrder {
   quantityOfItems: number;
   totalDeposit: number;
   createdAt: Date;
+  itemInUsers: {
+    id: number;
+    deposit: number;
+    status: number;
+    productId: number;
+    userPackageId: number;
+    tornMoney: number;
+    quantity: number;
+    returnedQuantity: number;
+  }[];
 }
 
 export interface IBrand {
@@ -231,11 +242,13 @@ export type IVehicle = {
   id: number;
 };
 
-export interface ITrendingProducts {
+export interface ITrendingPackages {
   id: number;
-  product: IProduct;
-  orderCount: number;
+  name: string;
+  value: number;
+  url: string;
 }
+
 export interface ICategoryPackage {
   id: number;
   maxAvailableQuantity: number;

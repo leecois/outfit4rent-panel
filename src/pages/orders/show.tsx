@@ -1,8 +1,12 @@
 import { CloseCircleOutlined, LeftOutlined } from '@ant-design/icons';
 import { List, ListButton } from '@refinedev/antd';
-import { useApiUrl, useShow, useTranslate } from '@refinedev/core';
-import { Button, Col, Divider, Flex, message, Row, Skeleton } from 'antd';
-import axios from 'axios';
+import {
+  useInvalidate,
+  useShow,
+  useTranslate,
+  useUpdate,
+} from '@refinedev/core';
+import { Button, Col, Divider, Flex, Row, Skeleton } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 import { ButtonSuccess } from '../../button';
@@ -19,40 +23,40 @@ export const OrderShow = () => {
   const { data, isLoading } = queryResult;
   const [record, setRecord] = useState<IOrder | undefined>(data?.data);
 
+  const invalidate = useInvalidate();
+
+  const { mutate } = useUpdate();
+
   useEffect(() => {
     if (data?.data) {
       setRecord(data.data);
     }
   }, [data]);
 
-  const apiUrl = useApiUrl();
-
-  const handleUpdateStatus = async (id: number, status: number) => {
-    try {
-      const response = await axios.patch(
-        `${apiUrl}/orders/${id}/status/${status}`,
+  const handleUpdateStatus = (orderId: number, status: number) => {
+    if (record) {
+      mutate(
         {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
+          resource: `orders`,
+          id: `${orderId}/status/${status}`,
+          values: { status },
+        },
+        {
+          onSuccess: (response) => {
+            const updatedOrder = response.data as IOrder;
+            setRecord(updatedOrder);
+            invalidate({
+              resource: 'orders',
+              invalidates: ['list'],
+            });
           },
         },
       );
-
-      if (response.status === 500) {
-        throw new Error('Network response was not ok');
-      }
-
-      const updatedOrder = (await response.data.data) as IOrder;
-      message.success(`Order ${id} status updated to ${status}`);
-      setRecord(updatedOrder);
-    } catch (error) {
-      message.error(`Failed to update order ${id} status`);
     }
   };
 
-  const canAcceptOrder = isLoading ? false : record?.status === 0;
-  const canRejectOrder = isLoading ? false : record?.status === 0;
+  const canAcceptOrder = !isLoading && record?.status === 0;
+  const canRejectOrder = !isLoading && record?.status === 0;
 
   return (
     <>
@@ -64,7 +68,7 @@ export const OrderShow = () => {
             disabled={!canAcceptOrder}
             style={{ marginRight: 8 }}
             onClick={() => {
-              handleUpdateStatus((record as IOrder)?.id, 1);
+              handleUpdateStatus(record?.id as number, 1);
             }}
           >
             {t('buttons.accept')}
@@ -74,7 +78,7 @@ export const OrderShow = () => {
             danger
             icon={<CloseCircleOutlined />}
             onClick={() => {
-              handleUpdateStatus((record as IOrder)?.id, -1);
+              handleUpdateStatus(record?.id as number, -1);
             }}
           >
             {t('buttons.reject')}
@@ -88,11 +92,7 @@ export const OrderShow = () => {
           isLoading ? (
             <Skeleton.Input
               active
-              style={{
-                width: '144px',
-                minWidth: '144px',
-                height: '28px',
-              }}
+              style={{ width: '144px', minWidth: '144px', height: '28px' }}
             />
           ) : (
             `${t('orders.titles.list')} #${record?.id}`
@@ -105,7 +105,6 @@ export const OrderShow = () => {
               <OrderProducts order={record} />
             </Flex>
           </Col>
-
           <Col xl={9} lg={24} md={24} sm={24} xs={24}>
             <CardWithContent
               bodyStyles={{

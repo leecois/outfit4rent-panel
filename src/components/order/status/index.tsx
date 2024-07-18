@@ -18,17 +18,17 @@ export const OrderStatus: React.FC<OrderStatusProps> = ({ status }) => {
 
   switch (status) {
     case 0: {
-      color = 'orange';
+      color = 'gold';
       icon = <ClockCircleOutlined />;
       break;
     }
     case 1: {
-      color = 'cyan';
+      color = 'green';
       icon = <BellOutlined />;
       break;
     }
     case 2: {
-      color = 'green';
+      color = 'gray';
       icon = <CheckCircleOutlined />;
       break;
     }

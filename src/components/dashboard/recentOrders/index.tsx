@@ -1,8 +1,10 @@
 import { useTable } from '@refinedev/antd';
 import { useNavigation } from '@refinedev/core';
-import { Space, Table, theme, Typography } from 'antd';
+import { Table, theme, Typography } from 'antd';
+import dayjs from 'dayjs';
 
 import type { IOrder } from '../../../interfaces';
+import { OrderActions, OrderStatus } from '../../order';
 import { useStyles } from './styled';
 
 export const RecentOrders: React.FC = () => {
@@ -18,13 +20,6 @@ export const RecentOrders: React.FC = () => {
       },
     ],
     initialPageSize: 10,
-    permanentFilter: [
-      {
-        field: 'status.text',
-        operator: 'eq',
-        value: 'Pending',
-      },
-    ],
     syncWithLocation: false,
   });
 
@@ -39,13 +34,19 @@ export const RecentOrders: React.FC = () => {
         showSizeChanger: false,
         className: styles.pagination,
       }}
-      showHeader={false}
       rowKey="id"
     >
       <Table.Column<IOrder>
-        dataIndex="orderNumber"
+        dataIndex="status"
+        title="Status"
         className={styles.column}
-        render={(_, record) => (
+        render={(status) => <OrderStatus status={status} />}
+      />
+      <Table.Column<IOrder>
+        dataIndex="orderCode"
+        title="Order Code"
+        className={styles.column}
+        render={(orderCode, record) => (
           <Typography.Link
             strong
             onClick={() => {
@@ -56,104 +57,25 @@ export const RecentOrders: React.FC = () => {
               color: token.colorTextHeading,
             }}
           >
-            #{record.id}
+            {orderCode}
           </Typography.Link>
         )}
       />
       <Table.Column<IOrder>
-        dataIndex="id"
+        dataIndex="createdAt"
+        title="Time"
         className={styles.column}
-        render={(_, record) => {
-          return (
-            <Space
-              size={0}
-              direction="vertical"
-              style={{
-                maxWidth: '220px',
-              }}
-            >
-              <Typography.Text
-                style={{
-                  fontSize: 14,
-                }}
-              >
-                {record?.customerId}
-              </Typography.Text>
-              <Typography.Text
-                ellipsis
-                style={{
-                  fontSize: 12,
-                }}
-                type="secondary"
-              >
-                {record?.receiverAddress}
-              </Typography.Text>
-            </Space>
-          );
-        }}
+        render={(createdAt) => (
+          <Typography.Text>{dayjs(createdAt).fromNow()}</Typography.Text>
+        )}
       />
-      {/* <Table.Column<IOrder>
-        dataIndex="products"
-        className={styles.column}
-        render={(products: IOrder['products']) => {
-          if (products.length === 0) {
-            return <Typography.Text>-</Typography.Text>;
-          }
-
-          const uniqueProducts = getUniqueListWithCount<
-            IOrder['products'][number]
-          >({ list: products, field: 'id' });
-
-          return (
-            <Space
-              size={0}
-              direction="vertical"
-              style={{
-                maxWidth: '220px',
-              }}
-            >
-              {uniqueProducts.map((product) => (
-                <Flex key={product.id} gap={4}>
-                  <Typography.Text ellipsis>{product.name}</Typography.Text>
-                  <span
-                    style={{
-                      color: token.colorTextSecondary,
-                    }}
-                  >
-                    x{product.count}
-                  </span>
-                </Flex>
-              ))}
-            </Space>
-          );
-        }}
-      /> */}
-      {/* <Table.Column<IOrder>
-        dataIndex="amount"
-        className={styles.column}
-        align="end"
-        render={(amount) => {
-          return (
-            <NumberField
-              value={amount / 100}
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-              options={{
-                style: 'currency',
-                currency: 'USD',
-              }}
-            />
-          );
-        }}
-      /> */}
-      {/* <Table.Column<IOrder>
+      <Table.Column<IOrder>
         fixed="right"
         key="actions"
         className={styles.column}
         align="end"
-        render={(_, record) => <OrderActions record={record as IOrder} />}
-      /> */}
+        render={(_, record) => <OrderActions record={record} />}
+      />
     </Table>
   );
 };
