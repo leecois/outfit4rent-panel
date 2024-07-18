@@ -33,7 +33,6 @@ import { authProvider } from './authProvider';
 import { Header, Title } from './components';
 import { BikeWhiteIcon } from './components/icons';
 import { ConfigProvider } from './context';
-import { useAutoLoginForDemo } from './hooks';
 import { AuthPage } from './pages/auth';
 import { BrandCreate, BrandEdit, BrandList, BrandShow } from './pages/brands';
 import {
@@ -69,7 +68,7 @@ const customTitleHandler = ({ resource }: TitleHandlerOptions): string => {
 const App: React.FC = () => {
   // This hook is used to automatically login the user.
   // We use this hook to skip the login page and demonstrate the application more quickly.
-  const { loading } = useAutoLoginForDemo();
+  // const { loading } = useAutoLoginForDemo();
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -83,9 +82,9 @@ const App: React.FC = () => {
     getLocale: () => i18n.language,
   };
 
-  if (loading) {
-    return null;
-  }
+  // if (loading) {
+  //   return null;
+  // }
 
   return (
     <BrowserRouter>
