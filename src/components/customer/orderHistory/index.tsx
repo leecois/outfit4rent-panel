@@ -1,4 +1,4 @@
-import { NumberField, useTable } from '@refinedev/antd';
+import { DateField, NumberField, useTable } from '@refinedev/antd';
 import type { HttpError } from '@refinedev/core';
 import { useNavigation, useTranslate } from '@refinedev/core';
 import { Table, Typography } from 'antd';
@@ -24,7 +24,7 @@ export const CustomerOrderHistory = ({ customer }: Props) => {
     ],
     permanentFilter: [
       {
-        field: 'user.id',
+        field: 'customerId',
         operator: 'eq',
         value: customer?.id,
       },
@@ -53,51 +53,55 @@ export const CustomerOrderHistory = ({ customer }: Props) => {
       }}
     >
       <Table.Column
-        title={`${t('orders.order')} #`}
-        dataIndex="id"
-        key="id"
+        title={t('orders.fields.orderCode')}
+        dataIndex="orderCode"
+        key="orderCode"
         render={(value) => (
-          <Typography.Text
-            style={{
-              whiteSpace: 'nowrap',
-            }}
-          >
+          <Typography.Text style={{ whiteSpace: 'nowrap' }}>
             #{value}
           </Typography.Text>
         )}
       />
       <Table.Column
-        key="status.text"
+        key="status"
         dataIndex="status"
         title={t('orders.fields.status')}
         render={(status) => {
-          return <OrderStatus status={status.text} />;
+          return <OrderStatus status={status} />;
         }}
       />
-
+      <Table.Column
+        dataIndex="packageName"
+        title={t('orders.fields.packageName')}
+        key="packageName"
+      />
       <Table.Column<IOrder>
-        dataIndex="amount"
-        align="end"
-        title={t('orders.fields.amount')}
-        render={(amount) => {
+        dataIndex="price"
+        align="right"
+        title={t('orders.fields.price')}
+        render={(price) => {
           return (
             <NumberField
-              value={amount / 100}
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-              options={{
-                style: 'currency',
-                currency: 'USD',
-              }}
+              value={price}
+              style={{ whiteSpace: 'nowrap' }}
+              options={{ style: 'currency', currency: 'USD' }}
             />
           );
         }}
       />
-      <Table.Column
-        key="store.title"
-        dataIndex={['store', 'title']}
-        title={t('orders.fields.store')}
+      <Table.Column<IOrder>
+        dataIndex="dateFrom"
+        title={t('orders.fields.dateFrom')}
+        render={(value) => (
+          <DateField value={value} format="YYYY-MM-DD HH:mm:ss" />
+        )}
+      />
+      <Table.Column<IOrder>
+        dataIndex="dateTo"
+        title={t('orders.fields.dateTo')}
+        render={(value) => (
+          <DateField value={value} format="YYYY-MM-DD HH:mm:ss" />
+        )}
       />
     </Table>
   );

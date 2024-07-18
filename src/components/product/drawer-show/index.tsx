@@ -1,5 +1,5 @@
 import { EditOutlined } from '@ant-design/icons';
-import { DeleteButton, NumberField } from '@refinedev/antd';
+import { DeleteButton, ImageField, NumberField } from '@refinedev/antd';
 import type { BaseKey, HttpError } from '@refinedev/core';
 import {
   useGetToPath,
@@ -9,21 +9,11 @@ import {
   useShow,
   useTranslate,
 } from '@refinedev/core';
-import {
-  Button,
-  Carousel,
-  Col,
-  Divider,
-  Grid,
-  List,
-  theme,
-  Typography,
-} from 'antd';
+import { Button, Col, Divider, Grid, List, Row, theme, Typography } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
 import type { IBrand, ICategory, IProductList } from '../../../interfaces';
 import { Drawer } from '../../drawer';
-import { ProductReviewTable } from '../review-table';
 import { ProductStatus } from '../status';
 
 type Props = {
@@ -94,44 +84,48 @@ export const ProductDrawerShow = (props: Props) => {
       zIndex={1001}
       onClose={handleDrawerClose}
     >
-      <Carousel draggable swipeToSlide infinite={false} arrows autoplay dots>
+      <div
+        style={{
+          padding: '16px',
+          backgroundColor: token.colorBgContainer,
+        }}
+      >
+        <Typography.Title level={5}>{product?.name}</Typography.Title>
+        <Typography.Text type="secondary">
+          {product?.description}
+        </Typography.Text>
+      </div>
+      <Divider style={{ margin: 0, padding: 0 }} />
+      <Row gutter={[16, 16]} style={{ padding: '16px' }}>
         {product?.images?.map((image) => (
-          <div key={image.id}>
-            <img
-              src={image.url}
+          <Col
+            key={image.id}
+            xs={24}
+            sm={12}
+            md={8}
+            lg={6}
+            xl={4}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <ImageField
+              value={image.url}
               alt={`Product image ${image.id}`}
               style={{
                 aspectRatio: 1,
                 objectFit: 'contain',
                 width: '100%',
-                height: '240px',
+                maxHeight: '200px',
               }}
             />
-          </div>
+          </Col>
         ))}
-      </Carousel>
+      </Row>
 
-      <div
-        style={{
-          backgroundColor: token.colorBgContainer,
-        }}
-      >
-        <div
-          style={{
-            padding: '16px',
-          }}
-        >
-          <Typography.Title level={5}>{product?.name}</Typography.Title>
-          <Typography.Text type="secondary">
-            {product?.description}
-          </Typography.Text>
-        </div>
-        <Divider
-          style={{
-            margin: 0,
-            padding: 0,
-          }}
-        />
+      <div style={{ backgroundColor: token.colorBgContainer }}>
         <List
           dataSource={[
             {
@@ -178,9 +172,7 @@ export const ProductDrawerShow = (props: Props) => {
           renderItem={(item) => (
             <List.Item>
               <List.Item.Meta
-                style={{
-                  padding: '0 16px',
-                }}
+                style={{ padding: '0 16px' }}
                 avatar={item.label}
                 title={item.value}
               />
@@ -226,14 +218,6 @@ export const ProductDrawerShow = (props: Props) => {
           {t('actions.edit')}
         </Button>
       </div>
-      <Col
-        span={24}
-        style={{
-          marginTop: '5px',
-        }}
-      >
-        <ProductReviewTable product={product} />
-      </Col>
     </Drawer>
   );
 };

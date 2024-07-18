@@ -26,6 +26,9 @@ import {
   TrendingMenu,
   TrendUpIcon,
 } from '../../components';
+import { NumberCompletedOrder } from '../../components/dashboard/numberCompletedOrder';
+import { NumberTransactions } from '../../components/dashboard/numberTransaction';
+import { TrendingProduct } from '../../components/dashboard/trendingProduct';
 import type { ApiResponse, ISalesChart } from '../../interfaces';
 
 type DateFilter = 'lastWeek' | 'lastMonth';
@@ -117,6 +120,22 @@ export const DashboardPage: React.FC = () => {
       query: dateFilterQuery,
     },
   });
+  const { data: numberTransactionsData } = useCustom<ApiResponse<ISalesChart>>({
+    url: `${API_URL}/admin/number-transactions`,
+    method: 'get',
+    config: {
+      query: dateFilterQuery,
+    },
+  });
+  const { data: numberCompletedOrderData } = useCustom<
+    ApiResponse<ISalesChart>
+  >({
+    url: `${API_URL}/admin/number-completed-order`,
+    method: 'get',
+    config: {
+      query: dateFilterQuery,
+    },
+  });
 
   const revenue = useMemo(() => {
     const data = dailyRevenueData?.data?.data.data;
@@ -177,6 +196,46 @@ export const DashboardPage: React.FC = () => {
       trend: newCustomersData.data.data.trend,
     };
   }, [newCustomersData]);
+
+  const numberTransactions = useMemo(() => {
+    const data = numberTransactionsData?.data?.data?.data;
+    if (!data) return { data: [], trend: 0 };
+
+    const plotData = data.map((transaction) => {
+      const date = dayjs(transaction.date);
+      return {
+        timeUnix: date.unix(),
+        timeText: date.format('DD MMM YYYY'),
+        value: transaction.value,
+        state: 'Number Transactions',
+      };
+    });
+
+    return {
+      data: plotData,
+      trend: numberTransactionsData.data.data.trend,
+    };
+  }, [numberTransactionsData]);
+
+  const numberCompletedOrder = useMemo(() => {
+    const data = numberCompletedOrderData?.data?.data?.data;
+    if (!data) return { data: [], trend: 0 };
+
+    const plotData = data.map((transaction) => {
+      const date = dayjs(transaction.date);
+      return {
+        timeUnix: date.unix(),
+        timeText: date.format('DD MMM YYYY'),
+        value: transaction.value,
+        state: 'Number Completed Order',
+      };
+    });
+
+    return {
+      data: plotData,
+      trend: numberCompletedOrderData.data.data.trend,
+    };
+  }, [numberCompletedOrderData]);
 
   return (
     <List
@@ -277,43 +336,79 @@ export const DashboardPage: React.FC = () => {
             </Col>
           </Row>
         </Col>
-        <Col xl={15} lg={15} md={24} sm={24} xs={24}>
-          <CardWithContent
-            bodyStyles={{
-              height: '432px',
-              overflow: 'hidden',
-              padding: 0,
-            }}
-            icon={
-              <ClockCircleOutlined
-                style={{
-                  fontSize: 14,
-                  color: token.colorPrimary,
-                }}
-              />
-            }
-            title={t('dashboard.deliveryMap.title')}
-          ></CardWithContent>
-        </Col>
-        <Col xl={9} lg={9} md={24} sm={24} xs={24}>
-          <CardWithContent
-            bodyStyles={{
-              height: '430px',
-              overflow: 'hidden',
-              padding: 0,
-            }}
-            icon={
-              <ClockCircleOutlined
-                style={{
-                  fontSize: 14,
-                  color: token.colorPrimary,
-                }}
-              />
-            }
-            title={t('dashboard.timeline.title')}
-          >
-            <OrderTimeline height={'432px'} />
-          </CardWithContent>
+        <Col md={24}>
+          <Row gutter={[16, 16]}>
+            <Col xl={{ span: 10 }} lg={24} md={24} sm={24} xs={24}>
+              <CardWithPlot
+                icon={
+                  <DollarCircleOutlined
+                    style={{
+                      fontSize: 14,
+                      color: token.colorPrimary,
+                    }}
+                  />
+                }
+                title={t('dashboard.numberTransactions.title')}
+                rightSlot={
+                  <Flex align="center" gap={8}>
+                    <NumberField
+                      value={numberTransactions.trend / 100}
+                      options={{
+                        style: 'percent',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
+                    {numberTransactions.trend > 0 ? (
+                      <TrendUpIcon />
+                    ) : (
+                      <TrendDownIcon />
+                    )}
+                  </Flex>
+                }
+              >
+                <NumberTransactions
+                  height={147}
+                  data={numberTransactions.data}
+                />
+              </CardWithPlot>
+            </Col>
+            <Col xl={{ span: 14 }} lg={24} md={24} sm={24} xs={24}>
+              <CardWithPlot
+                icon={
+                  <DollarCircleOutlined
+                    style={{
+                      fontSize: 14,
+                      color: token.colorPrimary,
+                    }}
+                  />
+                }
+                title={t('dashboard.numberCompletedOrder.title')}
+                rightSlot={
+                  <Flex align="center" gap={8}>
+                    <NumberField
+                      value={numberCompletedOrder.trend / 100}
+                      options={{
+                        style: 'percent',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }}
+                    />
+                    {numberCompletedOrder.trend > 0 ? (
+                      <TrendUpIcon />
+                    ) : (
+                      <TrendDownIcon />
+                    )}
+                  </Flex>
+                }
+              >
+                <NumberCompletedOrder
+                  height={147}
+                  data={numberCompletedOrder.data}
+                />
+              </CardWithPlot>
+            </Col>
+          </Row>
         </Col>
         <Col xl={15} lg={15} md={24} sm={24} xs={24}>
           <CardWithContent
@@ -336,6 +431,27 @@ export const DashboardPage: React.FC = () => {
         <Col xl={9} lg={9} md={24} sm={24} xs={24}>
           <CardWithContent
             bodyStyles={{
+              height: '430px',
+              overflow: 'hidden',
+              padding: 0,
+            }}
+            icon={
+              <ClockCircleOutlined
+                style={{
+                  fontSize: 14,
+                  color: token.colorPrimary,
+                }}
+              />
+            }
+            title={t('dashboard.timeline.title')}
+          >
+            <OrderTimeline height={'432px'} />
+          </CardWithContent>
+        </Col>
+
+        <Col xl={12} lg={9} md={24} sm={24} xs={24}>
+          <CardWithContent
+            bodyStyles={{
               padding: 0,
             }}
             icon={
@@ -349,6 +465,24 @@ export const DashboardPage: React.FC = () => {
             title={t('dashboard.trendingProducts.title')}
           >
             <TrendingMenu />
+          </CardWithContent>
+        </Col>
+        <Col xl={12} lg={9} md={24} sm={24} xs={24}>
+          <CardWithContent
+            bodyStyles={{
+              padding: 0,
+            }}
+            icon={
+              <RiseOutlined
+                style={{
+                  fontSize: 14,
+                  color: token.colorPrimary,
+                }}
+              />
+            }
+            title={t('dashboard.trendingProduct.title')}
+          >
+            <TrendingProduct />
           </CardWithContent>
         </Col>
       </Row>

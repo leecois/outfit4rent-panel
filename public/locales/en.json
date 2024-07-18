@@ -106,7 +106,7 @@
     "inTotal": "in total"
   },
   "search": {
-    "placeholder": "Search by Store ID, E-mail, Keyword",
+    "placeholder": "Search by Order ID, Return Order, Brand",
     "more": "more"
   },
   "status": {
@@ -311,6 +311,15 @@
     },
     "trendingProducts": {
       "title": "Trending Packages"
+    },
+    "numberTransactions": {
+      "title": "Number Transactions"
+    },
+    "numberCompletedOrder": {
+      "title": "Number Completed Order"
+    },
+    "trendingProduct": {
+      "title": "Trending Products"
     }
   },
   "enum": {
@@ -371,7 +380,13 @@
       "dateFrom": "Date From",
       "dateTo": "Date End",
       "packageName": "Package Name",
-      "customerId": "CustomerID"
+      "customerId": "CustomerID",
+      "orderCode": "Order Code",
+      "customerInfo": "Customer Info",
+      "packageAndProducts": "Package & Products",
+      "totalPrice": "Total Price",
+      "quantity": "Quantity",
+      "price": "Amount"
     },
     "filter": {
       "title": "Filters",
@@ -522,7 +537,13 @@
       "user": "User",
       "orderId": "Order",
       "review": "Review",
-      "rating": "Rating"
+      "rating": "Rating",
+      "customer": "Name",
+      "title": "Title",
+      "content": "Content",
+      "date": "Date",
+      "packageId": "Package",
+      "images": "Review Image"
     }
   },
   "stores": {
@@ -675,7 +696,7 @@
     "resourceLabel": "Customer"
   },
   "brands": {
-    "brands": "Brand",
+    "brands": "Brands",
     "fields": {
       "name": "Brand name",
       "description": "Description",
@@ -806,12 +827,12 @@
       "phone": "Phone",
       "partnerId": "Partner",
       "customerId": "Customer",
-      "orderId": "OrderID",
+      "orderId": "Order Code",
       "dateReturn": "Date Return",
       "quantityOfItems": "Quantity Items",
       "totalThornMoney": "Thorn Money"
     },
-    "id": "Return Order ID",
+    "id": "Return Order",
     "return-orders": "Return Order"
   },
   "errors": {
@@ -820,5 +841,8 @@
     },
     "minLength": "Min {{min}} character",
     "maxLength": "Max {{max}} character"
+  },
+  "returnOrders": {
+    "returnOrders": "Return-orders"
   }
 }

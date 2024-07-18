@@ -28,6 +28,13 @@ export interface IOrderTotalCount {
   totalDelivered: number;
 }
 
+export interface ITrendingProduct {
+  id: number;
+  name: string;
+  value: number;
+  url: string;
+}
+
 interface ApiResponse<T> {
   message: string;
   statusCode: string;
@@ -228,9 +235,32 @@ export interface IReview {
   content: string;
   title: string;
   numberStars: number;
+  status: number;
+  date: string;
   customerId: number;
-  productId: number;
-  reviewImages: string[];
+  customerName: string;
+  customerAvatar: string;
+  packageId: number;
+  images: IReviewImage[];
+}
+
+export interface IReviewImage {
+  id: number;
+  url: string;
+  reviewId: number;
+}
+
+export interface IPackageRating {
+  packageId: number;
+  quantityOfReviews: number;
+  averageStar: number;
+  ratingStars: IRatingStar[];
+}
+
+export interface IRatingStar {
+  starNumber: number;
+  quantity: number;
+  rate: number;
 }
 
 export type IVehicle = {

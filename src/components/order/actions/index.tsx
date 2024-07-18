@@ -18,7 +18,7 @@ export const OrderActions: React.FC<OrderActionProps> = ({ record }) => {
     mutate(
       {
         resource: `orders`,
-        id: orderId,
+        id: `${orderId}/status/${status}`,
         values: { status },
       },
       {

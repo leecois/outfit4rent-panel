@@ -109,16 +109,16 @@ export const PackageFormFields = ({
           padding: 0,
         }}
       >
-        <FormItemHorizontal
-          name="url"
-          icon={<RightCircleOutlined />}
-          label={t('packages.fields.image.label')}
-        >
+        <FormItemHorizontal name="url" icon="" label={''}>
           {isFormDisabled ? (
             <ImageField
               value={formProps.form?.getFieldValue('url')}
-              width={175}
-              height={175}
+              style={{
+                aspectRatio: 1,
+                objectFit: 'contain',
+                width: '100%',
+                height: '180px',
+              }}
             />
           ) : (
             <Upload.Dragger

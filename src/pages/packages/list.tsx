@@ -25,7 +25,11 @@ import type { PropsWithChildren } from 'react';
 import InputMask from 'react-input-mask';
 import { useLocation } from 'react-router-dom';
 
-import { PackageStatus, PaginationTotal } from '../../components';
+import {
+  PackageStatus,
+  PackageTableColumnRating,
+  PaginationTotal,
+} from '../../components';
 import type { IPackage } from '../../interfaces';
 
 export const PackagesList = ({ children }: PropsWithChildren) => {
@@ -235,6 +239,14 @@ export const PackagesList = ({ children }: PropsWithChildren) => {
               >
                 {value}
               </Typography.Text>
+            )}
+          />
+          <Table.Column<IPackage>
+            dataIndex="id"
+            key="ratings"
+            title={t('products.fields.rating')}
+            render={(_, record) => (
+              <PackageTableColumnRating package={record as IPackage} />
             )}
           />
           <Table.Column<IPackage>

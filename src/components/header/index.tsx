@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { useConfigProvider } from '../../context';
-import type { IBrand, IIdentity } from '../../interfaces';
+import type { IBrand, IIdentity, IOrder, IReturnOrder } from '../../interfaces';
 import { IconMoon, IconSun } from '../icons';
 import { useStyles } from './styled';
 
@@ -85,58 +85,63 @@ export const Header: React.FC = () => {
   const [value, setValue] = useState<string>('');
   const [options, setOptions] = useState<Array<IOptions>>([]);
 
-  // const { refetch: refetchOrders } = useList<IOrder>({
-  //   resource: 'orders',
-  //   config: {
-  //     filters: [{ field: 'q', operator: 'contains', value }],
-  //   },
-  //   queryOptions: {
-  //     enabled: false,
-  //     onSuccess: (data) => {
-  //       const orderOptionGroup = data.data.map((item) =>
-  //         renderItem(
-  //           `${item.store.title} / #${item.orderNumber}`,
-  //           item?.products?.[0].images?.[0]?.url ||
-  //             '/images/default-order-img.png',
-  //           `/orders/${item.id}`,
-  //         ),
-  //       );
-  //       if (orderOptionGroup.length > 0) {
-  //         setOptions((previousOptions) => [
-  //           ...previousOptions,
-  //           {
-  //             label: renderTitle(t('orders.orders')),
-  //             options: orderOptionGroup,
-  //           },
-  //         ]);
-  //       }
-  //     },
-  //   },
-  // });
+  const { refetch: refetchOrders } = useList<IOrder>({
+    resource: 'orders',
+    config: {
+      filters: [{ field: 'q', operator: 'contains', value }],
+    },
+    queryOptions: {
+      enabled: false,
+      onSuccess: (data) => {
+        const orderOptionGroup = data.data.map((item) =>
+          renderItem(
+            `${item.packageName} / #${item.orderCode}`,
+            item?.itemInUsers?.[0]?.productId
+              ? `/images/products/${item.itemInUsers[0].productId}.jpg`
+              : '/images/logo-mark-light.png',
+            `/orders/${item.id}`,
+          ),
+        );
+        if (orderOptionGroup.length > 0) {
+          setOptions((previousOptions) => [
+            ...previousOptions,
+            {
+              label: renderTitle(t('orders.orders')),
+              options: orderOptionGroup,
+            },
+          ]);
+        }
+      },
+    },
+  });
 
-  // const { refetch: refetchPartners } = useList<IPartner>({
-  //   resource: 'partners',
-  //   config: {
-  //     filters: [{ field: 'q', operator: 'contains', value }],
-  //   },
-  //   queryOptions: {
-  //     enabled: false,
-  //     onSuccess: (data) => {
-  //       const storeOptionGroup = data.data.map((item) =>
-  //         renderItem(item.title, '', `/partners/${item.id}/edit`),
-  //       );
-  //       if (storeOptionGroup.length > 0) {
-  //         setOptions((previousOptions) => [
-  //           ...previousOptions,
-  //           {
-  //             label: renderTitle(t('stores.stores')),
-  //             options: storeOptionGroup,
-  //           },
-  //         ]);
-  //       }
-  //     },
-  //   },
-  // });
+  const { refetch: refetchReturnOrders } = useList<IReturnOrder>({
+    resource: 'return-orders',
+    config: {
+      filters: [{ field: 'q', operator: 'contains', value }],
+    },
+    queryOptions: {
+      enabled: false,
+      onSuccess: (data) => {
+        const returnOrderOptionGroup = data.data.map((item) =>
+          renderItem(
+            `Return Order / #${item.id}`,
+            '/images/logo-mark-light.png',
+            `/return-orders/${item.id}`,
+          ),
+        );
+        if (returnOrderOptionGroup.length > 0) {
+          setOptions((previousOptions) => [
+            ...previousOptions,
+            {
+              label: renderTitle(t('returnOrders.returnOrders')),
+              options: returnOrderOptionGroup,
+            },
+          ]);
+        }
+      },
+    },
+  });
 
   const { refetch: refetchBrands } = useList<IBrand>({
     resource: 'brands',
@@ -168,8 +173,8 @@ export const Header: React.FC = () => {
 
   useEffect(() => {
     setOptions([]);
-    // refetchOrders();
-    // refetchPartners();
+    refetchOrders();
+    refetchReturnOrders();
     refetchBrands();
   }, [value]);
 

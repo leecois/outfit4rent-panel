@@ -49,7 +49,7 @@ export const ProductDrawerForm = (props: Props) => {
   const { drawerProps, formProps, close, saveButtonProps, formLoading } =
     useDrawerForm<IProductList>({
       resource: 'products',
-      id: props?.id, // when undefined, id will be read from the URL.
+      id: props?.id,
       action: props.action,
       redirect: false,
       onMutationSuccess: () => {
@@ -290,7 +290,7 @@ export const ProductDrawerForm = (props: Props) => {
             label={t('products.fields.isFeatured')}
             name="isFeatured"
             className={styles.formItem}
-            initialValue={1}
+            initialValue={true}
           >
             <Segmented
               block

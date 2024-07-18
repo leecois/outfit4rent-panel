@@ -12,16 +12,25 @@ import {
   getDefaultFilter,
   useExport,
   useNavigation,
+  useSelect,
   useTranslate,
 } from '@refinedev/core';
-import { Input, Select, Table, theme, Typography } from 'antd';
+import { Input, Select, Table, theme, Tooltip, Typography } from 'antd';
 
 import { PaginationTotal } from '../../components';
 import { ReturnOrderStatus } from '../../components/return-orders/status';
-import type { IReturnOrder } from '../../interfaces';
+import type { IOrder, IReturnOrder } from '../../interfaces';
 
 export const ReturnOrderList = () => {
   const { token } = theme.useToken();
+
+  const { queryResult } = useSelect<IOrder>({
+    resource: 'orders',
+    optionLabel: 'orderCode',
+    optionValue: 'id',
+  });
+
+  const orders = queryResult?.data?.data || [];
 
   const { tableProps, sorters, filters } = useTable<IReturnOrder, HttpError>({
     resource: 'return-orders',
@@ -246,15 +255,7 @@ export const ReturnOrderList = () => {
           defaultFilteredValue={getDefaultFilter('partnerId', filters, 'eq')}
           sorter
         />
-        <Table.Column<IReturnOrder>
-          align="right"
-          key="customerId"
-          dataIndex="customerId"
-          title={t('return-orders.fields.customerId')}
-          defaultSortOrder={getDefaultSortOrder('customerId', sorters)}
-          defaultFilteredValue={getDefaultFilter('customerId', filters, 'eq')}
-          sorter
-        />
+
         <Table.Column<IReturnOrder>
           align="right"
           key="customerPackageId"
@@ -267,6 +268,16 @@ export const ReturnOrderList = () => {
             'eq',
           )}
           sorter
+          render={(value) => {
+            const matchingOrder = orders.find((order) => order.id === value);
+            return matchingOrder ? (
+              <Tooltip title={`Order ID: ${value}`}>
+                #{matchingOrder.orderCode}
+              </Tooltip>
+            ) : (
+              value
+            );
+          }}
         />
         <Table.Column<IReturnOrder>
           key="dateReturn"

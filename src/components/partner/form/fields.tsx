@@ -1,4 +1,5 @@
 import {
+  AreaChartOutlined,
   EditOutlined,
   EnvironmentOutlined,
   MailOutlined,
@@ -6,7 +7,12 @@ import {
   RightCircleOutlined,
 } from '@ant-design/icons';
 import type { UseFormReturnType } from '@refinedev/antd';
-import { DeleteButton, ListButton, SaveButton } from '@refinedev/antd';
+import {
+  DeleteButton,
+  ListButton,
+  SaveButton,
+  useSelect,
+} from '@refinedev/antd';
 import type { UseFormProps } from '@refinedev/core';
 import { useNavigation, useTranslate } from '@refinedev/core';
 import type { InputProps, InputRef } from 'antd';
@@ -19,11 +25,12 @@ import {
   Input,
   InputNumber,
   Segmented,
+  Select,
 } from 'antd';
 import { useEffect, useRef } from 'react';
 import InputMask from 'react-input-mask';
 
-import type { IPartner } from '../../../interfaces';
+import type { IArea, IPartner } from '../../../interfaces';
 import { FormItemEditable, FormItemHorizontal } from '../../form';
 import { PartnerStatus } from '../status';
 
@@ -54,6 +61,12 @@ export const PartnerFormFields = ({
       titleInputRef.current?.focus();
     }
   }, [isFormDisabled]);
+
+  const { selectProps: areaSelectProps } = useSelect<IArea>({
+    resource: 'areas',
+    optionLabel: 'city',
+    optionValue: 'id',
+  });
 
   const statusField = Form.useWatch('status', formProps.form);
 
@@ -180,23 +193,19 @@ export const PartnerFormFields = ({
             margin: 0,
           }}
         />
+
         <FormItemHorizontal
           name="areaId"
-          icon={<PhoneOutlined />}
-          label={t('partners.fields.phone')}
+          icon={<AreaChartOutlined />}
+          label={t('partners.fields.area')}
           rules={[
             {
               required: true,
-              message: 'Please input a valid phone number!',
+              message: 'Please input a valid area!',
             },
           ]}
         >
-          <InputMask mask="9">
-            {/* 
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore */}
-            {(props: InputProps) => <Input {...props} />}
-          </InputMask>
+          <Select {...areaSelectProps} />
         </FormItemHorizontal>
       </Card>
       <Flex

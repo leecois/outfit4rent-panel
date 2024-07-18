@@ -115,12 +115,7 @@ export const ReturnOrderShow = () => {
               }}
             />
           ) : (
-            <>
-              {`${t('return-orders.id')} #${record?.id}   `}
-              <ReturnOrderStatus
-                status={record?.status as number}
-              ></ReturnOrderStatus>
-            </>
+            <>{`${t('return-orders.id')} #${record?.id}   `}</>
           )
         }
         headerButtons={
@@ -149,13 +144,13 @@ export const ReturnOrderShow = () => {
         }
       >
         <Row gutter={[16, 16]}>
-          <Col xl={15} lg={24} md={24} sm={24} xs={24}>
+          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
             <Flex gap={16} vertical>
               <ReturnOrderDetails order={record as IReturnOrder} />
             </Flex>
           </Col>
 
-          <Col xl={9} lg={24} md={24} sm={24} xs={24}>
+          <Col xl={16} lg={24} md={24} sm={24} xs={24}>
             <CardWithContent
               bodyStyles={{
                 padding: 0,

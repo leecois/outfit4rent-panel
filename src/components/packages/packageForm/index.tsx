@@ -1,5 +1,6 @@
 import { Col, Row, Spin } from 'antd';
 
+import { PackageReviewTable } from '../review-table';
 import { TableCategoryPackage } from '../tableCategoryPackage';
 import { PackageFormFields } from './fields';
 import { usePackageForm } from './usePackageForm';
@@ -16,6 +17,7 @@ export const PackageForm = (props: Props) => {
     isFormDisabled,
     setIsFormDisabled,
     categoryPackageWithCategory,
+    packageData,
   } = usePackageForm({
     action: props.action,
   });
@@ -46,6 +48,11 @@ export const PackageForm = (props: Props) => {
           />
         </Col>
       </Row>
+      {props.action === 'edit' && packageData && (
+        <Col span={24} style={{ marginTop: '24px' }}>
+          <PackageReviewTable package={packageData} />
+        </Col>
+      )}
     </Spin>
   );
 };
