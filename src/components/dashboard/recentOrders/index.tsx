@@ -72,7 +72,7 @@ export const RecentOrders: React.FC = () => {
               color: token.colorTextHeading,
             }}
           >
-            {record.orderCode}
+            #{record.orderCode}
           </Typography.Link>
         )}
       />

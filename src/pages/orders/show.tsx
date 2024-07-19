@@ -95,7 +95,7 @@ export const OrderShow = () => {
               style={{ width: '144px', minWidth: '144px', height: '28px' }}
             />
           ) : (
-            `${t('orders.titles.list')} #${record?.id}`
+            `${t('orders.titles.list')} #${record?.orderCode}`
           )
         }
       >

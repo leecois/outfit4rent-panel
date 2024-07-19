@@ -152,6 +152,24 @@ export const OrderList = () => {
             </Typography.Text>
           )}
         />
+        <Table.Column
+          key="orderCode"
+          dataIndex="orderCode"
+          title={t('orders.fields.orderCode')}
+          defaultFilteredValue={getDefaultFilter(
+            'orderCode',
+            filters,
+            'contains',
+          )}
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input
+                style={{ width: '100%' }}
+                placeholder={t('orders.filter.name.placeholder')}
+              />
+            </FilterDropdown>
+          )}
+        />
         <Table.Column<IOrder>
           key="status"
           dataIndex="status"
