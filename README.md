@@ -1,4 +1,4 @@
-# OUTFIT4RENT ADMIN PANELS
+# OUTFIT4RENT ADMIN PANEL
 
 ### Getting started
 
